@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agent Orchestration Dashboard</title>
+    <style>
+      :root {
+        --ink: #1d2835;
+        --muted: #5a6978;
+        --paper: #f6f8fb;
+        --surface: #ffffff;
+        --line: #d9e1e8;
+        --navy: #18395f;
+        --teal: #0b8993;
+        --green: #2f7d4a;
+        --gold: #9a6500;
+        --red: #b84242;
+        --violet: #5d55b3;
+        --shadow: 0 14px 34px rgba(29, 40, 53, 0.09);
+        font-family: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(180deg, #ffffff 0, var(--paper) 420px),
+          var(--paper);
+        letter-spacing: 0;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .shell {
+        width: min(1180px, calc(100% - 28px));
+        margin: 0 auto;
+        padding: 18px 0 34px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        min-height: 58px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        background: var(--navy);
+        color: #ffffff;
+        font-weight: 900;
+      }
+
+      .brand strong {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .brand span {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .nav-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        padding: 0 13px;
+        border: 1px solid var(--navy);
+        border-radius: 7px;
+        color: var(--navy);
+        background: #ffffff;
+        font-weight: 800;
+        font-size: 0.92rem;
+        text-decoration: none;
+      }
+
+      .button.primary {
+        background: var(--navy);
+        color: #ffffff;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr);
+        gap: 22px;
+        align-items: end;
+        padding: 34px 0 24px;
+      }
+
+      .intro h1 {
+        max-width: 780px;
+        font-size: clamp(2rem, 4vw, 4.25rem);
+        line-height: 0.96;
+        color: var(--navy);
+      }
+
+      .intro p {
+        max-width: 720px;
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.55;
+      }
+
+      .status-panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        padding: 16px;
+      }
+
+      .status-panel h2 {
+        font-size: 1rem;
+        color: var(--navy);
+      }
+
+      .status-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 8px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .status-row:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .status-row strong {
+        color: var(--ink);
+      }
+
+      .section {
+        margin-top: 26px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+
+      .section-head h2 {
+        color: var(--navy);
+        font-size: 1.45rem;
+      }
+
+      .section-head p {
+        max-width: 660px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .agent-grid,
+      .mission-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .agent-card,
+      .mission-card,
+      .gate-card {
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        padding: 15px;
+      }
+
+      .agent-card {
+        border-top: 5px solid var(--teal);
+      }
+
+      .agent-card:nth-child(2) {
+        border-top-color: var(--green);
+      }
+
+      .agent-card:nth-child(3) {
+        border-top-color: var(--gold);
+      }
+
+      .agent-card:nth-child(4) {
+        border-top-color: var(--violet);
+      }
+
+      .agent-card:nth-child(5) {
+        border-top-color: var(--red);
+      }
+
+      .agent-card:nth-child(6) {
+        border-top-color: var(--navy);
+      }
+
+      .agent-card:nth-child(7) {
+        border-top-color: var(--gold);
+      }
+
+      .agent-card:nth-child(8) {
+        border-top-color: var(--violet);
+      }
+
+      .step {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 34px;
+        height: 26px;
+        border-radius: 999px;
+        background: #eef4f8;
+        color: var(--navy);
+        font-weight: 900;
+        font-size: 0.82rem;
+      }
+
+      .agent-card h3,
+      .mission-card h3,
+      .gate-card h3 {
+        margin-top: 10px;
+        font-size: 1.05rem;
+      }
+
+      .agent-card p,
+      .mission-card p,
+      .gate-card p {
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.45;
+        font-size: 0.94rem;
+      }
+
+      .link-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .text-link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        padding: 0 10px;
+        background: #f9fbfd;
+        color: var(--navy);
+        font-size: 0.86rem;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .mission-card {
+        display: grid;
+        gap: 10px;
+      }
+
+      .mission-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 2px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        border-radius: 999px;
+        background: #eef4f8;
+        color: var(--muted);
+        padding: 0 9px;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .gate-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .gate-card {
+        border-left: 5px solid var(--green);
+      }
+
+      .gate-card.warning {
+        border-left-color: var(--gold);
+      }
+
+      .footer-note {
+        margin-top: 24px;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.45;
+      }
+
+      @media (max-width: 900px) {
+        .intro,
+        .agent-grid,
+        .mission-grid,
+        .gate-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar,
+        .section-head {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .nav-actions {
+          justify-content: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">PMC</div>
+          <div>
+            <strong>Agent Orchestration Dashboard</strong>
+            <span>Learning missions, agent checks, and release gates</span>
+          </div>
+        </div>
+        <nav class="nav-actions" aria-label="Main actions">
+          <a class="button primary" href="../run/pmc_simulation_app.html">Open Main App</a>
+          <a class="button" href="../qa/QUALITY_CHECKS.md">Quality Notes</a>
+          <a class="button" href="../agents/AGENT_ORCHESTRATION_README.md">Agent Protocol</a>
+        </nav>
+      </header>
+
+      <section class="intro">
+        <div>
+          <h1>Every mission moves through the same trusted build chain.</h1>
+          <p>
+            This dashboard keeps the app organized around the agents we created: extract the source,
+            teach the concept, protect diagram accuracy, vary the practice bank, and check the
+            experience before a student uses it.
+          </p>
+        </div>
+        <aside class="status-panel" aria-label="Package status">
+          <h2>Package Status</h2>
+          <div class="status-list">
+            <div class="status-row"><strong>Launch file</strong><span>run folder only</span></div>
+            <div class="status-row"><strong>Live missions</strong><span>6</span></div>
+            <div class="status-row"><strong>Agent files</strong><span>7 protocols</span></div>
+            <div class="status-row"><strong>Release gate</strong><span>QA scripts included</span></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" aria-labelledby="agent-chain">
+        <div class="section-head">
+          <div>
+            <h2 id="agent-chain">Agent Chain</h2>
+            <p>Use this sequence whenever new lesson notes or review papers are added.</p>
+          </div>
+        </div>
+        <div class="agent-grid">
+          <article class="agent-card" data-agent="source-miner">
+            <span class="step">01</span>
+            <h3>Source Miner</h3>
+            <p>Extracts the exact topic, vocabulary, worked examples, diagrams, and exam patterns from the lesson source.</p>
+            <div class="link-row">
+              <a class="text-link" href="../source/source_page_images/">Source images</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="intro-pedagogy">
+            <span class="step">02</span>
+            <h3>Intro Pedagogy Agent</h3>
+            <p>Turns the topic into a warm, child-ready onboarding path with a video pack, skill gates, and confidence ramp.</p>
+            <div class="link-row">
+              <a class="text-link" href="../agents/intro_pedagogy_agent.md">Protocol</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="diagram-fidelity">
+            <span class="step">03</span>
+            <h3>Source Diagram Fidelity Agent</h3>
+            <p>Checks that diagrams match the mathematical object, labels, dimensions, and source intent before release.</p>
+            <div class="link-row">
+              <a class="text-link" href="../agents/source_diagram_fidelity_agent.md">Protocol</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="visual-explainer">
+            <span class="step">04</span>
+            <h3>Visual Explainer Graphics Agent</h3>
+            <p>Builds visual explanations that are clickable, labeled correctly, and useful for an 11-year-old learner.</p>
+            <div class="link-row">
+              <a class="text-link" href="../agents/visual_explainer_graphics_agent.md">Protocol</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="volume-spatial-visual">
+            <span class="step">05</span>
+            <h3>Volume Spatial Visual Agent</h3>
+            <p>Approves cube-count diagrams only when unit cubes, missing cells, tunnel overlap, and dimensions are visible.</p>
+            <div class="link-row">
+              <a class="text-link" href="../agents/volume_spatial_visual_agent.md">Protocol</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="question-bank-quality">
+            <span class="step">06</span>
+            <h3>Question Bank Quality Agent</h3>
+            <p>Creates varied practice, verifies answers, checks distractors, and avoids questions that rely on memory alone.</p>
+            <div class="link-row">
+              <a class="text-link" href="../agents/question_bank_quality_agent.md">Protocol</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="challenge-question">
+            <span class="step">07</span>
+            <h3>Challenge Question Agent</h3>
+            <p>Turns the hardest source classics into JMC/PMC-style variations with reverse reasoning, constraints, and mixed answer formats.</p>
+            <div class="link-row">
+              <a class="text-link" href="../agents/challenge_question_agent.md">Protocol</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="experience-quality">
+            <span class="step">08</span>
+            <h3>Learning Experience Quality Gate</h3>
+            <p>Reviews flow, feedback, retakes, unanswered questions, scoring, and final explanations before the module ships.</p>
+            <div class="link-row">
+              <a class="text-link" href="../agents/learning_experience_quality_gate.md">Protocol</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="mission-registry">
+        <div class="section-head">
+          <div>
+            <h2 id="mission-registry">Mission Registry</h2>
+            <p>Each mission keeps its student page, source pack, intro pack, and checks inside its own folder.</p>
+          </div>
+        </div>
+        <div class="mission-grid">
+          <article class="mission-card">
+            <h3>Pascal Triangle</h3>
+            <div class="mission-meta"><span class="tag">Patterns</span><span class="tag">Combinations</span></div>
+            <div class="link-row">
+              <a class="text-link" href="../modules/pascal/pascal_triangle_practice_share.html">Open</a>
+              <a class="text-link" href="../modules/pascal/pascal_triangle_intro_animatic.html">Animatic</a>
+              <a class="text-link" href="../modules/pascal/pascal_triangle_intro_video_pack.md">Video pack</a>
+            </div>
+          </article>
+          <article class="mission-card">
+            <h3>Consecutive Number Triangles</h3>
+            <div class="mission-meta"><span class="tag">Sequences</span><span class="tag">Formulae</span></div>
+            <div class="link-row">
+              <a class="text-link" href="../modules/consecutive_number_triangles/consecutive_triangles_module.html">Open</a>
+              <a class="text-link" href="../modules/consecutive_number_triangles/consecutive_triangles_practice_share.html">Practice</a>
+              <a class="text-link" href="../modules/consecutive_number_triangles/consecutive_triangles_intro_video_pack.md">Video pack</a>
+            </div>
+          </article>
+          <article class="mission-card">
+            <h3>Angles</h3>
+            <div class="mission-meta"><span class="tag">Geometry</span><span class="tag">Reasoning</span></div>
+            <div class="link-row">
+              <a class="text-link" href="../modules/angles/angles_module.html">Open</a>
+              <a class="text-link" href="../modules/angles/angles_practice_share.html">Practice</a>
+              <a class="text-link" href="../modules/angles/angles_intro_video_pack.md">Video pack</a>
+            </div>
+          </article>
+          <article class="mission-card">
+            <h3>U2T2 Units</h3>
+            <div class="mission-meta"><span class="tag">Units</span><span class="tag">Word problems</span></div>
+            <div class="link-row">
+              <a class="text-link" href="../modules/u2t2_units/u2t2_units_mission.html">Open</a>
+              <a class="text-link" href="../modules/u2t2_units/u2t2_submodule.html">Submodules</a>
+              <a class="text-link" href="../modules/u2t2_units/u2t2_bank_quality_audit.js">Bank audit</a>
+            </div>
+          </article>
+          <article class="mission-card">
+            <h3>Volume of Prisms</h3>
+            <div class="mission-meta"><span class="tag">3D shapes</span><span class="tag">Area x length</span></div>
+            <div class="link-row">
+              <a class="text-link" href="../modules/volume_prisms/volume_prisms_module.html">Open</a>
+              <a class="text-link" href="../modules/volume_prisms/volume_prisms_source_extract.md">Source extract</a>
+              <a class="text-link" href="../modules/volume_prisms/volume_prisms_intro_video_pack.md">Video pack</a>
+            </div>
+          </article>
+          <article class="mission-card">
+            <h3>Volume Problem Extension</h3>
+            <div class="mission-meta"><span class="tag">Composite volume</span><span class="tag">Missing values</span></div>
+            <div class="link-row">
+              <a class="text-link" href="../modules/volume_problem_extension/volume_extension_module.html">Open</a>
+              <a class="text-link" href="../modules/volume_problem_extension/volume_extension_source_extract.md">Source extract</a>
+              <a class="text-link" href="../modules/volume_problem_extension/volume_extension_intro_video_pack.md">Video pack</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="release-gates">
+        <div class="section-head">
+          <div>
+            <h2 id="release-gates">Release Gates</h2>
+            <p>The dashboard is the human map; the QA files are the mechanical checks.</p>
+          </div>
+        </div>
+        <div class="gate-grid">
+          <article class="gate-card">
+            <h3>Full Quality Run</h3>
+            <p>Runs bank audits, module tests, math display checks, and existing mission checks.</p>
+            <div class="link-row">
+              <a class="text-link" href="../qa/run_all_quality_checks.js">Open QA runner</a>
+              <a class="text-link" href="../qa/QUALITY_CHECKS.md">Quality notes</a>
+            </div>
+          </article>
+          <article class="gate-card warning">
+            <h3>Packaging Rule</h3>
+            <p>The only student launch file in this export is the main app inside the run folder.</p>
+            <div class="link-row">
+              <a class="text-link" href="../run/pmc_simulation_app.html">Launch file</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <p class="footer-note">
+        When adding a new topic, create or enrich a module folder, attach its source and intro pack,
+        add or update the bank checks, then register it here and in the main app.
+      </p>
+    </main>
+  </body>
+</html>

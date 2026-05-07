@@ -1,0 +1,134 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PMC Simulation - Consecutive Number Triangles</title>
+    <link rel="stylesheet" href="consecutive_triangles_module.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">PMC Simulation</p>
+          <h1>Consecutive Number Triangles</h1>
+        </div>
+        <nav class="module-nav" aria-label="Module navigation">
+          <a href="../../run/pmc_simulation_app.html">Modules</a>
+          <a href="../pascal/pascal_triangle_practice_share.html">Pascal Triangle</a>
+          <button id="mode-intro-button" type="button">Watch intro</button>
+          <button id="mode-practice-button" type="button" class="secondary">Train</button>
+        </nav>
+      </header>
+
+      <section id="intro-screen" class="intro-screen" aria-labelledby="intro-heading">
+        <div class="intro-copy">
+          <span class="intro-kicker">Chapter 2</span>
+          <h2 id="intro-heading">A Triangle Is An Address Map</h2>
+          <p>This chapter is not Pascal Triangle. The numbers are placed row by row, so the useful question is: which row, and which seat?</p>
+          <div class="intro-rule">
+            <span>Main move</span>
+            <strong>numbers before the row + seat number</strong>
+          </div>
+          <div class="intro-skill-grid" aria-label="Skills in this session">
+            <div><strong>Row End</strong><span>Use triangular numbers to find the last value in a row.</span></div>
+            <div><strong>Find The Seat</strong><span>Find row r, position k by counting what came before.</span></div>
+            <div><strong>Find The Address</strong><span>Work backwards from a value to its row and position.</span></div>
+            <div><strong>Even Twin</strong><span>Use the same address map after doubling values.</span></div>
+            <div><strong>Wide Row</strong><span>Spot the stretch triangle whose row ends are square numbers.</span></div>
+          </div>
+          <div class="intro-choice-row">
+            <button id="intro-choice-watch" type="button">Watch the lesson</button>
+            <button id="intro-choice-train" type="button" class="secondary">Train now</button>
+          </div>
+        </div>
+
+        <div class="intro-video" aria-label="Consecutive number triangle intro">
+          <div class="intro-video-head">
+            <div>
+              <h2 id="intro-scene-title">New Map</h2>
+              <p id="intro-scene-purpose">Name the chapter and the address idea.</p>
+            </div>
+            <span id="intro-progress" class="state-label">1 of 8</span>
+          </div>
+          <div class="intro-video-body">
+            <div class="intro-main">
+              <div id="intro-frame" class="intro-frame"></div>
+              <p id="intro-caption" class="intro-caption"></p>
+              <div class="intro-track" aria-hidden="true">
+                <div id="intro-progress-fill" class="intro-progress-fill"></div>
+              </div>
+              <div class="intro-actions">
+                <button id="intro-play" type="button">Play captioned lesson</button>
+                <button id="intro-pause" type="button" class="secondary" disabled>Pause</button>
+                <button id="intro-next" type="button" class="secondary">Next scene</button>
+                <button id="intro-start" type="button">Start exercises</button>
+                <label class="voice-toggle">
+                  <input id="intro-voice-toggle" type="checkbox">
+                  <span>Simple voice fallback</span>
+                </label>
+              </div>
+            </div>
+            <ol id="intro-storyboard" class="intro-storyboard" aria-label="Lesson storyboard"></ol>
+          </div>
+        </div>
+      </section>
+
+      <section id="practice-grid" class="practice-grid" hidden>
+        <section class="practice-panel" aria-labelledby="practice-heading">
+          <div class="panel-head">
+            <div>
+              <p id="classic-label" class="eyebrow">Row End</p>
+              <h2 id="practice-heading">Practice</h2>
+            </div>
+            <span id="session-count" class="state-label">1 of 8</span>
+          </div>
+
+          <div id="mastery-chips" class="mastery-chips" aria-label="Module classics"></div>
+
+          <p id="problem-prompt" class="problem-prompt"></p>
+          <div id="format-hint" class="format-hint"></div>
+
+          <form id="answer-form" class="answer-form">
+            <div id="answer-host"></div>
+            <div class="action-row">
+              <button id="check-button" type="submit">Check</button>
+              <button id="hint-button" type="button" class="secondary">Hint</button>
+              <button id="why-button" type="button" class="secondary">Show why</button>
+              <button id="next-button" type="button" class="secondary" disabled>Next</button>
+            </div>
+          </form>
+
+          <div id="feedback" class="feedback-card muted" role="status" aria-live="polite">
+            Choose an answer, then check it.
+          </div>
+        </section>
+
+        <section class="visual-panel" aria-labelledby="visual-heading">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Visual explainer</p>
+              <h2 id="visual-heading">Triangle map</h2>
+            </div>
+            <span id="visual-state" class="state-label">initial</span>
+          </div>
+          <div id="visual-frame" class="visual-frame"></div>
+          <p id="visual-text" class="visual-text"></p>
+        </section>
+      </section>
+
+      <section id="round-recap" class="round-recap" hidden>
+        <div>
+          <p class="eyebrow">Round recap</p>
+          <h2>What This Round Taught You</h2>
+        </div>
+        <div id="recap-content" class="recap-content"></div>
+        <div class="action-row">
+          <button id="fresh-round-button" type="button">Fresh round</button>
+          <button id="review-intro-button" type="button" class="secondary">Review intro</button>
+        </div>
+      </section>
+    </main>
+    <script src="consecutive_triangles_module.js"></script>
+  </body>
+</html>

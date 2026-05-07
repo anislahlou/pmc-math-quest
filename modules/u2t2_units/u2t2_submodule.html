@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>U2T2 Training</title>
+    <link rel="stylesheet" href="u2t2_module.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="u2t2_units_mission.html" aria-label="Back to U2T2 Units">
+          <span class="brand-mark" aria-hidden="true">U</span>
+          <span>U2T2 Training</span>
+        </a>
+        <nav class="module-nav" aria-label="Module navigation">
+          <a href="pmc_simulation_app.html">Mission home</a>
+          <a href="u2t2_units_mission.html">U2T2 map</a>
+          <button type="button" class="top-action secondary" data-action="intro">Watch intro</button>
+          <button type="button" class="top-action" data-action="train">Train</button>
+          <button type="button" class="top-action challenge-action" data-action="challenge">Challenge</button>
+        </nav>
+      </header>
+
+      <section id="intro-screen" class="intro-screen" aria-labelledby="module-title">
+        <div class="intro-copy">
+          <span id="module-zone" class="intro-kicker">Zone</span>
+          <h1 id="module-title">Submodule</h1>
+          <p id="module-intro">Choose a submodule to begin.</p>
+          <div class="intro-rule">
+            <span>Source pack</span>
+            <strong id="module-source">Completed notes and review prep</strong>
+          </div>
+          <div id="skill-grid" class="intro-skill-grid" aria-label="Skills in this submodule"></div>
+          <div class="intro-choice-row">
+            <button type="button" data-action="train">Start exercises</button>
+            <button type="button" class="challenge-action" data-action="challenge">Challenge set</button>
+            <button type="button" class="secondary" data-action="intro">Review intro</button>
+          </div>
+        </div>
+
+        <aside class="module-picker" aria-label="Choose another U2T2 submodule">
+          <p class="eyebrow">Submodule map</p>
+          <div id="module-chips" class="module-chips"></div>
+        </aside>
+      </section>
+
+      <section id="practice-grid" class="practice-grid" hidden>
+        <section class="practice-panel" aria-labelledby="practice-heading">
+          <div class="panel-head">
+            <div>
+              <p id="current-classic" class="eyebrow">Skill</p>
+              <h2 id="practice-heading">Practice Round</h2>
+            </div>
+            <span id="session-count" class="state-label">1 of 8</span>
+          </div>
+
+          <p id="problem-prompt" class="problem-prompt"></p>
+          <div id="format-hint" class="format-hint"></div>
+
+          <form id="answer-form" class="answer-form" novalidate>
+            <div id="answer-host" class="answer-host"></div>
+            <div class="action-row" aria-label="Practice actions">
+              <button id="check-button" type="submit">Check</button>
+              <button id="hint-button" type="button" class="secondary">Hint</button>
+              <button id="why-button" type="button" class="secondary">Show why</button>
+              <button id="similar-button" type="button" class="secondary repair-button" hidden>Try similar</button>
+              <button id="next-button" type="button" class="secondary" disabled>Next</button>
+            </div>
+          </form>
+
+          <div id="feedback" class="feedback-card muted" role="status" aria-live="polite">
+            Choose or type an answer, then check it.
+          </div>
+          <div id="hint-ladder" class="hint-ladder" aria-live="polite"></div>
+        </section>
+
+        <section class="visual-panel" aria-labelledby="visual-heading">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Visual explainer</p>
+              <h2 id="visual-heading">Method Map</h2>
+            </div>
+            <span id="visual-state" class="state-label">initial</span>
+          </div>
+          <div id="visual-frame" class="visual-frame"></div>
+          <p id="visual-text" class="visual-text"></p>
+        </section>
+      </section>
+
+      <section id="round-recap" class="round-recap" hidden>
+        <div>
+          <p class="eyebrow">Round recap</p>
+          <h2>What This Round Taught You</h2>
+        </div>
+        <div id="recap-content" class="recap-content"></div>
+        <div class="action-row">
+          <button id="fresh-round-button" type="button">Fresh round</button>
+          <button type="button" class="secondary" data-action="intro">Review intro</button>
+        </div>
+      </section>
+    </main>
+    <script src="u2t2_module.js"></script>
+  </body>
+</html>

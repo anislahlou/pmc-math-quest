@@ -1,0 +1,1217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PMC Math Quest</title>
+    <style>
+      :root {
+        --bg: #f7fbff;
+        --paper: #fffdf7;
+        --ink: #172333;
+        --muted: #52657a;
+        --line: #d8e3eb;
+        --navy: #16345d;
+        --aqua: #11a9b8;
+        --mint: #b9f2cc;
+        --banana: #ffe16d;
+        --coral: #ff6d58;
+        --berry: #6b4de6;
+        --grass: #35a86b;
+        --shadow: 0 18px 40px rgba(23, 35, 51, 0.12);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--bg);
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--ink);
+        background:
+          repeating-linear-gradient(0deg, rgba(17, 169, 184, 0.06) 0 1px, transparent 1px 38px),
+          repeating-linear-gradient(90deg, rgba(107, 77, 230, 0.05) 0 1px, transparent 1px 38px),
+          var(--bg);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .app-shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 18px 0 28px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 64px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+        font-weight: 900;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        background: var(--banana);
+        box-shadow: 4px 4px 0 #0d263f;
+        font-size: 1.3rem;
+      }
+
+      .brand span:last-child {
+        overflow-wrap: anywhere;
+      }
+
+      .builder-link,
+      .button {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 8px;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .builder-link {
+        border: 1px solid var(--line);
+        padding: 0 14px;
+        background: rgba(255, 255, 255, 0.78);
+        color: var(--navy);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(360px, 0.98fr);
+        gap: 26px;
+        align-items: stretch;
+        margin-top: 8px;
+        padding: 28px;
+        border: 3px solid #0d263f;
+        border-radius: 8px;
+        background:
+          linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 44px),
+          linear-gradient(0deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 44px),
+          #17355f;
+        color: #ffffff;
+        box-shadow: 0 10px 0 #0d263f;
+      }
+
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+        min-width: 0;
+      }
+
+      .eyebrow {
+        color: inherit;
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .hero .eyebrow {
+        color: var(--mint);
+      }
+
+      h1 {
+        max-width: 12ch;
+        font-size: 3.45rem;
+        line-height: 0.96;
+        letter-spacing: 0;
+      }
+
+      .hero-copy > p:not(.eyebrow) {
+        max-width: 58ch;
+        color: #d8f7ff;
+        font-size: 1.05rem;
+        line-height: 1.55;
+      }
+
+      .hero-actions,
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .button {
+        border: 2px solid #0d263f;
+        padding: 0 16px;
+        background: var(--banana);
+        color: #0d263f;
+        box-shadow: 4px 4px 0 #0d263f;
+        transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+      }
+
+      .button:hover,
+      .button:focus-visible,
+      .builder-link:hover,
+      .builder-link:focus-visible {
+        transform: translate(-1px, -1px);
+      }
+
+      .button:focus-visible,
+      .builder-link:focus-visible,
+      .quest-node:focus-visible {
+        outline: 3px solid var(--banana);
+        outline-offset: 3px;
+      }
+
+      .button:hover,
+      .button:focus-visible {
+        box-shadow: 6px 6px 0 #0d263f;
+      }
+
+      .button.secondary {
+        background: #ffffff;
+      }
+
+      .button.coral {
+        background: var(--coral);
+        color: #ffffff;
+      }
+
+      .mission-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        max-width: 560px;
+      }
+
+      .stat {
+        min-height: 82px;
+        border: 2px solid rgba(255, 255, 255, 0.28);
+        border-radius: 8px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.11);
+      }
+
+      .stat strong,
+      .stat span {
+        display: block;
+      }
+
+      .stat strong {
+        font-size: 1.55rem;
+        line-height: 1;
+      }
+
+      .stat span {
+        margin-top: 6px;
+        color: #d8f7ff;
+        font-size: 0.86rem;
+        font-weight: 800;
+        line-height: 1.25;
+      }
+
+      .quest-board {
+        position: relative;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        gap: 18px;
+        min-height: 360px;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        padding: 18px;
+        background: var(--paper);
+        color: var(--ink);
+        box-shadow: 7px 7px 0 rgba(13, 38, 63, 0.95);
+      }
+
+      .board-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .board-title strong {
+        font-size: 1rem;
+      }
+
+      .xp-pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        border: 2px solid #0d263f;
+        border-radius: 999px;
+        padding: 0 10px;
+        background: var(--mint);
+        font-size: 0.82rem;
+        font-weight: 900;
+      }
+
+      .quest-map {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: center;
+        gap: 12px;
+      }
+
+      .quest-map::before {
+        content: "";
+        position: absolute;
+        left: 12%;
+        right: 12%;
+        top: 50%;
+        height: 6px;
+        border-radius: 999px;
+        background: #0d263f;
+      }
+
+      .quest-node {
+        position: relative;
+        z-index: 1;
+        min-height: 176px;
+        display: grid;
+        grid-template-rows: auto auto 1fr;
+        gap: 7px;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        padding: 12px;
+        background: #ffffff;
+        text-decoration: none;
+        box-shadow: 4px 4px 0 #0d263f;
+        transition: transform 150ms ease, box-shadow 150ms ease;
+      }
+
+      .quest-node:hover {
+        transform: translateY(-3px);
+        box-shadow: 5px 8px 0 #0d263f;
+      }
+
+      .quest-node:nth-child(1) {
+        align-self: start;
+        background: #fff4b5;
+      }
+
+      .quest-node:nth-child(2) {
+        align-self: end;
+        background: #d9fbff;
+      }
+
+      .quest-node:nth-child(3) {
+        align-self: start;
+        background: #efe8ff;
+      }
+
+      .quest-node:nth-child(4) {
+        align-self: end;
+        background: #ffe7df;
+      }
+
+      .quest-node:nth-child(5) {
+        align-self: start;
+        background: #dcf8e5;
+      }
+
+      .node-number {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        background: #ffffff;
+        font-weight: 1000;
+      }
+
+      .quest-node strong {
+        font-size: 1rem;
+        line-height: 1.15;
+      }
+
+      .quest-node small {
+        align-self: end;
+        color: var(--muted);
+        font-weight: 900;
+        line-height: 1.2;
+      }
+
+      .level-bar {
+        display: grid;
+        gap: 8px;
+      }
+
+      .level-copy {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 900;
+      }
+
+      .meter {
+        height: 16px;
+        overflow: hidden;
+        border: 2px solid #0d263f;
+        border-radius: 999px;
+        background: #ffffff;
+      }
+
+      .meter span {
+        display: block;
+        width: 72%;
+        height: 100%;
+        background:
+          repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.38) 0 8px, transparent 8px 16px),
+          var(--grass);
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        margin: 34px 0 14px;
+      }
+
+      .section-head p {
+        max-width: 48ch;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .section-head h2 {
+        font-size: 1.85rem;
+        line-height: 1.05;
+      }
+
+      .module-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .module-card {
+        min-height: 520px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 14px;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        padding: 16px;
+        background: #ffffff;
+        box-shadow: var(--shadow);
+      }
+
+      .module-card.pascal {
+        background: #fffaf0;
+      }
+
+      .module-card.triangles {
+        background: #effcff;
+      }
+
+      .module-card.angles {
+        background: #f7f2ff;
+      }
+
+      .module-card.volume {
+        background: #f2fff7;
+      }
+
+      .module-card.volume-extension {
+        background: #fff8e8;
+      }
+
+      .module-card.u2t2 {
+        grid-column: 1 / -1;
+        min-height: 360px;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 0.92fr);
+        grid-template-rows: auto 1fr auto;
+        background: #fff2ee;
+      }
+
+      .module-card.u2t2 > p,
+      .module-card.u2t2 .skill-list,
+      .module-card.u2t2 .actions {
+        grid-column: 1;
+      }
+
+      .module-card.u2t2 .card-visual {
+        grid-column: 2;
+        grid-row: 1 / span 4;
+        min-height: 100%;
+      }
+
+      .card-top {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .chapter {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        border: 2px solid #0d263f;
+        border-radius: 999px;
+        padding: 0 10px;
+        background: #ffffff;
+        color: #0d263f;
+        font-size: 0.78rem;
+        font-weight: 1000;
+        white-space: nowrap;
+      }
+
+      .module-card h3 {
+        margin-top: 8px;
+        font-size: 1.45rem;
+        line-height: 1.1;
+      }
+
+      .difficulty {
+        display: grid;
+        gap: 4px;
+        justify-items: end;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 900;
+      }
+
+      .dots {
+        display: inline-flex;
+        gap: 4px;
+      }
+
+      .dots span {
+        width: 10px;
+        height: 10px;
+        border: 2px solid #0d263f;
+        border-radius: 999px;
+        background: #ffffff;
+      }
+
+      .dots .filled {
+        background: var(--coral);
+      }
+
+      .module-card > p {
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .card-visual {
+        min-height: 186px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        background: #ffffff;
+      }
+
+      .pascal-stack {
+        display: grid;
+        gap: 7px;
+        transform: rotate(-2deg);
+      }
+
+      .pascal-row {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .pascal-row span,
+      .number-triangle span {
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        background: var(--banana);
+        font-weight: 1000;
+        box-shadow: 3px 3px 0 #0d263f;
+      }
+
+      .pascal-row:nth-child(3) span:nth-child(2),
+      .pascal-row:nth-child(4) span:nth-child(2),
+      .pascal-row:nth-child(4) span:nth-child(3) {
+        background: var(--mint);
+      }
+
+      .number-triangle {
+        display: grid;
+        gap: 7px;
+        transform: rotate(2deg);
+      }
+
+      .number-triangle .wide span {
+        background: #d9fbff;
+      }
+
+      .angle-stage {
+        position: relative;
+        width: min(100%, 270px);
+        aspect-ratio: 1.4;
+      }
+
+      .angle-line {
+        position: absolute;
+        left: 12%;
+        bottom: 32%;
+        width: 74%;
+        height: 8px;
+        border: 2px solid #0d263f;
+        border-radius: 999px;
+        background: var(--banana);
+        transform-origin: left center;
+      }
+
+      .angle-line.one {
+        transform: rotate(0deg);
+      }
+
+      .angle-line.two {
+        transform: rotate(-42deg);
+        background: var(--mint);
+      }
+
+      .angle-arc {
+        position: absolute;
+        left: 18%;
+        bottom: 35%;
+        width: 82px;
+        height: 82px;
+        border-top: 8px solid var(--coral);
+        border-right: 8px solid var(--coral);
+        border-radius: 0 100% 0 0;
+        transform: rotate(-43deg);
+      }
+
+      .angle-badge {
+        position: absolute;
+        right: 8%;
+        top: 12%;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        padding: 8px 10px;
+        background: #efe8ff;
+        box-shadow: 4px 4px 0 #0d263f;
+        font-weight: 1000;
+      }
+
+      .volume-stage {
+        width: min(100%, 300px);
+      }
+
+      .volume-stage text {
+        font: 900 13px Inter, ui-sans-serif, system-ui, sans-serif;
+        fill: #0d263f;
+      }
+
+      .unit-map {
+        width: min(100%, 430px);
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+        padding: 14px;
+      }
+
+      .unit-map span {
+        min-height: 156px;
+        display: grid;
+        place-items: center;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        padding: 10px 6px;
+        background: #ffffff;
+        box-shadow: 4px 4px 0 #0d263f;
+        font-size: 0.82rem;
+        font-weight: 1000;
+        line-height: 1.12;
+        text-align: center;
+      }
+
+      .unit-map span:nth-child(1) {
+        background: #fff4b5;
+        transform: translateY(18px);
+      }
+
+      .unit-map span:nth-child(2) {
+        background: #d9fbff;
+        transform: translateY(-8px);
+      }
+
+      .unit-map span:nth-child(3) {
+        background: #efe8ff;
+        transform: translateY(12px);
+      }
+
+      .unit-map span:nth-child(4) {
+        background: #dcf8e5;
+        transform: translateY(-16px);
+      }
+
+      .unit-map span:nth-child(5) {
+        background: #ffe7df;
+        transform: translateY(10px);
+      }
+
+      .skill-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: start;
+        gap: 8px;
+      }
+
+      .skill-list span {
+        min-height: 32px;
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0 10px;
+        background: rgba(255, 255, 255, 0.82);
+        color: #314457;
+        font-size: 0.82rem;
+        font-weight: 900;
+      }
+
+      .module-card .actions {
+        align-self: end;
+      }
+
+      .module-card .button {
+        flex: 1 1 160px;
+      }
+
+      .learning-powers {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 18px;
+        padding: 18px;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        background: var(--paper);
+      }
+
+      .power {
+        min-height: 118px;
+        display: grid;
+        gap: 8px;
+        align-content: start;
+        border-left: 8px solid var(--aqua);
+        padding: 4px 4px 4px 12px;
+      }
+
+      .power:nth-child(2) {
+        border-left-color: var(--coral);
+      }
+
+      .power:nth-child(3) {
+        border-left-color: var(--grass);
+      }
+
+      .power:nth-child(4) {
+        border-left-color: var(--berry);
+      }
+
+      .power strong {
+        font-size: 1rem;
+      }
+
+      .power span {
+        color: var(--muted);
+        font-size: 0.92rem;
+        font-weight: 750;
+        line-height: 1.35;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .brand-mark,
+        .node-number,
+        .angle-badge {
+          animation: lift 4s ease-in-out infinite;
+        }
+
+        .quest-node:nth-child(2) .node-number {
+          animation-delay: 600ms;
+        }
+
+        .quest-node:nth-child(3) .node-number {
+          animation-delay: 1100ms;
+        }
+
+        .quest-node:nth-child(4) .node-number {
+          animation-delay: 1500ms;
+        }
+
+        @keyframes lift {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+
+          50% {
+            transform: translateY(-4px);
+          }
+        }
+      }
+
+      @media (max-width: 980px) {
+        .hero,
+        .learning-powers {
+          grid-template-columns: 1fr;
+        }
+
+        .module-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .module-card.u2t2 {
+          grid-template-columns: 1fr;
+        }
+
+        .module-card.u2t2 > p,
+        .module-card.u2t2 .skill-list,
+        .module-card.u2t2 .actions,
+        .module-card.u2t2 .card-visual {
+          grid-column: auto;
+          grid-row: auto;
+        }
+
+        h1 {
+          max-width: 16ch;
+          font-size: 2.6rem;
+        }
+
+        .quest-board {
+          min-height: 320px;
+        }
+
+        .module-card {
+          min-height: 0;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .app-shell {
+          width: calc(100% - 18px);
+          padding-top: 8px;
+        }
+
+        .topbar,
+        .section-head,
+        .board-title,
+        .level-copy {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .topbar {
+          gap: 10px;
+        }
+
+        .builder-link,
+        .hero-actions .button,
+        .actions .button {
+          width: 100%;
+        }
+
+        .hero {
+          padding: 18px;
+        }
+
+        h1 {
+          font-size: 2.25rem;
+        }
+
+        .mission-stats,
+        .quest-map {
+          grid-template-columns: 1fr;
+        }
+
+        .quest-map::before {
+          left: 22px;
+          right: auto;
+          top: 10%;
+          bottom: 10%;
+          width: 6px;
+          height: auto;
+        }
+
+        .quest-node {
+          min-height: 126px;
+        }
+
+        .unit-map {
+          grid-template-columns: 1fr;
+        }
+
+        .unit-map span {
+          min-height: 74px;
+          transform: none !important;
+        }
+
+        .card-top {
+          flex-direction: column;
+        }
+
+        .difficulty {
+          justify-items: start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar" aria-label="PMC Math Quest">
+        <a class="brand" href="pmc_simulation_app.html" aria-label="PMC Math Quest home">
+          <span class="brand-mark" aria-hidden="true">M</span>
+          <span>PMC Math Quest</span>
+        </a>
+        <a class="builder-link" href="../dashboard/math_skill_command_center.html">Builder room</a>
+      </header>
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Math training for curious 11-year-olds</p>
+          <h1 id="hero-title">Pick your next math mission.</h1>
+          <p>Crack patterns, hunt number clues, and chase angles through short challenge rounds with hints that nudge instead of spoil.</p>
+          <div class="hero-actions" aria-label="Quick starts">
+            <a class="button coral" href="../modules/u2t2_units/u2t2_units_mission.html">Open U2T2 Units</a>
+            <a class="button secondary" href="../modules/volume_prisms/volume_prisms_module.html">Launch Volume</a>
+            <a class="button secondary" href="../modules/volume_problem_extension/volume_extension_module.html">Launch Extension</a>
+            <a class="button secondary" href="#missions">See all missions</a>
+          </div>
+          <div class="mission-stats" aria-label="Quest stats">
+            <div class="stat"><strong>6</strong><span>missions ready</span></div>
+            <div class="stat"><strong>14</strong><span>U2T2 submodules</span></div>
+            <div class="stat"><strong>10</strong><span>prism classics</span></div>
+          </div>
+        </div>
+
+        <div class="quest-board" aria-label="Mission map">
+          <div class="board-title">
+            <strong>Mission map</strong>
+            <span class="xp-pill">Skill XP active</span>
+          </div>
+          <div class="quest-map">
+            <a class="quest-node" href="../modules/pascal/pascal_triangle_practice_share.html">
+              <span class="node-number">1</span>
+              <strong>Pascal Triangle</strong>
+              <small>Pattern lab</small>
+            </a>
+            <a class="quest-node" href="../modules/consecutive_number_triangles/consecutive_triangles_practice_share.html">
+              <span class="node-number">2</span>
+              <strong>Number Triangles</strong>
+              <small>Clue chase</small>
+            </a>
+            <a class="quest-node" href="../modules/angles/angles_practice_share.html">
+              <span class="node-number">3</span>
+              <strong>Angles</strong>
+              <small>Boss puzzle</small>
+            </a>
+            <a class="quest-node" href="../modules/u2t2_units/u2t2_units_mission.html">
+              <span class="node-number">4</span>
+              <strong>U2T2 Units</strong>
+              <small>Year quest</small>
+            </a>
+            <a class="quest-node" href="../modules/volume_prisms/volume_prisms_module.html">
+              <span class="node-number">5</span>
+              <strong>Volume of Prisms</strong>
+              <small>Stack lab</small>
+            </a>
+            <a class="quest-node" href="../modules/volume_problem_extension/volume_extension_module.html">
+              <span class="node-number">6</span>
+              <strong>Volume Extension</strong>
+              <small>Cube lab</small>
+            </a>
+          </div>
+          <div class="level-bar" aria-label="Quest progress">
+            <div class="level-copy">
+              <span>Pattern power</span>
+              <span>72 percent charged</span>
+            </div>
+            <div class="meter" aria-hidden="true"><span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-head" id="missions">
+        <div>
+          <p class="eyebrow">Choose a mission</p>
+          <h2>Six ways to level up</h2>
+        </div>
+        <p>Single chapters build sharp skills. The U2T2 Units mission maps the whole year into smaller submodule quests.</p>
+      </section>
+
+      <section class="module-grid" aria-label="Available modules">
+        <article class="module-card u2t2">
+          <div class="card-top">
+            <div>
+              <span class="chapter">Year mission</span>
+              <h3>U2T2 Units</h3>
+            </div>
+            <div class="difficulty" aria-label="Difficulty: five out of five">
+              <span>Power level</span>
+              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span></span>
+            </div>
+          </div>
+          <p>Master the whole U2 maths map: number, algebra, geometry, ratio, data, 3D, and mixed exam reasoning.</p>
+          <div class="card-visual" aria-hidden="true">
+            <div class="unit-map">
+              <span>Number</span>
+              <span>Algebra</span>
+              <span>Geometry</span>
+              <span>Ratio + Data</span>
+              <span>Exam Arena</span>
+            </div>
+          </div>
+          <div class="skill-list" aria-label="U2T2 skills">
+            <span>5 zones</span>
+            <span>14 submodules</span>
+            <span>Review prep map</span>
+            <span>Live practice</span>
+          </div>
+          <div class="actions">
+            <a class="button coral" href="../modules/u2t2_units/u2t2_units_mission.html">Open U2T2 Units</a>
+          </div>
+        </article>
+
+        <article class="module-card pascal">
+          <div class="card-top">
+            <div>
+              <span class="chapter">Chapter 1</span>
+              <h3>Pascal Triangle</h3>
+            </div>
+            <div class="difficulty" aria-label="Difficulty: two out of five">
+              <span>Power level</span>
+              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span></span><span></span><span></span></span>
+            </div>
+          </div>
+          <p>Spot row patterns, parent rules, row totals, and reverse clues inside a number pyramid.</p>
+          <div class="card-visual" aria-hidden="true">
+            <div class="pascal-stack">
+              <div class="pascal-row"><span>1</span></div>
+              <div class="pascal-row"><span>1</span><span>1</span></div>
+              <div class="pascal-row"><span>1</span><span>2</span><span>1</span></div>
+              <div class="pascal-row"><span>1</span><span>3</span><span>3</span><span>1</span></div>
+            </div>
+          </div>
+          <div class="skill-list" aria-label="Pascal skills">
+            <span>Parent rule</span>
+            <span>Row doubler</span>
+            <span>Third stair</span>
+            <span>Reverse clues</span>
+          </div>
+          <div class="actions">
+            <a class="button" href="../modules/pascal/pascal_triangle_practice_share.html">Launch Pascal</a>
+          </div>
+        </article>
+
+        <article class="module-card volume">
+          <div class="card-top">
+            <div>
+              <span class="chapter">Lesson 15</span>
+              <h3>Volume of Prisms</h3>
+            </div>
+            <div class="difficulty" aria-label="Difficulty: four out of five">
+              <span>Power level</span>
+              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></span>
+            </div>
+          </div>
+          <p>Stack cross-sections, subtract holes, split composite faces, and solve water-level puzzles with fresh numbers.</p>
+          <div class="card-visual" aria-hidden="true">
+            <svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Volume prism preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <polygon points="65,48 168,48 212,75 110,75" fill="#e5f7f9" stroke="#0d263f" stroke-width="3"></polygon>
+              <rect x="65" y="75" width="103" height="82" fill="#fff8dc" stroke="#0d263f" stroke-width="3"></rect>
+              <polygon points="168,75 212,48 212,130 168,157" fill="#cdeff4" stroke="#0d263f" stroke-width="3"></polygon>
+              <polygon points="105,55 130,55 140,61 116,61" fill="#607983" stroke="#0d263f" stroke-width="2"></polygon>
+              <rect x="190" y="96" width="70" height="60" fill="#ffffff" stroke="#0d263f" stroke-width="3"></rect>
+              <rect x="193" y="125" width="64" height="28" fill="#95dcf2" opacity="0.8"></rect>
+              <circle cx="225" cy="137" r="11" fill="#607983"></circle>
+              <text x="117" y="174" text-anchor="middle">area x height</text>
+              <text x="226" y="174" text-anchor="middle">water rise</text>
+            </svg>
+          </div>
+          <div class="skill-list" aria-label="Volume skills">
+            <span>Base area</span>
+            <span>Hollow prisms</span>
+            <span>Composite faces</span>
+            <span>Water rise</span>
+            <span>Partial submerge</span>
+          </div>
+          <div class="actions">
+            <a class="button" href="../modules/volume_prisms/volume_prisms_module.html">Launch Volume</a>
+          </div>
+        </article>
+
+        <article class="module-card volume-extension">
+          <div class="card-top">
+            <div>
+              <span class="chapter">Lesson 16</span>
+              <h3>Volume Problem Extension</h3>
+            </div>
+            <div class="difficulty" aria-label="Difficulty: four out of five">
+              <span>Power level</span>
+              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></span>
+            </div>
+          </div>
+          <p>Count cube solids by layers, missing cells, tunnels, height maps, front-left-plan views, and water extensions.</p>
+          <div class="card-visual" aria-hidden="true">
+            <svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Volume extension preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <g stroke="#0d263f" stroke-width="2">
+                <rect x="44" y="36" width="34" height="34" fill="#d8e6ea"></rect>
+                <rect x="78" y="36" width="34" height="34" fill="#d8e6ea"></rect>
+                <rect x="112" y="36" width="34" height="34" fill="#d8e6ea"></rect>
+                <rect x="44" y="70" width="34" height="34" fill="#d8e6ea"></rect>
+                <rect x="78" y="70" width="34" height="34" fill="#ffffff"></rect>
+                <rect x="112" y="70" width="34" height="34" fill="#d8e6ea"></rect>
+                <rect x="44" y="104" width="34" height="34" fill="#d8e6ea"></rect>
+                <rect x="78" y="104" width="34" height="34" fill="#d8e6ea"></rect>
+                <rect x="112" y="104" width="34" height="34" fill="#d8e6ea"></rect>
+              </g>
+              <text x="95" y="164" text-anchor="middle">layer count</text>
+              <g transform="translate(184 42)" stroke="#0d263f" stroke-width="2">
+                <rect x="0" y="78" width="28" height="28" fill="#fff8dc"></rect>
+                <rect x="28" y="50" width="28" height="56" fill="#fff8dc"></rect>
+                <rect x="56" y="22" width="28" height="84" fill="#fff8dc"></rect>
+              </g>
+              <text x="226" y="164" text-anchor="middle">height map</text>
+            </svg>
+          </div>
+          <div class="skill-list" aria-label="Volume extension skills">
+            <span>Layer maps</span>
+            <span>Tunnel overlap</span>
+            <span>Height maps</span>
+            <span>Views</span>
+            <span>Cube displacement</span>
+          </div>
+          <div class="actions">
+            <a class="button" href="../modules/volume_problem_extension/volume_extension_module.html">Launch Extension</a>
+          </div>
+        </article>
+
+        <article class="module-card triangles">
+          <div class="card-top">
+            <div>
+              <span class="chapter">Chapter 2</span>
+              <h3>Consecutive Number Triangles</h3>
+            </div>
+            <div class="difficulty" aria-label="Difficulty: three out of five">
+              <span>Power level</span>
+              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span><span></span></span>
+            </div>
+          </div>
+          <p>Use row-and-seat addresses to find the number hiding in each triangle position.</p>
+          <div class="card-visual" aria-hidden="true">
+            <div class="number-triangle">
+              <div class="pascal-row"><span>1</span></div>
+              <div class="pascal-row"><span>2</span><span>3</span></div>
+              <div class="pascal-row"><span>4</span><span>5</span><span>6</span></div>
+              <div class="pascal-row wide"><span>7</span><span>8</span><span>9</span><span>10</span></div>
+            </div>
+          </div>
+          <div class="skill-list" aria-label="Consecutive triangle skills">
+            <span>Row end</span>
+            <span>Seat value</span>
+            <span>Find address</span>
+            <span>Even twin</span>
+            <span>Wide row</span>
+          </div>
+          <div class="actions">
+            <a class="button" href="../modules/consecutive_number_triangles/consecutive_triangles_practice_share.html">Launch Chapter 2</a>
+            <a class="button secondary" href="../modules/consecutive_number_triangles/consecutive_triangles_module.html">Source version</a>
+          </div>
+        </article>
+
+        <article class="module-card angles">
+          <div class="card-top">
+            <div>
+              <span class="chapter">Chapter 3</span>
+              <h3>Angles</h3>
+            </div>
+            <div class="difficulty" aria-label="Difficulty: four out of five">
+              <span>Power level</span>
+              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></span>
+            </div>
+          </div>
+          <p>Chase triangle totals, parallel lines, zigzags, polygons, and regular corners.</p>
+          <div class="card-visual" aria-hidden="true">
+            <div class="angle-stage">
+              <span class="angle-line one"></span>
+              <span class="angle-line two"></span>
+              <span class="angle-arc"></span>
+              <span class="angle-badge">x = ?</span>
+            </div>
+          </div>
+          <div class="skill-list" aria-label="Angle skills">
+            <span>Triangle total</span>
+            <span>Z/F/C angles</span>
+            <span>Zigzag totals</span>
+            <span>Angle chase</span>
+            <span>Polygon formula</span>
+          </div>
+          <div class="actions">
+            <a class="button" href="../modules/angles/angles_practice_share.html">Launch Angles</a>
+            <a class="button secondary" href="../modules/angles/angles_module.html">Source version</a>
+          </div>
+        </article>
+      </section>
+
+      <section class="learning-powers" aria-label="Learning style">
+        <div class="power">
+          <strong>Nudge hints</strong>
+          <span>Questions point you toward the next move without giving away the win.</span>
+        </div>
+        <div class="power">
+          <strong>Fast wins</strong>
+          <span>Short rounds make practice feel like a streak you can actually keep.</span>
+        </div>
+        <div class="power">
+          <strong>Instant feedback</strong>
+          <span>Right or wrong, the screen shows what changed and what to try next.</span>
+        </div>
+        <div class="power">
+          <strong>Warm challenge</strong>
+          <span>The tone stays patient, but the puzzles still feel worth beating.</span>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

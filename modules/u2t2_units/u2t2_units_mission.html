@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>U2T2 Units Mission</title>
+    <style>
+      :root {
+        --bg: #f7fbff;
+        --paper: #fffdf7;
+        --ink: #172333;
+        --muted: #52657a;
+        --line: #d8e3eb;
+        --navy: #16345d;
+        --aqua: #11a9b8;
+        --mint: #b9f2cc;
+        --banana: #ffe16d;
+        --coral: #ff6d58;
+        --berry: #6b4de6;
+        --grass: #35a86b;
+        --sky: #d9fbff;
+        --rose: #ffe7df;
+        --violet: #efe8ff;
+        --shadow: 0 18px 40px rgba(23, 35, 51, 0.12);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--bg);
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--ink);
+        background:
+          repeating-linear-gradient(0deg, rgba(17, 169, 184, 0.06) 0 1px, transparent 1px 38px),
+          repeating-linear-gradient(90deg, rgba(107, 77, 230, 0.05) 0 1px, transparent 1px 38px),
+          var(--bg);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .app-shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 18px 0 30px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 64px;
+      }
+
+      .brand,
+      .nav-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand {
+        min-width: 0;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        background: var(--banana);
+        box-shadow: 4px 4px 0 #0d263f;
+        font-size: 1.3rem;
+      }
+
+      .brand span:last-child {
+        overflow-wrap: anywhere;
+      }
+
+      .button,
+      .nav-link {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 8px;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .nav-link {
+        border: 1px solid var(--line);
+        padding: 0 14px;
+        background: rgba(255, 255, 255, 0.78);
+        color: var(--navy);
+      }
+
+      .button {
+        border: 2px solid #0d263f;
+        padding: 0 16px;
+        background: var(--banana);
+        color: #0d263f;
+        box-shadow: 4px 4px 0 #0d263f;
+        transition: transform 150ms ease, box-shadow 150ms ease;
+      }
+
+      .button:hover,
+      .button:focus-visible,
+      .nav-link:hover,
+      .nav-link:focus-visible,
+      .zone-chip:hover,
+      .zone-chip:focus-visible {
+        transform: translate(-1px, -1px);
+      }
+
+      .button:hover,
+      .button:focus-visible {
+        box-shadow: 6px 6px 0 #0d263f;
+      }
+
+      .button:focus-visible,
+      .nav-link:focus-visible,
+      .zone-chip:focus-visible,
+      .module-card:focus-within {
+        outline: 3px solid var(--banana);
+        outline-offset: 3px;
+      }
+
+      .button.secondary {
+        background: #ffffff;
+      }
+
+      .button.coral {
+        background: var(--coral);
+        color: #ffffff;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(340px, 0.98fr);
+        gap: 26px;
+        align-items: stretch;
+        margin-top: 8px;
+        padding: 28px;
+        border: 3px solid #0d263f;
+        border-radius: 8px;
+        background:
+          linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 44px),
+          linear-gradient(0deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 44px),
+          #17355f;
+        color: #ffffff;
+        box-shadow: 0 10px 0 #0d263f;
+      }
+
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+        min-width: 0;
+      }
+
+      .eyebrow {
+        color: inherit;
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .hero .eyebrow {
+        color: var(--mint);
+      }
+
+      h1 {
+        max-width: 11ch;
+        font-size: 3.4rem;
+        line-height: 0.96;
+        letter-spacing: 0;
+      }
+
+      .hero-copy > p:not(.eyebrow) {
+        max-width: 58ch;
+        color: #d8f7ff;
+        font-size: 1.05rem;
+        line-height: 1.55;
+      }
+
+      .hero-actions,
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .mission-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        max-width: 560px;
+      }
+
+      .stat {
+        min-height: 82px;
+        border: 2px solid rgba(255, 255, 255, 0.28);
+        border-radius: 8px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.11);
+      }
+
+      .stat strong,
+      .stat span {
+        display: block;
+      }
+
+      .stat strong {
+        font-size: 1.55rem;
+        line-height: 1;
+      }
+
+      .stat span {
+        margin-top: 6px;
+        color: #d8f7ff;
+        font-size: 0.86rem;
+        font-weight: 800;
+        line-height: 1.25;
+      }
+
+      .mission-console {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 16px;
+        min-height: 360px;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        padding: 18px;
+        background: var(--paper);
+        color: var(--ink);
+        box-shadow: 7px 7px 0 rgba(13, 38, 63, 0.95);
+      }
+
+      .console-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .xp-pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        border: 2px solid #0d263f;
+        border-radius: 999px;
+        padding: 0 10px;
+        background: var(--mint);
+        font-size: 0.82rem;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .console-map {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 9px;
+        align-content: center;
+      }
+
+      .zone-chip {
+        min-height: 138px;
+        display: grid;
+        gap: 8px;
+        align-content: start;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        padding: 12px;
+        background: #ffffff;
+        text-decoration: none;
+        box-shadow: 4px 4px 0 #0d263f;
+        transition: transform 150ms ease;
+      }
+
+      .zone-chip:nth-child(1) {
+        background: #fff4b5;
+      }
+
+      .zone-chip:nth-child(2) {
+        background: #d9fbff;
+      }
+
+      .zone-chip:nth-child(3) {
+        background: #efe8ff;
+      }
+
+      .zone-chip:nth-child(4) {
+        background: #dcf8e5;
+      }
+
+      .zone-chip:nth-child(5) {
+        background: #ffe7df;
+      }
+
+      .zone-chip strong {
+        font-size: 0.98rem;
+        line-height: 1.12;
+      }
+
+      .zone-chip span {
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 850;
+        line-height: 1.25;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        margin: 34px 0 14px;
+      }
+
+      .section-head p {
+        max-width: 50ch;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .section-head h2 {
+        font-size: 1.85rem;
+        line-height: 1.05;
+      }
+
+      .zone {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 16px;
+        margin-top: 16px;
+        scroll-margin-top: 18px;
+      }
+
+      .zone-label {
+        position: sticky;
+        top: 14px;
+        align-self: start;
+        display: grid;
+        gap: 12px;
+        min-height: 180px;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        padding: 14px;
+        background: var(--paper);
+        box-shadow: 5px 5px 0 #0d263f;
+      }
+
+      .zone-label strong {
+        font-size: 1.4rem;
+        line-height: 1.05;
+      }
+
+      .zone-label span {
+        color: var(--muted);
+        font-weight: 850;
+        line-height: 1.35;
+      }
+
+      .module-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .module-card {
+        min-height: 250px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 12px;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        padding: 14px;
+        background: #ffffff;
+        box-shadow: var(--shadow);
+        scroll-margin-top: 24px;
+        color: inherit;
+        text-decoration: none;
+        transition: transform 150ms ease, box-shadow 150ms ease;
+      }
+
+      .module-card:hover,
+      .module-card:focus-visible {
+        transform: translateY(-3px);
+        box-shadow: 6px 9px 0 rgba(13, 38, 63, 0.95);
+      }
+
+      .module-card.number {
+        background: #fffaf0;
+      }
+
+      .module-card.algebra {
+        background: #effcff;
+      }
+
+      .module-card.geometry {
+        background: #f7f2ff;
+      }
+
+      .module-card.proportion {
+        background: #f2fff6;
+      }
+
+      .module-card.arena {
+        background: #fff2ee;
+      }
+
+      .card-top {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .chapter {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        border: 2px solid #0d263f;
+        border-radius: 999px;
+        padding: 0 10px;
+        background: #ffffff;
+        color: #0d263f;
+        font-size: 0.78rem;
+        font-weight: 1000;
+        white-space: nowrap;
+      }
+
+      .module-card h3 {
+        margin-top: 8px;
+        font-size: 1.28rem;
+        line-height: 1.1;
+      }
+
+      .module-card p {
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .source-pill {
+        align-self: start;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 7px 10px;
+        background: rgba(255, 255, 255, 0.8);
+        color: #314457;
+        font-size: 0.76rem;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .skill-list {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: start;
+        gap: 8px;
+      }
+
+      .skill-list span {
+        min-height: 31px;
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0 10px;
+        background: rgba(255, 255, 255, 0.82);
+        color: #314457;
+        font-size: 0.8rem;
+        font-weight: 900;
+      }
+
+      .build-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 20px;
+        padding: 18px;
+        border: 2px solid #0d263f;
+        border-radius: 8px;
+        background: var(--paper);
+      }
+
+      .build-step {
+        min-height: 118px;
+        display: grid;
+        gap: 8px;
+        align-content: start;
+        border-left: 8px solid var(--aqua);
+        padding: 4px 4px 4px 12px;
+      }
+
+      .build-step:nth-child(2) {
+        border-left-color: var(--coral);
+      }
+
+      .build-step:nth-child(3) {
+        border-left-color: var(--grass);
+      }
+
+      .build-step:nth-child(4) {
+        border-left-color: var(--berry);
+      }
+
+      .build-step strong {
+        font-size: 1rem;
+      }
+
+      .build-step span {
+        color: var(--muted);
+        font-size: 0.92rem;
+        font-weight: 750;
+        line-height: 1.35;
+      }
+
+      @media (max-width: 980px) {
+        .hero,
+        .zone,
+        .build-strip {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          max-width: 16ch;
+          font-size: 2.6rem;
+        }
+
+        .zone-label {
+          position: static;
+          min-height: 0;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .app-shell {
+          width: calc(100% - 18px);
+          padding-top: 8px;
+        }
+
+        .topbar,
+        .nav-actions,
+        .section-head,
+        .console-title {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .hero {
+          padding: 18px;
+        }
+
+        h1 {
+          font-size: 2.25rem;
+        }
+
+        .mission-stats,
+        .console-map,
+        .module-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .button,
+        .nav-link {
+          width: 100%;
+        }
+
+        .card-top {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar" aria-label="U2T2 Units Mission">
+        <a class="brand" href="pmc_simulation_app.html" aria-label="PMC Math Quest home">
+          <span class="brand-mark" aria-hidden="true">U</span>
+          <span>U2T2 Units</span>
+        </a>
+        <div class="nav-actions">
+          <a class="nav-link" href="pmc_simulation_app.html">Mission home</a>
+          <a class="nav-link" href="math_skill_command_center.html">Builder room</a>
+        </div>
+      </header>
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Whole-year maths mission</p>
+          <h1 id="hero-title">Master the U2 map.</h1>
+          <p>Five zones, sixteen submodules, and a final exam arena built from the completed notes and review prep papers.</p>
+          <div class="hero-actions" aria-label="Quick starts">
+            <a class="button coral" href="#number-zone">Start Number Zone</a>
+            <a class="button secondary" href="#mission-map">See the full map</a>
+          </div>
+          <div class="mission-stats" aria-label="Mission stats">
+            <div class="stat"><strong>5</strong><span>skill zones</span></div>
+            <div class="stat"><strong>16</strong><span>submodules</span></div>
+            <div class="stat"><strong>6</strong><span>review preps</span></div>
+          </div>
+        </div>
+
+        <div class="mission-console" id="mission-map" aria-label="U2T2 mission map">
+          <div class="console-title">
+            <strong>Mission map</strong>
+            <span class="xp-pill">Training live</span>
+          </div>
+          <div class="console-map">
+            <a class="zone-chip" href="#number-zone"><strong>Number Zone</strong><span>Place value, BIDMAS, F/D/P, primes</span></a>
+            <a class="zone-chip" href="#algebra-zone"><strong>Algebra Zone</strong><span>Expressions, formulae, equations</span></a>
+            <a class="zone-chip" href="#geometry-zone"><strong>Geometry Zone</strong><span>Angles, area, coordinates, equations</span></a>
+            <a class="zone-chip" href="#proportion-zone"><strong>Proportion/Data</strong><span>Ratio, speed, averages, graphs</span></a>
+            <a class="zone-chip" href="#exam-arena"><strong>Exam Arena</strong><span>Mixed reasoning boss rounds</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-head">
+        <div>
+          <p class="eyebrow">Submodule training rooms</p>
+          <h2>Choose a skill to train</h2>
+        </div>
+        <p>Each card opens a live practice round with source-grounded examples, short rounds, hints, feedback, worked solutions, and recap mistakes.</p>
+      </section>
+
+      <section class="zone" id="number-zone" aria-labelledby="number-title">
+        <div class="zone-label">
+          <p class="eyebrow">Zone 1</p>
+          <strong id="number-title">Number Zone</strong>
+          <span>The foundations that appear again and again in every review prep.</span>
+        </div>
+        <div class="module-grid">
+          <a class="module-card number" id="place-value-scales" href="u2t2_submodule.html#place-value-scales">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 1</span><h3>Place Value & Scales</h3></div>
+              <span class="source-pill">Prep 1</span>
+            </div>
+            <p>Read, write, round, compare, and scale numbers using digit value and powers of 10.</p>
+            <div class="skill-list"><span>Large numbers</span><span>Digit value</span><span>Rounding</span><span>Scale arrows</span></div>
+          </a>
+
+          <a class="module-card number" id="slick-sums-four-rules" href="u2t2_submodule.html#slick-sums-four-rules">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 2</span><h3>Slick Sums & Four Rules</h3></div>
+              <span class="source-pill">Preps 1, 3, 4</span>
+            </div>
+            <p>Turn awkward calculations into friendlier ones, then handle integers and decimals cleanly.</p>
+            <div class="skill-list"><span>Rounding and adjusting</span><span>Factors</span><span>Decimals</span><span>Missing values</span></div>
+          </a>
+
+          <a class="module-card number" id="bidmas-powers" href="u2t2_submodule.html#bidmas-powers">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 3</span><h3>BIDMAS & Powers</h3></div>
+              <span class="source-pill">Preps 2, 4</span>
+            </div>
+            <p>Use the correct order of operations with brackets, powers, multiplication, division, addition, and subtraction.</p>
+            <div class="skill-list"><span>Brackets</span><span>Indices</span><span>Working layout</span><span>Radar checks</span></div>
+          </a>
+
+          <a class="module-card number" id="fractions-decimals-percentages" href="u2t2_submodule.html#fractions-decimals-percentages">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 4</span><h3>Fractions, Decimals & Percentages</h3></div>
+              <span class="source-pill">Preps 2, 4, 6</span>
+            </div>
+            <p>Convert between forms, simplify answers, and use percentages inside word problems.</p>
+            <div class="skill-list"><span>F to D</span><span>D to F</span><span>Percentages</span><span>Simplify</span></div>
+          </a>
+
+          <a class="module-card number" id="number-types-primes" href="u2t2_submodule.html#number-types-primes">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 5</span><h3>Number Types, Divisibility & Primes</h3></div>
+              <span class="source-pill">Preps 2, 3</span>
+            </div>
+            <p>Spot factors, multiples, squares, cubes, triangle numbers, divisibility rules, and prime tests.</p>
+            <div class="skill-list"><span>Factors</span><span>Multiples</span><span>Prime checks</span><span>Prime factorisation</span></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="zone" id="algebra-zone" aria-labelledby="algebra-title">
+        <div class="zone-label">
+          <p class="eyebrow">Zone 2</p>
+          <strong id="algebra-title">Algebra Zone</strong>
+          <span>From tidy expressions to equations that solve real problems.</span>
+        </div>
+        <div class="module-grid">
+          <a class="module-card algebra" id="algebra-expressions" href="u2t2_submodule.html#algebra-expressions">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 6</span><h3>Algebra Expressions</h3></div>
+              <span class="source-pill">Preps 3, 4</span>
+            </div>
+            <p>Collect like terms, multiply algebra terms, divide as fractions, and write expressions from words.</p>
+            <div class="skill-list"><span>Like terms</span><span>Index form</span><span>No times signs</span><span>Word to algebra</span></div>
+          </a>
+
+          <a class="module-card algebra" id="brackets-formulae-substitution" href="u2t2_submodule.html#brackets-formulae-substitution">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 7</span><h3>Brackets, Formulae & Substitution</h3></div>
+              <span class="source-pill">Units 1, 3</span>
+            </div>
+            <p>Expand brackets and substitute values into formulae, including negative values.</p>
+            <div class="skill-list"><span>Expand brackets</span><span>Formula flow</span><span>Negative values</span><span>Clean answers</span></div>
+          </a>
+
+          <a class="module-card algebra" id="solving-forming-equations" href="u2t2_submodule.html#solving-forming-equations">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 8</span><h3>Solving & Forming Equations</h3></div>
+              <span class="source-pill">Prep 5, 6</span>
+            </div>
+            <p>Use balance moves, define unknowns, form equations, simplify, then solve.</p>
+            <div class="skill-list"><span>Balance moves</span><span>Define x</span><span>Perimeter equations</span><span>Age problems</span></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="zone" id="geometry-zone" aria-labelledby="geometry-title">
+        <div class="zone-label">
+          <p class="eyebrow">Zone 3</p>
+          <strong id="geometry-title">Geometry Zone</strong>
+          <span>Shape facts, angle facts, coordinates, equations, and the units that make answers make sense.</span>
+        </div>
+        <div class="module-grid">
+          <a class="module-card geometry" id="angles-shape-facts" href="u2t2_submodule.html#angles-shape-facts">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 9</span><h3>Angles & 2D Shape Facts</h3></div>
+              <span class="source-pill">Prep 2</span>
+            </div>
+            <p>Use straight lines, vertically opposite angles, triangle totals, quadrilateral totals, and symmetry clues.</p>
+            <div class="skill-list"><span>Line total</span><span>Opposite angles</span><span>Triangle total</span><span>Shape facts</span></div>
+          </a>
+
+          <a class="module-card geometry" id="area-perimeter-units" href="u2t2_submodule.html#area-perimeter-units">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 10</span><h3>Area, Perimeter & Units</h3></div>
+              <span class="source-pill">Preps 3, 4, 5, 6</span>
+            </div>
+            <p>Handle composite area, shaded regions, algebraic area/perimeter, area conversions, and triangle area.</p>
+            <div class="skill-list"><span>Composite shapes</span><span>Triangle area</span><span>Shaded regions</span><span>Area units</span></div>
+          </a>
+
+          <a class="module-card geometry" id="coordinates-area-challenges" href="u2t2_submodule.html#coordinates-area-challenges">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 11</span><h3>Coordinates & Area Challenges</h3></div>
+              <span class="source-pill">Prep 6 Q10</span>
+            </div>
+            <p>Use coordinate symmetry, vertical and horizontal lines, midpoint clues, and base-height area reasoning.</p>
+            <div class="skill-list"><span>Coordinate points</span><span>Parallel axes</span><span>Isosceles symmetry</span><span>Area</span></div>
+          </a>
+
+          <a class="module-card geometry" id="geometry-equations-challenge" href="u2t2_submodule.html#geometry-equations-challenge">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 12</span><h3>Geometry Equations Challenge</h3></div>
+              <span class="source-pill">Preps 5, 6</span>
+            </div>
+            <p>Build and solve equations from perimeter, area, and volume stories, then use x for a second geometry step.</p>
+            <div class="skill-list"><span>Form equations</span><span>Perimeter</span><span>Area</span><span>Volume</span></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="zone" id="proportion-zone" aria-labelledby="proportion-title">
+        <div class="zone-label">
+          <p class="eyebrow">Zone 4</p>
+          <strong id="proportion-title">Proportion/Data Zone</strong>
+          <span>Ratios, rates, and data questions where the total is usually your friend.</span>
+        </div>
+        <div class="module-grid">
+          <a class="module-card proportion" id="ratio-proportion" href="u2t2_submodule.html#ratio-proportion">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 13</span><h3>Ratio & Proportion</h3></div>
+              <span class="source-pill">Prep 4</span>
+            </div>
+            <p>Read ratio language, simplify ratios, share amounts, and solve difference-between-parts questions.</p>
+            <div class="skill-list"><span>Ratio parts</span><span>Share money</span><span>Differences</span><span>New ratio</span></div>
+          </a>
+
+          <a class="module-card proportion" id="three-d-volume-speed" href="u2t2_submodule.html#three-d-volume-speed">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 14</span><h3>3D, Volume & Speed</h3></div>
+              <span class="source-pill">Units 2, Prep 6</span>
+            </div>
+            <p>Use volume formulae, cube/cuboid reasoning, unit conversion, and speed-distance-time logic.</p>
+            <div class="skill-list"><span>Volume</span><span>Unit cubes</span><span>Conversions</span><span>Speed</span></div>
+          </a>
+
+          <a class="module-card proportion" id="data-handling" href="u2t2_submodule.html#data-handling">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 15</span><h3>Data Handling</h3></div>
+              <span class="source-pill">Units 2, 3</span>
+            </div>
+            <p>Find averages and range, then extract information from bar charts and pie charts.</p>
+            <div class="skill-list"><span>Mean</span><span>Median</span><span>Mode</span><span>Range</span><span>Charts</span></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="zone" id="exam-arena" aria-labelledby="arena-title">
+        <div class="zone-label">
+          <p class="eyebrow">Zone 5</p>
+          <strong id="arena-title">Exam Arena</strong>
+          <span>The mixed challenge zone for review-prep style reasoning.</span>
+        </div>
+        <div class="module-grid">
+          <a class="module-card arena" id="word-problem-arena" href="u2t2_submodule.html#word-problem-arena">
+            <div class="card-top">
+              <div><span class="chapter">Submodule 16</span><h3>Word Problem Arena</h3></div>
+              <span class="source-pill">Preps 1-6</span>
+            </div>
+            <p>Mix topics inside multi-step problems: logic, percentages, algebra, coordinates, area, and careful explanations.</p>
+            <div class="skill-list"><span>Read the story</span><span>Choose a method</span><span>Show working</span><span>Check the answer</span></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="build-strip" aria-label="Build plan">
+        <div class="build-step"><strong>1. Source mine</strong><span>Question types come from the completed notes, review prep, and answer papers.</span></div>
+        <div class="build-step"><strong>2. Teach the move</strong><span>Each submodule opens with named skills and a friendly first move.</span></div>
+        <div class="build-step"><strong>3. Train rounds</strong><span>Generators create fresh practice with hints, checks, and worked solutions.</span></div>
+        <div class="build-step"><strong>4. Recap repair</strong><span>Mistakes are grouped by skill so the next round repairs the right thing.</span></div>
+      </section>
+    </main>
+  </body>
+</html>
