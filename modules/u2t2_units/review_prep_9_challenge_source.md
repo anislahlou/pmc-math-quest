@@ -1,8 +1,8 @@
-# Review Prep 9 Challenge Source Map
+# Review Prep 9 Exam Source Map
 
 Source document: `U2T3W4_ REVIEW PREP 9.pdf`
 
-New app section: `Review Prep 9 Challenge Lab`
+New app section: `Review Prep 9 Exam Lab`
 
 ## Target Questions
 
@@ -13,8 +13,8 @@ New app section: `Review Prep 9 Challenge Lab`
 - `6b`: use prime factorisation to find the largest odd divisor.
 - `7b`: update a pie-chart angle after one extra boy joins a class.
 
-## Exercise Bank Added
+## Refreshed Exercise Bank
 
-- 6 source-shaped routine variants for onboarding the styles.
-- 20 named challenge variants in challenge mode.
-- Independent audit coverage checks that the new challenge bank includes all six target question families.
+- 20 named exam-practice variants across all six target question families.
+- The separate challenge-mode bank for this newest set is disabled, so the student sees the refreshed practice bank only.
+- Independent audit coverage checks that this refreshed set includes all six target question families.

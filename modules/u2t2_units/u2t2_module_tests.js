@@ -28,7 +28,8 @@ function run() {
   assert.strictEqual(mod.parseNumber("34/15"), 34 / 15);
   assert.strictEqual(mod.generateProblem("place-value-scales", 0).expected, 900000);
   assert.strictEqual(mod.CHALLENGE_VARIANTS_PER_MODULE, 10);
-  assert.strictEqual(mod.challengeVariantCount("review-prep-9-challenge"), 20);
+  assert.strictEqual(mod.challengeVariantCount("review-prep-9-challenge"), 0);
+  assert.strictEqual(mod.hasChallengeBank("review-prep-9-challenge"), false);
   assert.strictEqual(typeof mod.generateChallengeProblem, "function");
 
   for (const moduleId of mod.MODULE_IDS) {
@@ -36,7 +37,8 @@ function run() {
     const classics = new Set();
     const answerModes = new Set();
     const correctChoicePositions = new Set();
-    for (let variant = 0; variant < 16; variant += 1) {
+    const routineVariantCount = moduleId === "review-prep-9-challenge" ? 20 : 16;
+    for (let variant = 0; variant < routineVariantCount; variant += 1) {
       const problem = mod.generateProblem(moduleId, variant);
       assert.strictEqual(problem.moduleId, moduleId);
       assert.ok(problem.prompt.length >= 15, `${moduleId} variant ${variant} needs a prompt`);
@@ -60,11 +62,23 @@ function run() {
     assert.ok(uniquePrompts.size >= 4, `${moduleId} should generate multiple prompt forms`);
     assert.ok(answerModes.has("choice") && answerModes.has("filled"), `${moduleId} should mix choice and filled-answer formats`);
     assert.ok(correctChoicePositions.size >= 2, `${moduleId} should vary the correct multiple-choice position`);
+    if (moduleId === "review-prep-9-challenge") {
+      const labels = [...classics].join(" ");
+      for (const sourceLabel of ["Q1b", "Q3", "Q4", "Q5a", "Q6b", "Q7b"]) {
+        assert.ok(labels.includes(sourceLabel), `Review Prep 9 refreshed bank should include ${sourceLabel}-style questions`);
+      }
+    }
 
     const challengePrompts = new Set();
     const challengeClassics = new Set();
     const challengeModes = new Set();
     const challengeVariantCount = mod.challengeVariantCount(moduleId);
+    if (challengeVariantCount === 0) {
+      const practiceProblem = mod.generateChallengeProblem(moduleId, 0);
+      assert.strictEqual(practiceProblem.isChallenge, undefined, `${moduleId} should not expose a challenge bank`);
+      assert.ok(!practiceProblem.prompt.includes("Challenge:"), `${moduleId} should fall back to refreshed practice`);
+      continue;
+    }
     for (let variant = 0; variant < challengeVariantCount; variant += 1) {
       const problem = mod.generateChallengeProblem(moduleId, variant);
       assert.strictEqual(problem.moduleId, moduleId);

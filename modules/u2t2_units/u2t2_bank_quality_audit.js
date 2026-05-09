@@ -120,8 +120,63 @@ function assertAcceptsCorrect(problem) {
 function solve(problem) {
   const prompt = problem.prompt;
   const nums = numbers(prompt);
+  const classic = problem.classic;
 
-  switch (problem.classic) {
+  if (classic.startsWith("Prep 9 Q1b")) {
+    const match = prompt.match(/p = (-?\d+), q = (-?\d+), and y = (-?\d+), find A = (\d+)q \+ py/);
+    assert.ok(match, `Cannot parse Prep 9 formula prompt: ${prompt}`);
+    const [, p, q, y, coeff] = match.map(Number);
+    return { kind: "number", value: coeff * q + p * y };
+  }
+  if (classic.startsWith("Prep 9 Q3")) {
+    const match = prompt.match(/(?:uses|Review Prep 9:) ([\d,]+) (tonnes|kilograms).* (?:uses|of) ([\d.]+) g/);
+    assert.ok(match, `Cannot parse Prep 9 metric prompt: ${prompt}`);
+    const amount = Number(match[1].replace(/,/g, ""));
+    const grams = match[2] === "tonnes" ? amount * 1000000 : amount * 1000;
+    return { kind: "number", value: grams / Number(match[3]) };
+  }
+  if (classic.startsWith("Prep 9 Q4")) {
+    if (prompt.includes("33 1/3%")) {
+      const match = prompt.match(/of (\d+)/);
+      assert.ok(match, `Cannot parse one-third percentage prompt: ${prompt}`);
+      return { kind: "number", value: Number(match[1]) / 3 };
+    }
+    if (prompt.includes("sale price")) {
+      const match = prompt.match(/(\d+) before a (\d+)% discount/);
+      assert.ok(match, `Cannot parse sale price prompt: ${prompt}`);
+      return { kind: "number", value: Number(match[1]) * (100 - Number(match[2])) / 100 };
+    }
+    if (prompt.includes("answer in grams")) {
+      const match = prompt.match(/Calculate ([\d.]+)% of ([\d.]+) kg/);
+      assert.ok(match, `Cannot parse grams percentage prompt: ${prompt}`);
+      return { kind: "number", value: Number(match[1]) / 100 * Number(match[2]) * 1000 };
+    }
+  }
+  if (classic.startsWith("Prep 9 Q5a")) {
+    const match = prompt.match(/measuring (\d+) cm by (\d+) cm by (\d+) cm/);
+    assert.ok(match, `Cannot parse Prep 9 cuboid prompt: ${prompt}`);
+    const length = Number(match[1]);
+    const width = Number(match[2]);
+    const height = Number(match[3]);
+    return { kind: "number", value: 2 * (length * width + length * height + width * height) };
+  }
+  if (classic.startsWith("Prep 9 Q6b")) {
+    const match = prompt.match(/(?:style:|Review Prep 9:) (\d+) =/);
+    assert.ok(match, `Cannot parse Prep 9 odd-divisor prompt: ${prompt}`);
+    let value = Number(match[1]);
+    while (value % 2 === 0) value /= 2;
+    return { kind: "number", value };
+  }
+  if (classic.startsWith("Prep 9 Q7b")) {
+    const match = prompt.match(/shows (\d+) boys as (\d+) degrees/);
+    assert.ok(match, `Cannot parse Prep 9 pie-change prompt: ${prompt}`);
+    const boys = Number(match[1]);
+    const oldAngle = Number(match[2]);
+    const oldTotal = 360 * boys / oldAngle;
+    return { kind: "number", value: 360 * (boys + 1) / (oldTotal + 1) };
+  }
+
+  switch (classic) {
     case "Digit Value":
       return { kind: "number", value: digitValueFromPrompt(prompt) };
     case "Rounding":
@@ -359,7 +414,7 @@ function solve(problem) {
       return { kind: "number", value: coeff * q + p * y };
     }
     case "Prep 9 Metric Unit Count": {
-      const match = prompt.match(/uses ([\d,]+) (tonnes|kilograms).* uses ([\d.]+) g/);
+      const match = prompt.match(/(?:uses|Review Prep 9:) ([\d,]+) (tonnes|kilograms).* (?:uses|of) ([\d.]+) g/);
       assert.ok(match, `Cannot parse Prep 9 metric prompt: ${prompt}`);
       const amount = Number(match[1].replace(/,/g, ""));
       const grams = match[2] === "tonnes" ? amount * 1000000 : amount * 1000;
@@ -372,6 +427,14 @@ function solve(problem) {
         return { kind: "number", value: Number(match[1]) / 3 };
       }
       if (prompt.includes("sale price")) {
+        const plainSaleMatch = prompt.match(/(\d+) before a (\d+)% discount/);
+        if (plainSaleMatch) {
+          return { kind: "number", value: Number(plainSaleMatch[1]) * (100 - Number(plainSaleMatch[2])) / 100 };
+        }
+        const saleMatch = prompt.match(/(?:£|Â£)(\d+) before a (\d+)% discount/);
+        if (saleMatch) {
+          return { kind: "number", value: Number(saleMatch[1]) * (100 - Number(saleMatch[2])) / 100 };
+        }
         const match = prompt.match(/£(\d+) before a (\d+)% discount/);
         assert.ok(match, `Cannot parse sale price prompt: ${prompt}`);
         return { kind: "number", value: Number(match[1]) * (100 - Number(match[2])) / 100 };
@@ -392,7 +455,7 @@ function solve(problem) {
       return { kind: "number", value: 2 * (length * width + length * height + width * height) };
     }
     case "Prep 9 Largest Odd Divisor": {
-      const match = prompt.match(/style: (\d+) =/);
+      const match = prompt.match(/(?:style:|Review Prep 9:) (\d+) =/);
       assert.ok(match, `Cannot parse Prep 9 odd-divisor prompt: ${prompt}`);
       let value = Number(match[1]);
       while (value % 2 === 0) value /= 2;
@@ -456,7 +519,8 @@ function run() {
     const promptsByClassic = new Map();
     const answerModes = new Set();
     const correctChoicePositions = new Set();
-    for (let variant = 0; variant < VARIANTS_PER_MODULE; variant += 1) {
+    const routineVariantCount = moduleId === "review-prep-9-challenge" ? 20 : VARIANTS_PER_MODULE;
+    for (let variant = 0; variant < routineVariantCount; variant += 1) {
       const problem = mod.generateProblem(moduleId, variant);
       try {
         if (!promptsByClassic.has(problem.classic)) promptsByClassic.set(problem.classic, new Set());
@@ -478,7 +542,7 @@ function run() {
       }
     }
     promptsByClassic.forEach((prompts, classic) => {
-      const minimumPrompts = moduleId === "review-prep-9-challenge" ? 2 : 4;
+      const minimumPrompts = moduleId === "review-prep-9-challenge" ? 1 : 4;
       if (prompts.size < minimumPrompts) {
         failures.push(`${moduleId} [${classic}]\n  Expected at least ${minimumPrompts} source-shaped prompt variants, found ${prompts.size}.`);
       }
@@ -489,11 +553,29 @@ function run() {
     if (correctChoicePositions.size < 2) {
       failures.push(`${moduleId}\n  Expected the correct multiple-choice position to vary.`);
     }
+    if (moduleId === "review-prep-9-challenge") {
+      const routineLabels = [...promptsByClassic.keys()].join(" ");
+      for (const sourceLabel of ["Q1b", "Q3", "Q4", "Q5a", "Q6b", "Q7b"]) {
+        if (!routineLabels.includes(sourceLabel)) {
+          failures.push(`${moduleId}\n  Expected refreshed Review Prep 9 bank to include ${sourceLabel}-style questions.`);
+        }
+      }
+    }
 
     const challengePrompts = new Set();
     const challengeClassics = new Set();
     const challengeModes = new Set();
     const challengeVariantCount = mod.challengeVariantCount(moduleId);
+    if (challengeVariantCount === 0) {
+      const practiceProblem = mod.generateChallengeProblem(moduleId, 0);
+      if (practiceProblem.isChallenge || practiceProblem.prompt.includes("Challenge:")) {
+        failures.push(`${moduleId}\n  Expected no challenge bank for the refreshed Review Prep 9 set.`);
+      }
+      if (moduleId !== "review-prep-9-challenge") {
+        failures.push(`${moduleId}\n  Only Review Prep 9 should have challenge mode disabled.`);
+      }
+      continue;
+    }
     for (let variant = 0; variant < challengeVariantCount; variant += 1) {
       const problem = mod.generateChallengeProblem(moduleId, variant);
       try {

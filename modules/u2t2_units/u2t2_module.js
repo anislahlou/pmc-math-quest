@@ -132,10 +132,10 @@
     },
     {
       id: "review-prep-9-challenge",
-      title: "Review Prep 9 Challenge Lab",
+      title: "Review Prep 9 Exam Lab",
       zone: "Exam Arena",
       source: "U2T3W4 Review Prep 9 questions 1b, 3, 4, 5a, 6b, 7b",
-      intro: "A mixed challenge set built from Review Prep 9: formula substitution, metric conversions, percentage levels, cuboid surface area, prime-factor odd divisors, and changing pie charts.",
+      intro: "A refreshed exam-practice set built from Review Prep 9: formula substitution, metric conversions, percentage levels, cuboid surface area, prime-factor odd divisors, and changing pie charts.",
       skills: ["Formula substitution", "Metric conversion", "Percentage levels", "Surface area", "Prime factors", "Pie chart changes"]
     }
   ];
@@ -147,8 +147,14 @@
   const CHALLENGE_VARIANTS_BY_MODULE = {
     "review-prep-9-challenge": 20
   };
+  const CHALLENGE_DISABLED_MODULE_IDS = new Set(["review-prep-9-challenge"]);
+
+  function hasChallengeBank(moduleId) {
+    return !CHALLENGE_DISABLED_MODULE_IDS.has(moduleId);
+  }
 
   function challengeVariantCount(moduleId) {
+    if (!hasChallengeBank(moduleId)) return 0;
     return CHALLENGE_VARIANTS_BY_MODULE[moduleId] || CHALLENGE_VARIANTS_PER_MODULE;
   }
 
@@ -1894,6 +1900,113 @@
     return templates[v % templates.length]();
   }
 
+  function reviewPrep9RefreshedBankModule(v) {
+    function formula(classic, coeff, p, q, y) {
+      const expected = coeff * q + p * y;
+      return numberProblem(moduleProblem("review-prep-9-challenge", classic, {
+        source: "U2T3W4 Review Prep 9 question 1b",
+        prompt: "Review Prep 9: If p = " + p + ", q = " + q + ", and y = " + y + ", find A = " + coeff + "q + py.",
+        expected,
+        hint1: "Substitute p, q, and y before doing the arithmetic.",
+        hint2: coeff + "q = " + (coeff * q) + " and py = " + (p * y) + ".",
+        solution: "A = " + coeff + " x " + q + " + (" + p + " x " + y + ") = " + expected + ".",
+        visual: { title: "Prep 9 Q1b formula", lines: ["A = " + coeff + "q + py", "p = " + p + ", q = " + q + ", y = " + y, "keep the sign of p"] }
+      }));
+    }
+
+    function metric(classic, amount, unit, gramsEach, object) {
+      const grams = unit === "tonnes" ? amount * 1000000 : amount * 1000;
+      const expected = grams / gramsEach;
+      return numberProblem(moduleProblem("review-prep-9-challenge", classic, {
+        source: "U2T3W4 Review Prep 9 question 3",
+        prompt: "Review Prep 9: " + amount.toLocaleString("en-GB") + " " + unit + " of material is split into " + object + " of " + gramsEach + " g each. How many " + object + " can be made?",
+        expected,
+        hint1: unit === "tonnes" ? "Convert tonnes to grams first." : "Convert kilograms to grams first.",
+        hint2: "Number made = total grams divided by grams per item.",
+        solution: amount.toLocaleString("en-GB") + " " + unit + " = " + grams.toLocaleString("en-GB") + " g. Then " + grams.toLocaleString("en-GB") + " / " + gramsEach + " = " + expected.toLocaleString("en-GB") + ".",
+        visual: { title: "Prep 9 Q3 metric units", lines: [unit + " -> grams", "total grams / grams each", object] }
+      }));
+    }
+
+    function percentage(classic, prompt, expected, hint1, hint2, solution) {
+      return numberProblem(moduleProblem("review-prep-9-challenge", classic, {
+        source: "U2T3W4 Review Prep 9 question 4",
+        prompt: "Review Prep 9: " + prompt,
+        expected,
+        hint1,
+        hint2,
+        solution,
+        visual: { title: "Prep 9 Q4 percentage", lines: ["identify the percentage", "convert if needed", "calculate"] }
+      }));
+    }
+
+    function surface(classic, length, width, height) {
+      const expected = cuboidSurfaceArea(length, width, height);
+      return numberProblem(moduleProblem("review-prep-9-challenge", classic, {
+        source: "U2T3W4 Review Prep 9 question 5a",
+        prompt: "Review Prep 9: A cuboid measuring " + length + " cm by " + width + " cm by " + height + " cm is painted on every face. What is its total surface area?",
+        expected,
+        hint1: "Painted on every face means surface area, not volume.",
+        hint2: "Use 2(lw + lh + wh).",
+        solution: "Surface area = 2(" + (length * width) + " + " + (length * height) + " + " + (width * height) + ") = " + expected + " cm^2.",
+        visual: { title: "Prep 9 Q5a surface area", lines: ["2 x length x width", "2 x length x height", "2 x width x height"] }
+      }));
+    }
+
+    function oddDivisor(classic, n) {
+      const expected = largestOddDivisor(n);
+      return numberProblem(moduleProblem("review-prep-9-challenge", classic, {
+        source: "U2T3W4 Review Prep 9 question 6b",
+        prompt: "Review Prep 9: " + n + " = " + factorString(n) + ". What is the largest odd number that divides exactly into " + n + "?",
+        expected,
+        hint1: "Odd numbers have no factor of 2.",
+        hint2: "Remove all the 2s from the prime factorisation and multiply what is left.",
+        solution: "From " + factorString(n) + ", remove every factor of 2. The largest odd divisor is " + expected + ".",
+        visual: { title: "Prep 9 Q6b odd divisor", lines: [factorString(n), "remove all 2s", "multiply the odd factors"] }
+      }));
+    }
+
+    function pieChange(classic, boys, oldAngle) {
+      const oldTotal = 360 * boys / oldAngle;
+      const newBoys = boys + 1;
+      const newTotal = oldTotal + 1;
+      const expected = 360 * newBoys / newTotal;
+      return numberProblem(moduleProblem("review-prep-9-challenge", classic, {
+        source: "U2T3W4 Review Prep 9 question 7b",
+        prompt: "Review Prep 9: A pie chart shows " + boys + " boys as " + oldAngle + " degrees. One more boy joins the class. What is the new angle for boys?",
+        expected,
+        hint1: "Use the old angle to find the old class total.",
+        hint2: "Old total = 360 x boys / old angle.",
+        solution: "Old total = 360 x " + boys + " / " + oldAngle + " = " + oldTotal + ". New boys = " + newBoys + " and new total = " + newTotal + ". New angle = 360 x " + newBoys + " / " + newTotal + " = " + expected + " degrees.",
+        visual: { title: "Prep 9 Q7b pie change", lines: ["old angle -> old total", "add one boy", "new fraction x 360"] }
+      }));
+    }
+
+    const items = [
+      formula("Prep 9 Q1b Formula Refresh A", 4, -5, 9, 6),
+      formula("Prep 9 Q1b Formula Refresh B", 7, -3, 5, 8),
+      formula("Prep 9 Q1b Formula Refresh C", 6, -4, 7, 9),
+      formula("Prep 9 Q1b Formula Refresh D", 5, -6, 8, 4),
+      metric("Prep 9 Q3 Tonnes Refresh A", 24000, "tonnes", 0.8, "mini bars"),
+      metric("Prep 9 Q3 Kilograms Refresh B", 15000, "kilograms", 0.5, "sample packets"),
+      metric("Prep 9 Q3 Tonnes Refresh C", 42, "tonnes", 0.7, "science capsules"),
+      percentage("Prep 9 Q4a One Third Refresh A", "Calculate 33 1/3% of 2940.", 980, "33 1/3% is one third.", "Divide 2940 by 3.", "2940 / 3 = 980."),
+      percentage("Prep 9 Q4a One Third Refresh B", "Calculate 33 1/3% of 1680.", 560, "33 1/3% is one third.", "Divide 1680 by 3.", "1680 / 3 = 560."),
+      percentage("Prep 9 Q4b Sale Price Refresh A", "A jacket costs £240 before a 25% discount. What is the sale price?", 180, "A 25% discount leaves 75%.", "75% of 240 is 0.75 x 240.", "Sale price = £180."),
+      percentage("Prep 9 Q4b Sale Price Refresh B", "A bike costs £360 before a 15% discount. What is the sale price?", 306, "A 15% discount leaves 85%.", "85% of 360 is 0.85 x 360.", "Sale price = £306."),
+      percentage("Prep 9 Q4c Gram Percentage Refresh", "Calculate 4% of 0.075 kg. Give your answer in grams.", 3, "Convert 0.075 kg to 75 g first.", "4% is 0.04.", "0.04 x 75 g = 3 g."),
+      surface("Prep 9 Q5a Surface Refresh A", 6, 7, 10),
+      surface("Prep 9 Q5a Surface Refresh B", 8, 9, 5),
+      surface("Prep 9 Q5a Surface Refresh C", 4, 11, 13),
+      surface("Prep 9 Q5a Surface Refresh D", 12, 5, 6),
+      oddDivisor("Prep 9 Q6b Odd Divisor Refresh A", 840),
+      oddDivisor("Prep 9 Q6b Odd Divisor Refresh B", 2772),
+      pieChange("Prep 9 Q7b Pie Change Refresh A", 9, 135),
+      pieChange("Prep 9 Q7b Pie Change Refresh B", 5, 120)
+    ];
+    return items[v % items.length];
+  }
+
   function challengeFields(moduleId, classic, fields) {
     const module = MODULE_BY_ID[moduleId];
     return moduleProblem(moduleId, "Challenge: " + classic, {
@@ -2328,116 +2441,6 @@
     return templates[v % templates.length]();
   }
 
-  function reviewPrep9ChallengeChallenge(v) {
-    function formula(classic, coeff, p, q, y) {
-      const expected = coeff * q + p * y;
-      return {
-        classic,
-        prompt: "Challenge: If p = " + p + ", q = " + q + ", and y = " + y + ", find A = " + coeff + "q + py.",
-        expected,
-        hint1: "Replace every letter first. Keep the negative sign attached to p.",
-        hint2: coeff + "q = " + (coeff * q) + " and py = " + (p * y) + ".",
-        solution: "A = " + coeff + " x " + q + " + (" + p + " x " + y + ") = " + expected + ".",
-        visual: { title: "Prep 9 Q1b formula", lines: ["substitute first", "multiply before adding", "negative signs matter"] }
-      };
-    }
-
-    function metric(classic, amount, unit, gramsEach, object) {
-      const grams = unit === "tonnes" ? amount * 1000000 : amount * 1000;
-      const expected = grams / gramsEach;
-      return {
-        classic,
-        prompt: "Challenge: " + amount.toLocaleString("en-GB") + " " + unit + " of material is split into " + object + " of " + gramsEach + " g each. How many " + object + " can be made?",
-        expected,
-        hint1: unit === "tonnes" ? "Convert tonnes to grams first." : "Convert kilograms to grams first.",
-        hint2: "Total grams / grams per item.",
-        solution: amount.toLocaleString("en-GB") + " " + unit + " = " + grams.toLocaleString("en-GB") + " g, and " + grams.toLocaleString("en-GB") + " / " + gramsEach + " = " + expected.toLocaleString("en-GB") + ".",
-        visual: { title: "Prep 9 Q3 metric units", lines: [unit + " -> grams", "divide by grams each", "count the items"] }
-      };
-    }
-
-    function percentage(classic, prompt, expected, hint1, hint2, solution) {
-      return {
-        classic,
-        prompt: "Challenge: " + prompt,
-        expected,
-        hint1,
-        hint2,
-        solution,
-        visual: { title: "Prep 9 Q4 percentage", lines: ["identify the level", "convert if needed", "calculate carefully"] }
-      };
-    }
-
-    function surface(classic, length, width, height) {
-      const expected = cuboidSurfaceArea(length, width, height);
-      return {
-        classic,
-        prompt: "Challenge: A cuboid measures " + length + " cm by " + width + " cm by " + height + " cm. What is its total surface area?",
-        expected,
-        hint1: "Do not find volume. Surface area is the outside area.",
-        hint2: "Use 2(lw + lh + wh).",
-        solution: "Surface area = 2(" + (length * width) + " + " + (length * height) + " + " + (width * height) + ") = " + expected + " cm^2.",
-        visual: { title: "Prep 9 Q5a surface area", lines: ["2 x length x width", "2 x length x height", "2 x width x height"] }
-      };
-    }
-
-    function oddDivisor(classic, n) {
-      const expected = largestOddDivisor(n);
-      return {
-        classic,
-        prompt: "Challenge: " + n + " = " + factorString(n) + ". What is the largest odd number that divides exactly into " + n + "?",
-        expected,
-        hint1: "Odd numbers have no factor 2.",
-        hint2: "Remove every factor of 2 and keep the rest.",
-        solution: "From " + factorString(n) + ", remove the factors of 2. The largest odd divisor is " + expected + ".",
-        visual: { title: "Prep 9 Q6b odd divisor", lines: [factorString(n), "cross out all 2s", "multiply what remains"] }
-      };
-    }
-
-    function pieChange(classic, boys, oldAngle) {
-      const oldTotal = 360 * boys / oldAngle;
-      const newBoys = boys + 1;
-      const newTotal = oldTotal + 1;
-      const expected = 360 * newBoys / newTotal;
-      return {
-        classic,
-        prompt: "Challenge: A pie chart shows " + boys + " boys as " + oldAngle + " degrees. One more boy joins the class. What is the new angle for boys?",
-        expected,
-        hint1: "Use the old pie chart angle to find the old class total.",
-        hint2: "Old total = 360 x " + boys + " / " + oldAngle + ".",
-        solution: "Old total = " + oldTotal + ". New boys = " + newBoys + " and new total = " + newTotal + ". New angle = 360 x " + newBoys + " / " + newTotal + " = " + expected + " degrees.",
-        visual: { title: "Prep 9 Q7b pie change", lines: ["old angle -> old total", "add one boy", "new angle = new fraction x 360"] }
-      };
-    }
-
-    const items = [
-      formula("Prep 9 Q1b Formula Sign Check", 4, -3, 7, 5),
-      formula("Prep 9 Q1b Negative Product", 6, -2, 8, 9),
-      formula("Prep 9 Q1b Formula Trap", 5, -4, 6, 3),
-      metric("Prep 9 Q3 Tonnes To Items", 36000, "tonnes", 0.6, "mini bars"),
-      metric("Prep 9 Q3 Decimal Gram Count", 18000, "tonnes", 0.75, "sample packets"),
-      metric("Prep 9 Q3 Kilograms To Packets", 12600, "kilograms", 0.9, "lab samples"),
-      percentage("Prep 9 Q4a One Third Percent", "Calculate 33 1/3% of 2460.", 820, "33 1/3% is exactly one third.", "Divide by 3.", "2460 / 3 = 820."),
-      percentage("Prep 9 Q4a Eighth Percent", "Calculate 12.5% of £960.", 120, "12.5% is one eighth.", "960 / 8 = 120.", "12.5% of £960 is £120."),
-      percentage("Prep 9 Q4b Sale Price", "A £180 jacket is reduced by 35%. What is the sale price?", 117, "A 35% reduction leaves 65%.", "0.65 x 180.", "Sale price = 65% of £180 = £117."),
-      percentage("Prep 9 Q4b Discount Difference", "A game costs £240 before a 40% sale. How many pounds are saved?", 96, "This asks for the discount, not the sale price.", "40% of 240 = 0.4 x 240.", "The saving is £96."),
-      percentage("Prep 9 Q4c Small Kg To Grams", "Calculate 2.5% of 0.048 kg. Give your answer in grams.", 1.2, "Convert 0.048 kg to 48 g first.", "2.5% is 0.025.", "0.025 x 48 g = 1.2 g."),
-      percentage("Prep 9 Q4c Gram Percentage", "Calculate 7% of 0.035 kg. Give your answer in grams.", 2.45, "Convert 0.035 kg to 35 g first.", "7% is 0.07.", "0.07 x 35 g = 2.45 g."),
-      surface("Prep 9 Q5a Cuboid Surface A", 7, 8, 11),
-      surface("Prep 9 Q5a Cuboid Surface B", 4, 9, 10),
-      surface("Prep 9 Q5a Painted Cuboid", 5, 6, 12),
-      oddDivisor("Prep 9 Q6b Odd Divisor A", 420),
-      oddDivisor("Prep 9 Q6b Odd Divisor B", 630),
-      oddDivisor("Prep 9 Q6b Odd Divisor C", 2024),
-      pieChange("Prep 9 Q7b New Boy Angle A", 6, 108),
-      pieChange("Prep 9 Q7b New Boy Angle B", 9, 135)
-    ];
-    const item = items[v % items.length];
-    const { classic, ...fields } = item;
-    return challengeNumber("review-prep-9-challenge", classic, fields);
-  }
-
-
   const GENERATORS = {
     "place-value-scales": placeValueScales,
     "slick-sums-four-rules": slickSumsFourRules,
@@ -2455,7 +2458,7 @@
     "three-d-volume-speed": threeDVolumeSpeed,
     "data-handling": dataHandling,
     "word-problem-arena": wordProblemArena,
-    "review-prep-9-challenge": reviewPrep9ChallengeModule
+    "review-prep-9-challenge": reviewPrep9RefreshedBankModule
   };
 
   const CHALLENGE_GENERATORS = {
@@ -2474,8 +2477,7 @@
     "ratio-proportion": ratioProportionChallenge,
     "three-d-volume-speed": threeDVolumeSpeedChallenge,
     "data-handling": dataHandlingChallenge,
-    "word-problem-arena": wordProblemArenaChallenge,
-    "review-prep-9-challenge": reviewPrep9ChallengeChallenge
+    "word-problem-arena": wordProblemArenaChallenge
   };
 
   function generateProblem(moduleId, variantIndex) {
@@ -2487,6 +2489,9 @@
   }
 
   function generateChallengeProblem(moduleId, variantIndex) {
+    if (!hasChallengeBank(moduleId)) {
+      return generateProblem(moduleId, variantIndex || 0);
+    }
     const generator = CHALLENGE_GENERATORS[moduleId] || CHALLENGE_GENERATORS[MODULE_IDS[0]];
     const variantCount = challengeVariantCount(moduleId);
     const challengeIndex = ((variantIndex || 0) % variantCount + variantCount) % variantCount;
@@ -2575,6 +2580,7 @@
     CHALLENGE_VARIANTS_PER_MODULE,
     CHALLENGE_VARIANTS_BY_MODULE,
     challengeVariantCount,
+    hasChallengeBank,
     gcd,
     simplifyFraction,
     triangular,
@@ -2686,6 +2692,9 @@
       doc.querySelectorAll(".module-chip").forEach((chip) => {
         chip.classList.toggle("active", chip.dataset.id === state.moduleId);
       });
+      els.challengeButtons.forEach((button) => {
+        button.hidden = !mod.hasChallengeBank(state.moduleId);
+      });
       showIntro();
       loadProblem();
     }
@@ -2717,6 +2726,10 @@
     }
 
     function showChallenge() {
+      if (!mod.hasChallengeBank(state.moduleId)) {
+        resetRound(false);
+        return;
+      }
       resetRound(true);
     }
 
@@ -2733,7 +2746,7 @@
       els.prompt.textContent = formatMathText(problem.prompt);
       els.formatHint.textContent = formatMathText(problem.formatHint);
       els.feedback.className = "feedback-card muted";
-      els.feedback.textContent = statusMessage || (problem.answerMode === "choice" ? "Choose an answer, then check it." : "Type an answer, then check it.");
+      els.feedback.textContent = statusMessage || (problem.answerType === "choice" ? "Choose an answer, then check it." : "Type an answer, then check it.");
       els.hintLadder.innerHTML = "";
       els.next.disabled = true;
       els.check.disabled = false;
