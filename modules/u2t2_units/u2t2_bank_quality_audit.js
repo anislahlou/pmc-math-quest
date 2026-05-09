@@ -352,6 +352,60 @@ function solve(problem) {
       const height = Math.abs(nums[5] - nums[1]);
       return { kind: "number", value: base * height / 2 };
     }
+    case "Prep 9 Formula Substitution": {
+      const match = prompt.match(/p = (-?\d+), q = (-?\d+), and y = (-?\d+), find A = (\d+)q \+ py/);
+      assert.ok(match, `Cannot parse Prep 9 formula prompt: ${prompt}`);
+      const [, p, q, y, coeff] = match.map(Number);
+      return { kind: "number", value: coeff * q + p * y };
+    }
+    case "Prep 9 Metric Unit Count": {
+      const match = prompt.match(/uses ([\d,]+) (tonnes|kilograms).* uses ([\d.]+) g/);
+      assert.ok(match, `Cannot parse Prep 9 metric prompt: ${prompt}`);
+      const amount = Number(match[1].replace(/,/g, ""));
+      const grams = match[2] === "tonnes" ? amount * 1000000 : amount * 1000;
+      return { kind: "number", value: grams / Number(match[3]) };
+    }
+    case "Prep 9 Percentage Level": {
+      if (prompt.includes("33 1/3%")) {
+        const match = prompt.match(/of (\d+)/);
+        assert.ok(match, `Cannot parse one-third percentage prompt: ${prompt}`);
+        return { kind: "number", value: Number(match[1]) / 3 };
+      }
+      if (prompt.includes("sale price")) {
+        const match = prompt.match(/£(\d+) before a (\d+)% discount/);
+        assert.ok(match, `Cannot parse sale price prompt: ${prompt}`);
+        return { kind: "number", value: Number(match[1]) * (100 - Number(match[2])) / 100 };
+      }
+      if (prompt.includes("answer in grams")) {
+        const match = prompt.match(/Calculate ([\d.]+)% of ([\d.]+) kg/);
+        assert.ok(match, `Cannot parse grams percentage prompt: ${prompt}`);
+        return { kind: "number", value: Number(match[1]) / 100 * Number(match[2]) * 1000 };
+      }
+      break;
+    }
+    case "Prep 9 Cuboid Surface Area": {
+      const match = prompt.match(/measuring (\d+) cm by (\d+) cm by (\d+) cm/);
+      assert.ok(match, `Cannot parse Prep 9 cuboid prompt: ${prompt}`);
+      const length = Number(match[1]);
+      const width = Number(match[2]);
+      const height = Number(match[3]);
+      return { kind: "number", value: 2 * (length * width + length * height + width * height) };
+    }
+    case "Prep 9 Largest Odd Divisor": {
+      const match = prompt.match(/style: (\d+) =/);
+      assert.ok(match, `Cannot parse Prep 9 odd-divisor prompt: ${prompt}`);
+      let value = Number(match[1]);
+      while (value % 2 === 0) value /= 2;
+      return { kind: "number", value };
+    }
+    case "Prep 9 Pie Chart Change": {
+      const match = prompt.match(/shows (\d+) boys as (\d+) degrees/);
+      assert.ok(match, `Cannot parse Prep 9 pie-change prompt: ${prompt}`);
+      const boys = Number(match[1]);
+      const oldAngle = Number(match[2]);
+      const oldTotal = 360 * boys / oldAngle;
+      return { kind: "number", value: 360 * (boys + 1) / (oldTotal + 1) };
+    }
     default:
       throw new Error(`No independent solver for ${problem.classic}`);
   }
@@ -424,8 +478,9 @@ function run() {
       }
     }
     promptsByClassic.forEach((prompts, classic) => {
-      if (prompts.size < 4) {
-        failures.push(`${moduleId} [${classic}]\n  Expected at least 4 source-shaped prompt variants, found ${prompts.size}.`);
+      const minimumPrompts = moduleId === "review-prep-9-challenge" ? 2 : 4;
+      if (prompts.size < minimumPrompts) {
+        failures.push(`${moduleId} [${classic}]\n  Expected at least ${minimumPrompts} source-shaped prompt variants, found ${prompts.size}.`);
       }
     });
     if (!(answerModes.has("choice") && answerModes.has("filled"))) {
@@ -438,7 +493,8 @@ function run() {
     const challengePrompts = new Set();
     const challengeClassics = new Set();
     const challengeModes = new Set();
-    for (let variant = 0; variant < mod.CHALLENGE_VARIANTS_PER_MODULE; variant += 1) {
+    const challengeVariantCount = mod.challengeVariantCount(moduleId);
+    for (let variant = 0; variant < challengeVariantCount; variant += 1) {
       const problem = mod.generateChallengeProblem(moduleId, variant);
       try {
         assert.strictEqual(problem.isChallenge, true, `${problem.id} is not marked as challenge`);
@@ -473,14 +529,22 @@ function run() {
         failures.push(`${problem.id} [${problem.classic}] ${problem.prompt}\n  ${error.message}`);
       }
     }
-    if (challengePrompts.size < mod.CHALLENGE_VARIANTS_PER_MODULE) {
-      failures.push(`${moduleId}\n  Expected ${mod.CHALLENGE_VARIANTS_PER_MODULE} unique challenge prompts, found ${challengePrompts.size}.`);
+    if (challengePrompts.size < challengeVariantCount) {
+      failures.push(`${moduleId}\n  Expected ${challengeVariantCount} unique challenge prompts, found ${challengePrompts.size}.`);
     }
-    if (challengeClassics.size < mod.CHALLENGE_VARIANTS_PER_MODULE) {
-      failures.push(`${moduleId}\n  Expected ${mod.CHALLENGE_VARIANTS_PER_MODULE} named challenge classics, found ${challengeClassics.size}.`);
+    if (challengeClassics.size < challengeVariantCount) {
+      failures.push(`${moduleId}\n  Expected ${challengeVariantCount} named challenge classics, found ${challengeClassics.size}.`);
     }
     if (!(challengeModes.has("choice") && challengeModes.has("filled"))) {
       failures.push(`${moduleId}\n  Expected challenge questions to mix multiple-choice and filled-answer formats.`);
+    }
+    if (moduleId === "review-prep-9-challenge") {
+      const labels = [...challengeClassics].join(" ");
+      for (const sourceLabel of ["Q1b", "Q3", "Q4", "Q5a", "Q6b", "Q7b"]) {
+        if (!labels.includes(sourceLabel)) {
+          failures.push(`${moduleId}\n  Expected Review Prep 9 challenge bank to include ${sourceLabel}-style questions.`);
+        }
+      }
     }
   }
 

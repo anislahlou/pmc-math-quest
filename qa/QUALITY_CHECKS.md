@@ -9,7 +9,8 @@ Run this before trusting or packaging the app:
 ## What It Checks
 
 - `u2t2_bank_quality_audit.js`
-  - Generates 16 variants for each of the 14 U2T2 submodules.
+  - Generates 16 routine variants for each U2T2 submodule, plus the challenge bank for each module.
+  - Checks the Review Prep 9 Challenge Lab has 20 named challenge variants covering Q1b, Q3, Q4, Q5a, Q6b, and Q7b styles.
   - Independently solves each visible question from the prompt.
   - Compares the independent answer with the app answer.
   - Rejects ambiguous prompts, such as a number-type question that does not name square/cube/prime/etc.

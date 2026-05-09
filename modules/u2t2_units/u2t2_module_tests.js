@@ -15,7 +15,7 @@ function assertWrong(problem) {
 }
 
 function run() {
-  assert.strictEqual(mod.MODULE_IDS.length, 16);
+  assert.strictEqual(mod.MODULE_IDS.length, 17);
   assert.strictEqual(mod.gcd(45, 27), 9);
   assert.deepStrictEqual(mod.simplifyFraction(18, 33), { numerator: 6, denominator: 11 });
   assert.strictEqual(mod.triangular(10), 55);
@@ -28,6 +28,7 @@ function run() {
   assert.strictEqual(mod.parseNumber("34/15"), 34 / 15);
   assert.strictEqual(mod.generateProblem("place-value-scales", 0).expected, 900000);
   assert.strictEqual(mod.CHALLENGE_VARIANTS_PER_MODULE, 10);
+  assert.strictEqual(mod.challengeVariantCount("review-prep-9-challenge"), 20);
   assert.strictEqual(typeof mod.generateChallengeProblem, "function");
 
   for (const moduleId of mod.MODULE_IDS) {
@@ -63,7 +64,8 @@ function run() {
     const challengePrompts = new Set();
     const challengeClassics = new Set();
     const challengeModes = new Set();
-    for (let variant = 0; variant < mod.CHALLENGE_VARIANTS_PER_MODULE; variant += 1) {
+    const challengeVariantCount = mod.challengeVariantCount(moduleId);
+    for (let variant = 0; variant < challengeVariantCount; variant += 1) {
       const problem = mod.generateChallengeProblem(moduleId, variant);
       assert.strictEqual(problem.moduleId, moduleId);
       assert.strictEqual(problem.isChallenge, true, `${moduleId} challenge ${variant} should be marked as challenge`);
@@ -84,8 +86,8 @@ function run() {
       challengeClassics.add(problem.classic);
       challengeModes.add(problem.answerType === "choice" ? "choice" : "filled");
     }
-    assert.ok(challengePrompts.size >= 10, `${moduleId} should have at least 10 unique challenge prompts`);
-    assert.ok(challengeClassics.size >= 10, `${moduleId} should have at least 10 named challenge classics`);
+    assert.ok(challengePrompts.size >= challengeVariantCount, `${moduleId} should have at least ${challengeVariantCount} unique challenge prompts`);
+    assert.ok(challengeClassics.size >= challengeVariantCount, `${moduleId} should have at least ${challengeVariantCount} named challenge classics`);
     assert.ok(challengeModes.has("choice") && challengeModes.has("filled"), `${moduleId} challenges should mix choice and filled-answer formats`);
   }
 
