@@ -2,7 +2,7 @@
   "use strict";
 
   const ROUND_LENGTH = 8;
-  const INTRO_SCENE_MS = 5200;
+  const INTRO_SCENE_MS = 9000;
 
   const CLASSICS = [
     { id: "triangle-gate", nickname: "Triangle Gate", skill: "Check whether the two shorter sides add to more than the longest side.", sourcePages: "Book 118, 127 / PDF 128, 137" },
@@ -34,6 +34,8 @@
       title: "Triangle Gate",
       purpose: "Can the sides close?",
       kind: "gate",
+      audio: "audio/intro_01_triangle_gate.wav",
+      durationMs: 9400,
       caption: "Three sticks only make a triangle when the two shorter sticks can reach across the longest side.",
       voiceover: "First question: can these three sides even close? The two shorter sides have to reach farther than the longest side."
     },
@@ -41,6 +43,8 @@
       title: "Pick The Longest Side",
       purpose: "Avoid checking the wrong pair.",
       kind: "order",
+      audio: "audio/intro_02_longest_side.wav",
+      durationMs: 8600,
       caption: "Put the sides in order first. The only gate to test is short plus short greater than longest.",
       voiceover: "Do not test random pairs. Put the sides in order, then test short plus short against the longest."
     },
@@ -48,6 +52,8 @@
       title: "Meet The Hypotenuse",
       purpose: "Name the side opposite the right angle.",
       kind: "right",
+      audio: "audio/intro_03_hypotenuse.wav",
+      durationMs: 10000,
       caption: "In a right triangle, the side across from the square corner is the hypotenuse. It is the side called c in a^2 + b^2 = c^2.",
       voiceover: "When there is a right angle, the longest side has a special job. It sits opposite the square corner and is called the hypotenuse."
     },
@@ -55,6 +61,8 @@
       title: "Build The Hypotenuse",
       purpose: "Use the squares of the two legs.",
       kind: "hyp",
+      audio: "audio/intro_04_build_hypotenuse.wav",
+      durationMs: 8100,
       caption: "If the legs are 6 and 8, their squares are 36 and 64. Together they make 100, so the hypotenuse is 10.",
       voiceover: "To build the hypotenuse, square the two legs, add those squares, then take the square root."
     },
@@ -62,6 +70,8 @@
       title: "Find A Missing Leg",
       purpose: "Reverse the same idea.",
       kind: "leg",
+      audio: "audio/intro_05_missing_leg.wav",
+      durationMs: 10100,
       caption: "If you know the hypotenuse and one leg, subtract the known square from the hypotenuse square.",
       voiceover: "If the hypotenuse is already known, reverse the move. Hypotenuse square minus known leg square gives the missing leg square."
     },
@@ -69,6 +79,8 @@
       title: "Shared Height Chase",
       purpose: "Use two right triangles in one diagram.",
       kind: "shared",
+      audio: "audio/intro_06_shared_height.wav",
+      durationMs: 9700,
       caption: "One dropped height can belong to two smaller right triangles. Use the first triangle to find the height, then the second to find the hidden base.",
       voiceover: "Some diagrams hide two right triangles inside one big shape. Find the shared height first, then use it again."
     },
@@ -76,6 +88,8 @@
       title: "Isosceles Split",
       purpose: "Halve the base before using Pythagoras.",
       kind: "iso",
+      audio: "audio/intro_07_isosceles_split.wav",
+      durationMs: 9400,
       caption: "The height in an isosceles triangle splits the base into two equal parts, which gives a right triangle to solve.",
       voiceover: "In an isosceles triangle, the equal sides let the height split the base in half. That creates a right triangle."
     },
@@ -83,6 +97,8 @@
       title: "Right-Turn Challenge",
       purpose: "Turn a path into one right triangle.",
       kind: "path",
+      audio: "audio/intro_08_right_turn.wav",
+      durationMs: 12700,
       caption: "For a 90 degree path, combine all moves in one direction, combine all moves in the other direction, then use Pythagoras for the final distance.",
       voiceover: "For right-turn paths, do not add every step as the answer. Combine the sideways moves, combine the upward moves, then make one final right triangle."
     }
@@ -544,20 +560,27 @@
   function cancelIntroSpeech() {
     const synth = speechEngine();
     if (synth) synth.cancel();
+    const audio = $("intro-audio-player");
+    if (audio) {
+      audio.onended = null;
+      audio.onerror = null;
+      audio.onplay = null;
+      audio.pause();
+      try {
+        audio.currentTime = 0;
+      } catch (error) {
+        // Some browsers cannot reset currentTime until metadata has loaded.
+      }
+    }
     state.currentUtterance = null;
   }
 
-  function speakIntroScene() {
-    if (!state.audioEnabled) {
-      updateAudioStatus("Audio off. Turn it on to hear the narration.");
-      return;
-    }
+  function speakIntroSceneFallback() {
     const synth = speechEngine();
     if (!synth || typeof SpeechSynthesisUtterance === "undefined") {
       updateAudioStatus("Audio is not available in this browser, but the narration text is shown below the animation.");
       return;
     }
-    cancelIntroSpeech();
     const utterance = new SpeechSynthesisUtterance(INTRO_SCENES[state.introIndex].voiceover);
     const voice = chooseNarrationVoice();
     if (voice) utterance.voice = voice;
@@ -576,6 +599,44 @@
     state.currentUtterance = utterance;
     updateAudioStatus("Audio starting.");
     synth.speak(utterance);
+  }
+
+  function speakIntroScene() {
+    if (!state.audioEnabled) {
+      updateAudioStatus("Audio off. Turn it on to hear the narration.");
+      return;
+    }
+    cancelIntroSpeech();
+    const scene = INTRO_SCENES[state.introIndex];
+    const audio = $("intro-audio-player");
+    if (!audio || !scene.audio) {
+      speakIntroSceneFallback();
+      return;
+    }
+    let fallbackStarted = false;
+    const startFallback = () => {
+      if (fallbackStarted) return;
+      fallbackStarted = true;
+      updateAudioStatus("Audio file was blocked, so I am trying the browser narration instead.");
+      speakIntroSceneFallback();
+    };
+    audio.src = scene.audio;
+    try {
+      audio.currentTime = 0;
+    } catch (error) {
+      // The browser may need metadata before accepting a seek.
+    }
+    audio.onplay = () => updateAudioStatus("Audio playing.");
+    audio.onended = () => updateAudioStatus(state.introPlaying ? "Audio ready for the next scene." : "Audio ready.");
+    audio.onerror = startFallback;
+    updateAudioStatus("Audio starting.");
+    const playAttempt = audio.play();
+    if (playAttempt && typeof playAttempt.catch === "function") playAttempt.catch(startFallback);
+  }
+
+  function currentIntroDurationMs() {
+    const scene = INTRO_SCENES[state.introIndex];
+    return scene.durationMs || INTRO_SCENE_MS;
   }
 
   function toggleIntroAudio() {
@@ -647,7 +708,7 @@
     renderIntro();
     speakIntroScene();
     state.introTimer = setInterval(() => {
-      const percent = ((Date.now() - state.introStartedAt) / INTRO_SCENE_MS) * 100;
+      const percent = ((Date.now() - state.introStartedAt) / currentIntroDurationMs()) * 100;
       setIntroProgress(percent);
       if (percent >= 100) advanceIntro(true);
     }, 80);

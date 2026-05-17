@@ -39,8 +39,17 @@ function assertNoInitialLeak(problem) {
 
 function run() {
   assert.strictEqual(mod.CLASSIC_IDS.length, 8);
+  assert.strictEqual(mod.INTRO_SCENES.length, 8);
   assert.strictEqual(mod.formatMathText("a^2 + b^2 = c^2"), "a² + b² = c²");
   assert.strictEqual(mod.parseNumber("32 cm"), 32);
+
+  for (const scene of mod.INTRO_SCENES) {
+    assert.ok(scene.audio && scene.audio.endsWith(".wav"), `${scene.title} needs bundled narration audio`);
+    assert.ok(scene.durationMs >= 7500, `${scene.title} needs enough time for narration`);
+    const audioPath = path.join(__dirname, scene.audio);
+    assert.ok(fs.existsSync(audioPath), `${scene.title} audio file should exist at ${scene.audio}`);
+    assert.ok(fs.statSync(audioPath).size > 100000, `${scene.title} audio file should not be empty`);
+  }
 
   assert.strictEqual(item("triangle-gate", 0).expected, "can form a triangle");
   assert.strictEqual(item("triangle-gate", 1).expected, "cannot form a triangle");
@@ -74,14 +83,14 @@ function run() {
 
   const html = fs.readFileSync(path.join(__dirname, "triangle_sides_module.html"), "utf8");
   const css = fs.readFileSync(path.join(__dirname, "triangle_sides_module.css"), "utf8");
-  for (const id of ["intro-screen", "intro-frame", "intro-play", "intro-audio", "intro-audio-status", "intro-progress-fill", "intro-voiceover", "practice-grid", "answer-host", "similar-button", "feedback", "round-recap", "live-score"]) {
+  for (const id of ["intro-screen", "intro-frame", "intro-play", "intro-audio", "intro-audio-player", "intro-audio-status", "intro-progress-fill", "intro-voiceover", "practice-grid", "answer-host", "similar-button", "feedback", "round-recap", "live-score"]) {
     assert.ok(html.includes(`id="${id}"`), `Triangle sides HTML should include ${id}`);
   }
   for (const token of [".intro-screen", ".choice-card", ".visual-frame", ".feedback-card", ".voiceover-card", ".audio-status", "overflow-x: hidden"]) {
     assert.ok(css.includes(token), `Triangle sides CSS should include ${token}`);
   }
   const js = fs.readFileSync(path.join(__dirname, "triangle_sides_module.js"), "utf8");
-  for (const token of ["speechSynthesis", "SpeechSynthesisUtterance", "intro-audio", "speakIntroScene"]) {
+  for (const token of ["speechSynthesis", "SpeechSynthesisUtterance", "intro-audio-player", ".wav", "speakIntroSceneFallback", "speakIntroScene"]) {
     assert.ok(js.includes(token), `Triangle sides JS should include audio hook ${token}`);
   }
 }
