@@ -507,6 +507,8 @@
     introPlaying: false,
     introStartedAt: 0,
     introTimer: null,
+    audioEnabled: true,
+    currentUtterance: null,
     roundOffset: 0,
     round: createRound(0),
     current: 0,
@@ -515,6 +517,77 @@
   };
 
   const $ = (id) => document.getElementById(id);
+
+  function speechEngine() {
+    return typeof window !== "undefined" && "speechSynthesis" in window ? window.speechSynthesis : null;
+  }
+
+  function chooseNarrationVoice() {
+    const synth = speechEngine();
+    if (!synth) return null;
+    const voices = synth.getVoices();
+    const englishVoices = voices.filter((voice) => /^en/i.test(voice.lang || ""));
+    return englishVoices.find((voice) => /natural|online|neural|jenny|aria|sonia|libby/i.test(voice.name))
+      || englishVoices.find((voice) => /microsoft|google/i.test(voice.name))
+      || englishVoices[0]
+      || voices[0]
+      || null;
+  }
+
+  function updateAudioStatus(message) {
+    const status = $("intro-audio-status");
+    if (status) status.textContent = message;
+    const button = $("intro-audio");
+    if (button) button.textContent = state.audioEnabled ? "Audio on" : "Audio off";
+  }
+
+  function cancelIntroSpeech() {
+    const synth = speechEngine();
+    if (synth) synth.cancel();
+    state.currentUtterance = null;
+  }
+
+  function speakIntroScene() {
+    if (!state.audioEnabled) {
+      updateAudioStatus("Audio off. Turn it on to hear the narration.");
+      return;
+    }
+    const synth = speechEngine();
+    if (!synth || typeof SpeechSynthesisUtterance === "undefined") {
+      updateAudioStatus("Audio is not available in this browser, but the narration text is shown below the animation.");
+      return;
+    }
+    cancelIntroSpeech();
+    const utterance = new SpeechSynthesisUtterance(INTRO_SCENES[state.introIndex].voiceover);
+    const voice = chooseNarrationVoice();
+    if (voice) utterance.voice = voice;
+    utterance.rate = 0.94;
+    utterance.pitch = 1.04;
+    utterance.volume = 1;
+    utterance.onstart = () => updateAudioStatus("Audio playing.");
+    utterance.onend = () => {
+      state.currentUtterance = null;
+      updateAudioStatus(state.introPlaying ? "Audio ready for the next scene." : "Audio ready.");
+    };
+    utterance.onerror = () => {
+      state.currentUtterance = null;
+      updateAudioStatus("Audio was blocked by the browser. Press Play intro video again to restart it.");
+    };
+    state.currentUtterance = utterance;
+    updateAudioStatus("Audio starting.");
+    synth.speak(utterance);
+  }
+
+  function toggleIntroAudio() {
+    state.audioEnabled = !state.audioEnabled;
+    if (!state.audioEnabled) {
+      cancelIntroSpeech();
+      updateAudioStatus("Audio off. The narration text remains visible.");
+      return;
+    }
+    updateAudioStatus("Audio on. Press Play intro video to hear the narration.");
+    if (state.introPlaying) speakIntroScene();
+  }
 
   function renderIntro() {
     const scene = INTRO_SCENES[state.introIndex];
@@ -526,6 +599,7 @@
     $("intro-caption").textContent = scene.caption;
     $("intro-storyboard").innerHTML = INTRO_SCENES.map((item, index) => `<li class="${index === state.introIndex ? "active" : ""}"><strong>${escapeHtml(item.title)}</strong><br>${escapeHtml(item.purpose)}</li>`).join("");
     $("intro-play").textContent = state.introPlaying ? "Pause intro" : (state.introIndex === INTRO_SCENES.length - 1 ? "Replay intro" : "Play intro video");
+    updateAudioStatus(state.audioEnabled ? "Audio ready. Press Play intro video to hear the narration." : "Audio off. The narration text remains visible.");
   }
 
   function clearIntroTimer() {
@@ -542,6 +616,7 @@
 
   function stopIntroPlayback(progress = 0) {
     clearIntroTimer();
+    cancelIntroSpeech();
     state.introPlaying = false;
     setIntroProgress(progress);
     renderIntro();
@@ -549,9 +624,18 @@
 
   function advanceIntro(keepPlaying = false) {
     const atEnd = state.introIndex >= INTRO_SCENES.length - 1;
+    if (atEnd && keepPlaying) {
+      stopIntroPlayback(100);
+      return;
+    }
     state.introIndex = atEnd ? 0 : state.introIndex + 1;
-    if (keepPlaying && !atEnd) startIntroPlayback();
-    else stopIntroPlayback(atEnd ? 100 : 0);
+    if (keepPlaying) startIntroPlayback();
+    else {
+      cancelIntroSpeech();
+      state.introPlaying = false;
+      setIntroProgress(0);
+      renderIntro();
+    }
   }
 
   function startIntroPlayback() {
@@ -561,6 +645,7 @@
     state.introStartedAt = Date.now();
     setIntroProgress(0);
     renderIntro();
+    speakIntroScene();
     state.introTimer = setInterval(() => {
       const percent = ((Date.now() - state.introStartedAt) / INTRO_SCENE_MS) * 100;
       setIntroProgress(percent);
@@ -695,6 +780,7 @@
     $("show-intro").addEventListener("click", showIntro);
     $("show-practice").addEventListener("click", showPractice);
     $("intro-start").addEventListener("click", showPractice);
+    $("intro-audio").addEventListener("click", toggleIntroAudio);
     $("intro-next").addEventListener("click", () => advanceIntro(false));
     $("intro-play").addEventListener("click", toggleIntroPlayback);
     $("answer-form").addEventListener("submit", checkCurrent);

@@ -159,6 +159,14 @@ input:focus-visible {
   line-height: 1.45;
 }
 
+.audio-status {
+  min-height: 22px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
 .intro-kicker,
 .state-label {
   display: inline-flex;

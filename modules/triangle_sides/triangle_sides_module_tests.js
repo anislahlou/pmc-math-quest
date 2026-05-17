@@ -74,11 +74,15 @@ function run() {
 
   const html = fs.readFileSync(path.join(__dirname, "triangle_sides_module.html"), "utf8");
   const css = fs.readFileSync(path.join(__dirname, "triangle_sides_module.css"), "utf8");
-  for (const id of ["intro-screen", "intro-frame", "intro-play", "intro-progress-fill", "intro-voiceover", "practice-grid", "answer-host", "similar-button", "feedback", "round-recap", "live-score"]) {
+  for (const id of ["intro-screen", "intro-frame", "intro-play", "intro-audio", "intro-audio-status", "intro-progress-fill", "intro-voiceover", "practice-grid", "answer-host", "similar-button", "feedback", "round-recap", "live-score"]) {
     assert.ok(html.includes(`id="${id}"`), `Triangle sides HTML should include ${id}`);
   }
-  for (const token of [".intro-screen", ".choice-card", ".visual-frame", ".feedback-card", ".voiceover-card", "overflow-x: hidden"]) {
+  for (const token of [".intro-screen", ".choice-card", ".visual-frame", ".feedback-card", ".voiceover-card", ".audio-status", "overflow-x: hidden"]) {
     assert.ok(css.includes(token), `Triangle sides CSS should include ${token}`);
+  }
+  const js = fs.readFileSync(path.join(__dirname, "triangle_sides_module.js"), "utf8");
+  for (const token of ["speechSynthesis", "SpeechSynthesisUtterance", "intro-audio", "speakIntroScene"]) {
+    assert.ok(js.includes(token), `Triangle sides JS should include audio hook ${token}`);
   }
 }
 
