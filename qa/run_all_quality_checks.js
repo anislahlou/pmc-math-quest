@@ -11,6 +11,9 @@ require("../modules/volume_problem_extension/volume_extension_module_tests.js").
 require("../modules/triangle_sides/triangle_sides_bank_quality_audit.js").run();
 require("../modules/triangle_sides/triangle_sides_module_tests.js").run();
 
+require("../modules/equal_height_triangles/equal_height_triangles_bank_quality_audit.js").run();
+require("../modules/equal_height_triangles/equal_height_triangles_module_tests.js").run();
+
 require("./math_display_quality_check.js").run();
 console.log("Math display quality check passed.");
 

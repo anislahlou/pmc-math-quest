@@ -39,6 +39,14 @@ Run this before trusting or packaging the app:
 - `triangle_sides_module_tests.js`
   - Checks the Lesson 17 app wiring, intro, answer checker, visual explainers, recap, and known source-example answers.
 
+- `equal_height_triangles_bank_quality_audit.js`
+  - Generates 24 variants for each of the 10 Equal Height Triangles classics plus 12 challenge forms.
+  - Checks area formula, same-height ratios, equal-area twins, reverse area, split bases, shaded differences, algebra targets, select-all challenges, and sloping-side traps.
+  - Verifies anchored diagram labels, no initial answer leakage, registered wrong-answer rejection, mixed challenge formats, and source caveat tracking.
+
+- `equal_height_triangles_module_tests.js`
+  - Checks the intro video scenes, bundled narration audio, warmup gate, answer checker, visual explainers, recap controls, and known generated answers.
+
 - `math_display_quality_check.js`
   - Checks that displayed powers are formatted as superscripts, such as `5¹`, `x²`, `cm³`, and `2⁽ʳᵒʷ⁻¹⁾`.
   - Checks that Pascal still accepts typed power answers using superscript notation.

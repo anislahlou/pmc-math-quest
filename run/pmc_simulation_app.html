@@ -457,6 +457,10 @@
         background: #e8f6ff;
       }
 
+      .module-card.equal-height {
+        background: #f0fbf6;
+      }
+
       .module-card.volume {
         background: #f2fff7;
       }
@@ -929,10 +933,11 @@
             <a class="button secondary" href="../modules/volume_prisms/volume_prisms_module.html">Launch Volume</a>
             <a class="button secondary" href="../modules/volume_problem_extension/volume_extension_module.html">Launch Extension</a>
             <a class="button secondary" href="../modules/triangle_sides/triangle_sides_module.html">Launch Triangle Sides</a>
+            <a class="button secondary" href="../modules/equal_height_triangles/equal_height_triangles_module.html">Launch Equal Height</a>
             <a class="button secondary" href="#missions">See all missions</a>
           </div>
           <div class="mission-stats" aria-label="Quest stats">
-            <div class="stat"><strong>7</strong><span>missions ready</span></div>
+            <div class="stat"><strong>8</strong><span>missions ready</span></div>
             <div class="stat"><strong>17</strong><span>U2T2 submodules</span></div>
             <div class="stat"><strong>10</strong><span>prism classics</span></div>
           </div>
@@ -978,6 +983,11 @@
               <span class="node-number">7</span>
               <strong>Triangle Sides</strong>
               <small>Pythagoras lab</small>
+            </a>
+            <a class="quest-node" href="../modules/equal_height_triangles/equal_height_triangles_module.html">
+              <span class="node-number">8</span>
+              <strong>Equal Height</strong>
+              <small>Area ratio lab</small>
             </a>
           </div>
           <div class="level-bar" aria-label="Quest progress">
@@ -1251,6 +1261,45 @@
           <div class="actions">
             <a class="button" href="../modules/triangle_sides/triangle_sides_module.html">Launch Triangle Sides</a>
             <a class="button secondary" href="../modules/triangle_sides/triangle_sides_source_extract.md">Source extract</a>
+          </div>
+        </article>
+
+        <article class="module-card equal-height">
+          <div class="card-top">
+            <div>
+              <span class="chapter">Geometry</span>
+              <h3>Triangles With Equal Height</h3>
+            </div>
+            <div class="difficulty" aria-label="Difficulty: four out of five">
+              <span>Power level</span>
+              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></span>
+            </div>
+          </div>
+          <p>Spot shared heights, compare area ratios, reverse the formula, split bases, subtract shaded regions, and solve expression-labelled triangle questions.</p>
+          <div class="card-visual" aria-hidden="true">
+            <svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Equal-height triangles preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <line x1="36" y1="42" x2="264" y2="42" stroke="#9fb9c4" stroke-width="3"></line>
+              <line x1="36" y1="146" x2="264" y2="146" stroke="#9fb9c4" stroke-width="3"></line>
+              <polygon points="48,146 116,146 78,42" fill="#e8f6ff" stroke="#0d263f" stroke-width="4"></polygon>
+              <polygon points="150,146 252,146 196,42" fill="#fff1eb" stroke="#0d263f" stroke-width="4"></polygon>
+              <line x1="134" y1="42" x2="134" y2="146" stroke="#f36f45" stroke-width="4" stroke-dasharray="6 5"></line>
+              <path d="M134 128 h18 v18" fill="none" stroke="#f36f45" stroke-width="3"></path>
+              <text x="82" y="168" text-anchor="middle">base 2</text>
+              <text x="202" y="168" text-anchor="middle">base 3</text>
+              <text x="154" y="92" text-anchor="middle">same height</text>
+            </svg>
+          </div>
+          <div class="skill-list" aria-label="Equal height triangle skills">
+            <span>Height detective</span>
+            <span>Area ratios</span>
+            <span>Split bases</span>
+            <span>Reverse formula</span>
+            <span>Algebra targets</span>
+          </div>
+          <div class="actions">
+            <a class="button" href="../modules/equal_height_triangles/equal_height_triangles_module.html">Launch Equal Height</a>
+            <a class="button secondary" href="../modules/equal_height_triangles/equal_height_triangles_source_extract.md">Source extract</a>
           </div>
         </article>
       </section>
