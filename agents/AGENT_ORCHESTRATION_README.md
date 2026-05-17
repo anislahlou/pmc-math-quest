@@ -74,6 +74,7 @@ Output:
 ## 9. Release Gate
 
 A mission is trusted only after source coverage, visuals, bank checks, module tests, and math display checks pass.
+If the lesson promises intro narration, the release also needs a real audio asset check and a browser or manual playback sign-off.
 
 Output:
 - Updated dashboard registry.

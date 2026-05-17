@@ -32,70 +32,78 @@
   const INTRO_SCENES = [
     {
       title: "Triangle Gate",
-      purpose: "Can the sides close?",
+      purpose: "Check whether the sides can close.",
+      classicId: "triangle-gate",
       kind: "gate",
       audio: "audio/intro_01_triangle_gate.wav",
-      durationMs: 9400,
-      caption: "Three sticks only make a triangle when the two shorter sticks can reach across the longest side.",
-      voiceover: "First question: can these three sides even close? The two shorter sides have to reach farther than the longest side."
+      durationMs: 12200,
+      caption: "Order the sides, then test short + short > longest. If the shorter pair cannot pass the longest side, no triangle forms.",
+      voiceover: "Start with the triangle gate. Put the three side lengths in order. Then ask one question: do the two shorter sides reach farther than the longest side?"
     },
     {
-      title: "Pick The Longest Side",
-      purpose: "Avoid checking the wrong pair.",
-      kind: "order",
-      audio: "audio/intro_02_longest_side.wav",
-      durationMs: 8600,
-      caption: "Put the sides in order first. The only gate to test is short plus short greater than longest.",
-      voiceover: "Do not test random pairs. Put the sides in order, then test short plus short against the longest."
+      title: "Isosceles Choice",
+      purpose: "Pick the equal side that makes a real triangle.",
+      classicId: "isosceles-choice",
+      kind: "iso-choice",
+      audio: "audio/intro_02_isosceles_choice.wav",
+      durationMs: 12250,
+      caption: "When two sides are equal, the repeated side must still pass the triangle gate before you add the perimeter.",
+      voiceover: "For an isosceles triangle, two sides are equal. But do not repeat a side blindly. The two equal sides still have to close around the base."
     },
     {
-      title: "Meet The Hypotenuse",
-      purpose: "Name the side opposite the right angle.",
-      kind: "right",
-      audio: "audio/intro_03_hypotenuse.wav",
-      durationMs: 10000,
-      caption: "In a right triangle, the side across from the square corner is the hypotenuse. It is the side called c in a^2 + b^2 = c^2.",
-      voiceover: "When there is a right angle, the longest side has a special job. It sits opposite the square corner and is called the hypotenuse."
-    },
-    {
-      title: "Build The Hypotenuse",
-      purpose: "Use the squares of the two legs.",
+      title: "Hypotenuse Builder",
+      purpose: "Name and build the side across the right angle.",
+      classicId: "hypotenuse-builder",
       kind: "hyp",
-      audio: "audio/intro_04_build_hypotenuse.wav",
-      durationMs: 8100,
-      caption: "If the legs are 6 and 8, their squares are 36 and 64. Together they make 100, so the hypotenuse is 10.",
-      voiceover: "To build the hypotenuse, square the two legs, add those squares, then take the square root."
+      audio: "audio/intro_03_hypotenuse_builder.wav",
+      durationMs: 13200,
+      caption: "The hypotenuse is opposite the square corner. Square the two legs, add, then take the square root.",
+      voiceover: "Now look for the square corner. The side opposite it is the hypotenuse. To build that side, square the two legs, add the squares, then take the square root."
     },
     {
-      title: "Find A Missing Leg",
-      purpose: "Reverse the same idea.",
+      title: "Missing Leg",
+      purpose: "Reverse Pythagoras when the longest side is known.",
+      classicId: "missing-leg",
       kind: "leg",
-      audio: "audio/intro_05_missing_leg.wav",
-      durationMs: 10100,
-      caption: "If you know the hypotenuse and one leg, subtract the known square from the hypotenuse square.",
-      voiceover: "If the hypotenuse is already known, reverse the move. Hypotenuse square minus known leg square gives the missing leg square."
+      audio: "audio/intro_04_missing_leg.wav",
+      durationMs: 12000,
+      caption: "If the hypotenuse is known, subtract the known leg square from the hypotenuse square.",
+      voiceover: "If the hypotenuse is already known, reverse the move. Start with the hypotenuse square, subtract the known leg square, then take the square root."
     },
     {
       title: "Shared Height Chase",
-      purpose: "Use two right triangles in one diagram.",
+      purpose: "Use one hidden height in two right triangles.",
+      classicId: "shared-height-chase",
       kind: "shared",
-      audio: "audio/intro_06_shared_height.wav",
-      durationMs: 9700,
-      caption: "One dropped height can belong to two smaller right triangles. Use the first triangle to find the height, then the second to find the hidden base.",
-      voiceover: "Some diagrams hide two right triangles inside one big shape. Find the shared height first, then use it again."
+      audio: "audio/intro_05_shared_height.wav",
+      durationMs: 12350,
+      caption: "One dropped height can belong to two smaller right triangles. Solve one side, then reuse the same height.",
+      voiceover: "Some diagrams hide two right triangles inside one bigger shape. Find the shared height in the first triangle, then use that same height again in the second triangle."
     },
     {
-      title: "Isosceles Split",
-      purpose: "Halve the base before using Pythagoras.",
+      title: "Isosceles Split Area",
+      purpose: "Halve the base, find the height, then calculate area.",
+      classicId: "isosceles-split-area",
       kind: "iso",
-      audio: "audio/intro_07_isosceles_split.wav",
-      durationMs: 9400,
-      caption: "The height in an isosceles triangle splits the base into two equal parts, which gives a right triangle to solve.",
-      voiceover: "In an isosceles triangle, the equal sides let the height split the base in half. That creates a right triangle."
+      audio: "audio/intro_06_isosceles_split_area.wav",
+      durationMs: 12000,
+      caption: "The height in an isosceles triangle splits the base in half, making a right triangle you can solve.",
+      voiceover: "In an isosceles triangle, the equal sides let the height split the base in half. That gives a right triangle, so you can find the height and then the area."
+    },
+    {
+      title: "Area To Perimeter",
+      purpose: "Reverse area into height, then find the equal side.",
+      classicId: "area-to-perimeter",
+      kind: "area",
+      audio: "audio/intro_07_area_to_perimeter.wav",
+      durationMs: 12400,
+      caption: "Area gives height when base is known: height = 2 x area / base. Then Pythagoras finds the sloping equal side.",
+      voiceover: "Sometimes the book gives area first. Use the area formula backwards to find the height. Then use the half-base and height to find the equal side and the perimeter."
     },
     {
       title: "Right-Turn Challenge",
       purpose: "Turn a path into one right triangle.",
+      classicId: "right-turn-path",
       kind: "path",
       audio: "audio/intro_08_right_turn.wav",
       durationMs: 12700,
@@ -486,7 +494,7 @@
 
   function renderIntroScene(index) {
     const scene = INTRO_SCENES[index % INTRO_SCENES.length];
-    const fakeProblem = generateProblem(CLASSIC_IDS[index % CLASSIC_IDS.length], index);
+    const fakeProblem = generateProblem(scene.classicId || CLASSIC_IDS[index % CLASSIC_IDS.length], index);
     return renderProblemVisual({ ...fakeProblem, expectedDisplay: scene.title }, "initial").html;
   }
 

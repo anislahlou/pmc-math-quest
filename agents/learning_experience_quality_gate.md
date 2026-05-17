@@ -68,6 +68,14 @@ Minimum standard:
 
 Browser speech synthesis may be used only as an explicit fallback, off by default. A production release should use NotebookLM export, recorded narration, or another natural-voice pipeline.
 
+If the app promises narration or an intro video with sound, the release must include a narration delivery check:
+
+- every intro scene has a real audio asset or approved external audio source
+- the app has an actual audio player, not only `speechSynthesis`
+- browser speech synthesis remains a fallback only
+- module tests verify scene-to-audio mapping and non-empty audio assets
+- browser QA or manual sign-off confirms the player reaches a playing state
+
 ### 5. Storyboard Readability
 
 Storyboard steps must be scannable.
@@ -149,6 +157,7 @@ Block release if any are true:
 - layout horizontally overflows
 - video is not integrated into the practice app
 - exercise set tests skills not introduced or named
+- audio or narration is promised but no real asset/player check proves it can be heard
 - the "bridge" scene cannot be explained by an 11-year-old in one sentence
 - labels are not anchored to the exact angle, row, point, or shape they describe
 - an angle value is placed on the wrong supplementary side, such as labelling the `71°` sector as `109°`

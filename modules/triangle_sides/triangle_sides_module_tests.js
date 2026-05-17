@@ -40,15 +40,24 @@ function assertNoInitialLeak(problem) {
 function run() {
   assert.strictEqual(mod.CLASSIC_IDS.length, 8);
   assert.strictEqual(mod.INTRO_SCENES.length, 8);
+  assert.deepStrictEqual(
+    mod.INTRO_SCENES.map((scene) => scene.classicId),
+    mod.CLASSIC_IDS,
+    "Every named Triangle Sides skill must have one aligned intro scene"
+  );
   assert.strictEqual(mod.formatMathText("a^2 + b^2 = c^2"), "a² + b² = c²");
   assert.strictEqual(mod.parseNumber("32 cm"), 32);
 
-  for (const scene of mod.INTRO_SCENES) {
+  for (const [index, scene] of mod.INTRO_SCENES.entries()) {
+    assert.ok(scene.purpose.length > 20, `${scene.title} needs a clear child-facing purpose`);
+    assert.ok(scene.caption.length > 60, `${scene.title} needs visual explanation before practice`);
+    assert.ok(scene.voiceover.length > 80, `${scene.title} needs teacher-like narration`);
     assert.ok(scene.audio && scene.audio.endsWith(".wav"), `${scene.title} needs bundled narration audio`);
     assert.ok(scene.durationMs >= 7500, `${scene.title} needs enough time for narration`);
     const audioPath = path.join(__dirname, scene.audio);
     assert.ok(fs.existsSync(audioPath), `${scene.title} audio file should exist at ${scene.audio}`);
     assert.ok(fs.statSync(audioPath).size > 100000, `${scene.title} audio file should not be empty`);
+    assert.ok(mod.renderIntroScene(index).includes('role="img"'), `${scene.title} should render as a visual intro scene`);
   }
 
   assert.strictEqual(item("triangle-gate", 0).expected, "can form a triangle");
@@ -83,6 +92,8 @@ function run() {
 
   const html = fs.readFileSync(path.join(__dirname, "triangle_sides_module.html"), "utf8");
   const css = fs.readFileSync(path.join(__dirname, "triangle_sides_module.css"), "utf8");
+  assert.ok(!html.includes("a² + b² = c²"), "Opening intro card should not show the Pythagorean formula before the visual bridge");
+  assert.ok(html.includes("right-angle side builder"), "Opening intro card should name the skill without leading with the formula");
   for (const id of ["intro-screen", "intro-frame", "intro-play", "intro-audio", "intro-audio-player", "intro-audio-status", "intro-progress-fill", "intro-voiceover", "practice-grid", "answer-host", "similar-button", "feedback", "round-recap", "live-score"]) {
     assert.ok(html.includes(`id="${id}"`), `Triangle sides HTML should include ${id}`);
   }
