@@ -23,17 +23,17 @@
 
       <section id="intro-screen" class="intro-screen">
         <div class="intro-copy">
-          <span class="intro-kicker">New mission</span>
-          <h2>Can The Triangle Close?</h2>
-          <p>Before we calculate, we check the shape: can three sides really meet, and is there a right angle we can trust?</p>
+          <span class="intro-kicker">Intro video</span>
+          <h2>Watch The Triangle Side Detective</h2>
+          <p>Before the exercises, watch the short animatic. It shows how to check if a triangle can close, then how Pythagoras and isosceles splits help reveal missing sides.</p>
           <div class="intro-rule">
-            <span>Main moves</span>
+            <span>Video anchors</span>
             <strong>short + short &gt; longest</strong>
             <strong>a² + b² = c²</strong>
           </div>
           <div id="intro-skill-grid" class="intro-skill-grid"></div>
           <div class="action-row">
-            <button id="intro-play" type="button">Play intro</button>
+            <button id="intro-play" type="button">Play intro video</button>
             <button id="intro-next" type="button" class="secondary">Next scene</button>
             <button id="intro-start" type="button">Start exercises</button>
           </div>
@@ -41,12 +41,16 @@
         <div class="intro-video">
           <div class="panel-head">
             <div>
-              <p class="eyebrow">Concept intro</p>
+              <p class="eyebrow">Lesson 17 video intro</p>
               <h2 id="intro-title">Triangle Gate</h2>
             </div>
             <span id="intro-count" class="state-label">1 of 8</span>
           </div>
+          <div class="intro-progress" aria-label="Intro video progress">
+            <span id="intro-progress-fill"></span>
+          </div>
           <div id="intro-frame" class="visual-frame"></div>
+          <p id="intro-voiceover" class="voiceover-card"></p>
           <p id="intro-caption" class="visual-text"></p>
           <ol id="intro-storyboard" class="intro-storyboard"></ol>
         </div>

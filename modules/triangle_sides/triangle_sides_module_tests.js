@@ -18,6 +18,25 @@ function assertWrong(problem) {
   assert.strictEqual(result.isCorrect, false, `${problem.id} should reject a wrong answer`);
 }
 
+function assertNoInitialLeak(problem) {
+  const html = mod.renderProblemVisual(problem, "initial").html;
+  const visual = problem.visual;
+  assert.ok(!html.includes("Answer:"), `${problem.id} initial visual should not show answer text`);
+  if (visual.type === "isoscelesChoice") {
+    assert.ok(!html.includes(`base ${visual.base}`), `${problem.id} initial visual should not reveal the chosen base`);
+  }
+  if (visual.type === "right" && visual.missing === "c") {
+    assert.ok(!html.includes(`>${problem.expected}<`), `${problem.id} initial visual should not reveal the hypotenuse`);
+  }
+  if (visual.type === "shared") {
+    assert.ok(!html.includes(`h ${visual.height}`), `${problem.id} initial visual should not reveal the shared height`);
+  }
+  if (visual.type === "areaPerimeter") {
+    assert.ok(!html.includes(`height ${visual.height}`), `${problem.id} initial visual should not reveal the height`);
+    assert.ok(!html.includes(`>${visual.equal}<`), `${problem.id} initial visual should not reveal the equal side`);
+  }
+}
+
 function run() {
   assert.strictEqual(mod.CLASSIC_IDS.length, 8);
   assert.strictEqual(mod.formatMathText("a^2 + b^2 = c^2"), "a² + b² = c²");
@@ -50,14 +69,15 @@ function run() {
     const rendered = mod.renderProblemVisual(problem, "solution");
     assert.ok(rendered.html.includes('role="img"'), `${problem.id} needs accessible visual`);
     assert.ok(rendered.html.includes("Answer:"), `${problem.id} solution visual should include answer`);
+    assertNoInitialLeak(problem);
   }
 
   const html = fs.readFileSync(path.join(__dirname, "triangle_sides_module.html"), "utf8");
   const css = fs.readFileSync(path.join(__dirname, "triangle_sides_module.css"), "utf8");
-  for (const id of ["intro-screen", "intro-frame", "intro-play", "practice-grid", "answer-host", "similar-button", "feedback", "round-recap", "live-score"]) {
+  for (const id of ["intro-screen", "intro-frame", "intro-play", "intro-progress-fill", "intro-voiceover", "practice-grid", "answer-host", "similar-button", "feedback", "round-recap", "live-score"]) {
     assert.ok(html.includes(`id="${id}"`), `Triangle sides HTML should include ${id}`);
   }
-  for (const token of [".intro-screen", ".choice-card", ".visual-frame", ".feedback-card", "overflow-x: hidden"]) {
+  for (const token of [".intro-screen", ".choice-card", ".visual-frame", ".feedback-card", ".voiceover-card", "overflow-x: hidden"]) {
     assert.ok(css.includes(token), `Triangle sides CSS should include ${token}`);
   }
 }

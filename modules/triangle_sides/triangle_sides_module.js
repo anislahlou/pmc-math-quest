@@ -2,6 +2,7 @@
   "use strict";
 
   const ROUND_LENGTH = 8;
+  const INTRO_SCENE_MS = 5200;
 
   const CLASSICS = [
     { id: "triangle-gate", nickname: "Triangle Gate", skill: "Check whether the two shorter sides add to more than the longest side.", sourcePages: "Book 118, 127 / PDF 128, 137" },
@@ -29,14 +30,62 @@
   };
 
   const INTRO_SCENES = [
-    { title: "Triangle Gate", purpose: "Can the sides close?", kind: "gate", caption: "Three sticks only make a triangle when the two shorter sticks can reach across the longest side." },
-    { title: "Pick The Longest Side", purpose: "Avoid checking the wrong pair.", kind: "order", caption: "Put the sides in order first. The only gate to test is short plus short greater than longest." },
-    { title: "Meet The Hypotenuse", purpose: "Name the side opposite the right angle.", kind: "right", caption: "In a right triangle, the side across from the square corner is the hypotenuse. It is the side called c in a^2 + b^2 = c^2." },
-    { title: "Build The Hypotenuse", purpose: "Use the squares of the two legs.", kind: "hyp", caption: "If the legs are 6 and 8, their squares are 36 and 64. Together they make 100, so the hypotenuse is 10." },
-    { title: "Find A Missing Leg", purpose: "Reverse the same idea.", kind: "leg", caption: "If you know the hypotenuse and one leg, subtract the known square from the hypotenuse square." },
-    { title: "Shared Height Chase", purpose: "Use two right triangles in one diagram.", kind: "shared", caption: "One dropped height can belong to two smaller right triangles. Use the first triangle to find the height, then the second to find the hidden base." },
-    { title: "Isosceles Split", purpose: "Halve the base before using Pythagoras.", kind: "iso", caption: "The height in an isosceles triangle splits the base into two equal parts, which gives a right triangle to solve." },
-    { title: "Right-Turn Challenge", purpose: "Turn a path into one right triangle.", kind: "path", caption: "For a 90 degree path, combine all moves in one direction, combine all moves in the other direction, then use Pythagoras for the final distance." }
+    {
+      title: "Triangle Gate",
+      purpose: "Can the sides close?",
+      kind: "gate",
+      caption: "Three sticks only make a triangle when the two shorter sticks can reach across the longest side.",
+      voiceover: "First question: can these three sides even close? The two shorter sides have to reach farther than the longest side."
+    },
+    {
+      title: "Pick The Longest Side",
+      purpose: "Avoid checking the wrong pair.",
+      kind: "order",
+      caption: "Put the sides in order first. The only gate to test is short plus short greater than longest.",
+      voiceover: "Do not test random pairs. Put the sides in order, then test short plus short against the longest."
+    },
+    {
+      title: "Meet The Hypotenuse",
+      purpose: "Name the side opposite the right angle.",
+      kind: "right",
+      caption: "In a right triangle, the side across from the square corner is the hypotenuse. It is the side called c in a^2 + b^2 = c^2.",
+      voiceover: "When there is a right angle, the longest side has a special job. It sits opposite the square corner and is called the hypotenuse."
+    },
+    {
+      title: "Build The Hypotenuse",
+      purpose: "Use the squares of the two legs.",
+      kind: "hyp",
+      caption: "If the legs are 6 and 8, their squares are 36 and 64. Together they make 100, so the hypotenuse is 10.",
+      voiceover: "To build the hypotenuse, square the two legs, add those squares, then take the square root."
+    },
+    {
+      title: "Find A Missing Leg",
+      purpose: "Reverse the same idea.",
+      kind: "leg",
+      caption: "If you know the hypotenuse and one leg, subtract the known square from the hypotenuse square.",
+      voiceover: "If the hypotenuse is already known, reverse the move. Hypotenuse square minus known leg square gives the missing leg square."
+    },
+    {
+      title: "Shared Height Chase",
+      purpose: "Use two right triangles in one diagram.",
+      kind: "shared",
+      caption: "One dropped height can belong to two smaller right triangles. Use the first triangle to find the height, then the second to find the hidden base.",
+      voiceover: "Some diagrams hide two right triangles inside one big shape. Find the shared height first, then use it again."
+    },
+    {
+      title: "Isosceles Split",
+      purpose: "Halve the base before using Pythagoras.",
+      kind: "iso",
+      caption: "The height in an isosceles triangle splits the base into two equal parts, which gives a right triangle to solve.",
+      voiceover: "In an isosceles triangle, the equal sides let the height split the base in half. That creates a right triangle."
+    },
+    {
+      title: "Right-Turn Challenge",
+      purpose: "Turn a path into one right triangle.",
+      kind: "path",
+      caption: "For a 90 degree path, combine all moves in one direction, combine all moves in the other direction, then use Pythagoras for the final distance.",
+      voiceover: "For right-turn paths, do not add every step as the answer. Combine the sideways moves, combine the upward moves, then make one final right triangle."
+    }
   ];
 
   const triples = [
@@ -129,7 +178,7 @@
     p.hint1 = "In an isosceles triangle, two sides are equal.";
     p.hint2 = `The repeated side must be ${repeated} cm because ${small} + ${small} ${2 * small > big ? ">" : "="} ${big}.`;
     p.solution = `The equal sides are ${repeated} cm and ${repeated} cm, with base ${base} cm. Perimeter = ${repeated} + ${repeated} + ${base} = ${expected} cm.`;
-    p.visual = { type: "isosceles", equal: repeated, base };
+    p.visual = { type: "isoscelesChoice", values: [a, b], equal: repeated, base };
     return p;
   }
 
@@ -171,7 +220,7 @@
       { leftHyp: 13, leftBase: 5, rightHyp: 15, ask: "area", expected: 84 },
       { leftHyp: 15, leftBase: 9, rightBase: 16, ask: "perimeter", expected: 60 },
       { leftHyp: 30, leftBase: 18, rightHyp: 40, ask: "rightBase", expected: 32 },
-      { leftBase: 4, height: 3, rightHyp: 13, ask: "rightBase", expected: 12 }
+      { leftBase: 3, height: 4, rightHyp: 13, ask: "rightBase", expected: 12 }
     ];
     const data = cases[variantIndex % cases.length];
     const height = data.height ?? Math.sqrt(data.leftHyp ** 2 - data.leftBase ** 2);
@@ -194,7 +243,17 @@
     p.hint1 = "Use the left right triangle first to find the shared height.";
     p.hint2 = `Shared height = ${Math.round(height)}. Then use the other right triangle or the area/perimeter rule.`;
     p.solution = `The shared height is ${Math.round(height)}. The hidden right base is ${Math.round(rightBase)}. ${data.ask === "area" ? `Area = ${totalBase} x ${height} / 2 = ${data.expected}.` : data.ask === "perimeter" ? `Perimeter = ${totalBase} + ${leftHyp} + ${rightHyp} = ${data.expected}.` : `The hidden base is ${data.expected}.`}`;
-    p.visual = { type: "shared", leftBase: data.leftBase, height: Math.round(height), rightBase: Math.round(rightBase), leftHyp: Math.round(leftHyp), rightHyp: Math.round(rightHyp), ask: data.ask };
+    p.visual = {
+      type: "shared",
+      leftBase: data.leftBase,
+      height: Math.round(height),
+      rightBase: Math.round(rightBase),
+      leftHyp: Math.round(leftHyp),
+      rightHyp: Math.round(rightHyp),
+      ask: data.ask,
+      showRightBase: data.ask === "perimeter",
+      showRightHyp: data.ask !== "perimeter"
+    };
     return p;
   }
 
@@ -233,7 +292,7 @@
     p.hint1 = "Reverse the area formula to find the height.";
     p.hint2 = `Height = 2 x ${data.area} / ${data.base} = ${data.height}; half-base = ${data.base / 2}.`;
     p.solution = `Height = ${data.height}. Half the base is ${data.base / 2}. Equal side = sqrt(${data.height}^2 + ${data.base / 2}^2) = ${data.equal}. Perimeter = ${data.equal} + ${data.equal} + ${data.base} = ${data.expected} cm.`;
-    p.visual = { type: "isoArea", equal: data.equal, base: data.base, height: data.height };
+    p.visual = { type: "areaPerimeter", area: data.area, base: data.base, height: data.height, equal: data.equal };
     return p;
   }
 
@@ -296,11 +355,15 @@
 
   function renderProblemVisual(problem, state = "initial") {
     const v = problem.visual;
+    const isInitial = state === "initial";
+    const isRevealed = state === "solution" || state === "worked";
+    const isSupported = !isInitial;
     const answer = state === "solution" || state === "worked" ? `<text x="280" y="306" text-anchor="middle" class="formula-note">Answer: ${escapeHtml(problem.expectedDisplay)}</text>` : "";
     let html = "";
     let text = problem.skill;
     if (v.type === "gate") {
       const sorted = [...v.sides].sort((a, b) => a - b);
+      const comparator = isSupported ? (v.ok ? ">" : "≤") : "?";
       html = svgShell(`
         <line x1="90" y1="210" x2="470" y2="210" stroke="#16345d" stroke-width="6" data-label-for="longest-side"/>
         <line x1="110" y1="130" x2="250" y2="210" stroke="#ff7654" stroke-width="6"/>
@@ -308,50 +371,96 @@
         <text x="280" y="238" text-anchor="middle" class="side-label">longest ${sorted[2]}</text>
         <text x="130" y="120" class="side-label">${sorted[0]}</text>
         <text x="428" y="120" class="side-label">${sorted[1]}</text>
-        <text x="280" y="64" text-anchor="middle" class="formula-note">${sorted[0]} + ${sorted[1]} ${v.ok ? ">" : "≤"} ${sorted[2]}</text>
+        <text x="280" y="64" text-anchor="middle" class="formula-note">${sorted[0]} + ${sorted[1]} ${comparator} ${sorted[2]}</text>
         ${answer}
       `);
       text = "The two shorter sides must add to more than the longest side.";
     } else if (v.type === "right") {
+      const aLabel = v.a ?? "?";
+      const bLabel = v.b ?? "?";
+      const cLabel = v.missing === "c" && !isRevealed ? "?" : (v.c ?? "?");
       html = svgShell(`
         <polygon points="130,240 130,80 410,240" fill="#fff8dc" stroke="#16345d" stroke-width="4"/>
         <path d="M130 216 H154 V240" fill="none" stroke="#ff7654" stroke-width="4" data-label-for="right-angle"/>
-        <text x="112" y="165" class="side-label">${v.a ?? "?"}</text>
-        <text x="270" y="264" text-anchor="middle" class="side-label">${v.b ?? "?"}</text>
-        <text x="286" y="145" class="side-label">${v.c ?? "?"}</text>
+        <text x="112" y="165" class="side-label">${aLabel}</text>
+        <text x="270" y="264" text-anchor="middle" class="side-label">${bLabel}</text>
+        <text x="286" y="145" class="side-label">${cLabel}</text>
         <text x="280" y="52" text-anchor="middle" class="formula-note">a² + b² = c²</text>
         ${answer}
       `);
       text = "The hypotenuse is opposite the right angle.";
+    } else if (v.type === "isoscelesChoice") {
+      const solutionLabels = `
+        <text x="178" y="158" class="side-label">${v.equal}</text>
+        <text x="366" y="158" class="side-label">${v.equal}</text>
+        <text x="280" y="274" text-anchor="middle" class="side-label">base ${v.base}</text>
+      `;
+      const neutralLabels = `
+        <text x="176" y="158" class="side-label">given ${v.values[0]}</text>
+        <text x="348" y="158" class="side-label">given ${v.values[1]}</text>
+        <text x="280" y="274" text-anchor="middle" class="side-label">which side repeats?</text>
+      `;
+      html = svgShell(`
+        <polygon points="280,70 140,250 420,250" fill="#fff8dc" stroke="#16345d" stroke-width="4"/>
+        <text x="280" y="52" text-anchor="middle" class="formula-note">choose the valid repeated side</text>
+        ${isRevealed ? solutionLabels : neutralLabels}
+        ${answer}
+      `);
+      text = isRevealed ? "The valid repeated side is shown only after the answer is checked." : "The diagram shows the two given lengths without revealing which one must repeat.";
     } else if (v.type === "isosceles" || v.type === "isoArea") {
+      const heightLabel = isRevealed && v.height ? `<text x="294" y="168" class="side-label">height ${v.height}</text>` : "";
       html = svgShell(`
         <polygon points="280,70 140,250 420,250" fill="#fff8dc" stroke="#16345d" stroke-width="4"/>
         <line x1="280" y1="70" x2="280" y2="250" stroke="#ff7654" stroke-width="4" stroke-dasharray="8 8" data-label-for="height"/>
         <text x="178" y="158" class="side-label">${v.equal}</text>
         <text x="366" y="158" class="side-label">${v.equal}</text>
         <text x="280" y="274" text-anchor="middle" class="side-label">base ${v.base}</text>
-        ${v.height ? `<text x="294" y="168" class="side-label">height ${v.height}</text>` : ""}
+        ${heightLabel}
         ${answer}
       `);
       text = "The height splits an isosceles base into two equal halves.";
+    } else if (v.type === "areaPerimeter") {
+      const revealedLabels = `
+        <text x="178" y="158" class="side-label">${v.equal}</text>
+        <text x="366" y="158" class="side-label">${v.equal}</text>
+        <text x="294" y="168" class="side-label">height ${v.height}</text>
+      `;
+      const initialLabels = `
+        <text x="176" y="158" class="side-label">equal side ?</text>
+        <text x="348" y="158" class="side-label">equal side ?</text>
+        <text x="294" y="168" class="side-label">height ?</text>
+      `;
+      html = svgShell(`
+        <polygon points="280,70 140,250 420,250" fill="#fff8dc" stroke="#16345d" stroke-width="4"/>
+        <line x1="280" y1="70" x2="280" y2="250" stroke="#ff7654" stroke-width="4" stroke-dasharray="8 8" data-label-for="height"/>
+        <text x="280" y="52" text-anchor="middle" class="formula-note">area ${v.area}; find perimeter</text>
+        <text x="280" y="274" text-anchor="middle" class="side-label">base ${v.base}</text>
+        ${isRevealed ? revealedLabels : initialLabels}
+        ${answer}
+      `);
+      text = "Use the area and base to find the height before revealing the equal sides.";
     } else if (v.type === "shared") {
+      const heightLabel = isRevealed ? `h ${v.height}` : "h ?";
+      const rightBaseLabel = isRevealed || v.showRightBase ? v.rightBase : "?";
+      const rightHypLabel = isRevealed || v.showRightHyp ? v.rightHyp : "?";
       html = svgShell(`
         <polygon points="150,250 280,90 450,250" fill="#fff8dc" stroke="#16345d" stroke-width="4"/>
         <line x1="280" y1="90" x2="280" y2="250" stroke="#ff7654" stroke-width="4" data-label-for="shared-height"/>
         <path d="M280 228 H302 V250" fill="none" stroke="#ff7654" stroke-width="4"/>
         <text x="210" y="164" class="side-label">${v.leftHyp}</text>
-        <text x="365" y="164" class="side-label">${v.rightHyp}</text>
+        <text x="365" y="164" class="side-label">${rightHypLabel}</text>
         <text x="214" y="274" class="side-label">${v.leftBase}</text>
-        <text x="362" y="274" class="side-label">${v.rightBase}</text>
-        <text x="294" y="174" class="side-label">h ${v.height}</text>
+        <text x="362" y="274" class="side-label">${rightBaseLabel}</text>
+        <text x="294" y="174" class="side-label">${heightLabel}</text>
         ${answer}
       `);
       text = "Find the shared height first, then use the second right triangle.";
     } else {
+      const totals = isSupported ? `perpendicular totals: ${v.x} and ${v.y}` : "sort the moves into two directions";
       html = svgShell(`
         <polyline points="120,250 210,250 210,180 330,180 330,110 450,110" fill="none" stroke="#16345d" stroke-width="8" stroke-linejoin="round"/>
         <line x1="120" y1="250" x2="450" y2="110" stroke="#ff7654" stroke-width="4" stroke-dasharray="8 8" data-label-for="final-distance"/>
-        <text x="280" y="74" text-anchor="middle" class="formula-note">perpendicular totals: ${v.x} and ${v.y}</text>
+        <text x="280" y="74" text-anchor="middle" class="formula-note">${totals}</text>
         ${answer}
       `);
       text = "Alternate turns make two perpendicular totals.";
@@ -374,6 +483,7 @@
     CLASSIC_IDS,
     SOURCE_COVERAGE,
     INTRO_SCENES,
+    INTRO_SCENE_MS,
     ROUND_LENGTH,
     formatMathText,
     parseNumber,
@@ -392,7 +502,17 @@
 
   root.TriangleSidesModule = api;
 
-  const state = { introIndex: 0, roundOffset: 0, round: createRound(0), current: 0, answers: [], hintCount: 0 };
+  const state = {
+    introIndex: 0,
+    introPlaying: false,
+    introStartedAt: 0,
+    introTimer: null,
+    roundOffset: 0,
+    round: createRound(0),
+    current: 0,
+    answers: [],
+    hintCount: 0
+  };
 
   const $ = (id) => document.getElementById(id);
 
@@ -401,8 +521,56 @@
     $("intro-title").textContent = scene.title;
     $("intro-count").textContent = `${state.introIndex + 1} of ${INTRO_SCENES.length}`;
     $("intro-frame").innerHTML = renderIntroScene(state.introIndex);
+    $("intro-frame").classList.toggle("playing", state.introPlaying);
+    $("intro-voiceover").textContent = scene.voiceover;
     $("intro-caption").textContent = scene.caption;
     $("intro-storyboard").innerHTML = INTRO_SCENES.map((item, index) => `<li class="${index === state.introIndex ? "active" : ""}"><strong>${escapeHtml(item.title)}</strong><br>${escapeHtml(item.purpose)}</li>`).join("");
+    $("intro-play").textContent = state.introPlaying ? "Pause intro" : (state.introIndex === INTRO_SCENES.length - 1 ? "Replay intro" : "Play intro video");
+  }
+
+  function clearIntroTimer() {
+    if (state.introTimer) {
+      clearInterval(state.introTimer);
+      state.introTimer = null;
+    }
+  }
+
+  function setIntroProgress(percent) {
+    const fill = $("intro-progress-fill");
+    if (fill) fill.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+  }
+
+  function stopIntroPlayback(progress = 0) {
+    clearIntroTimer();
+    state.introPlaying = false;
+    setIntroProgress(progress);
+    renderIntro();
+  }
+
+  function advanceIntro(keepPlaying = false) {
+    const atEnd = state.introIndex >= INTRO_SCENES.length - 1;
+    state.introIndex = atEnd ? 0 : state.introIndex + 1;
+    if (keepPlaying && !atEnd) startIntroPlayback();
+    else stopIntroPlayback(atEnd ? 100 : 0);
+  }
+
+  function startIntroPlayback() {
+    clearIntroTimer();
+    if (state.introIndex >= INTRO_SCENES.length - 1 && !state.introPlaying) state.introIndex = 0;
+    state.introPlaying = true;
+    state.introStartedAt = Date.now();
+    setIntroProgress(0);
+    renderIntro();
+    state.introTimer = setInterval(() => {
+      const percent = ((Date.now() - state.introStartedAt) / INTRO_SCENE_MS) * 100;
+      setIntroProgress(percent);
+      if (percent >= 100) advanceIntro(true);
+    }, 80);
+  }
+
+  function toggleIntroPlayback() {
+    if (state.introPlaying) stopIntroPlayback(Number($("intro-progress-fill").style.width.replace("%", "")) || 0);
+    else startIntroPlayback();
   }
 
   function renderSkills() {
@@ -418,6 +586,7 @@
   }
 
   function showPractice() {
+    stopIntroPlayback(0);
     $("intro-screen").hidden = true;
     $("practice-grid").hidden = false;
     $("round-recap").hidden = true;
@@ -526,8 +695,8 @@
     $("show-intro").addEventListener("click", showIntro);
     $("show-practice").addEventListener("click", showPractice);
     $("intro-start").addEventListener("click", showPractice);
-    $("intro-next").addEventListener("click", () => { state.introIndex = (state.introIndex + 1) % INTRO_SCENES.length; renderIntro(); });
-    $("intro-play").addEventListener("click", () => { state.introIndex = (state.introIndex + 1) % INTRO_SCENES.length; renderIntro(); });
+    $("intro-next").addEventListener("click", () => advanceIntro(false));
+    $("intro-play").addEventListener("click", toggleIntroPlayback);
     $("answer-form").addEventListener("submit", checkCurrent);
     $("hint-button").addEventListener("click", showHint);
     $("why-button").addEventListener("click", showWhy);

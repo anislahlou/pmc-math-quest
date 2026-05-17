@@ -1,6 +1,41 @@
 const assert = require("assert");
 const mod = require("./triangle_sides_module.js");
 
+function assertNoInitialVisualLeak(problem) {
+  const rendered = mod.renderProblemVisual(problem, "initial");
+  const html = rendered.html;
+  const visual = problem.visual;
+
+  assert.ok(!html.includes("Answer:"), `${problem.id} initial visual must not include the answer banner`);
+
+  if (visual.type === "gate") {
+    assert.ok(!html.includes(" > ") && !html.includes("≤"), `${problem.id} initial triangle-gate visual must not reveal the comparison result`);
+  }
+  if (visual.type === "right" && visual.missing === "c") {
+    assert.ok(!html.includes(`>${problem.expected}<`), `${problem.id} initial hypotenuse visual must keep the hypotenuse hidden`);
+  }
+  if (visual.type === "isoscelesChoice") {
+    assert.ok(!html.includes(`base ${visual.base}`), `${problem.id} initial isosceles-choice visual must not reveal the base`);
+    const repeatedCount = (html.match(new RegExp(`>${visual.equal}<`, "g")) || []).length;
+    assert.ok(repeatedCount < 2, `${problem.id} initial isosceles-choice visual must not show the repeated side twice`);
+  }
+  if (visual.type === "shared") {
+    assert.ok(!html.includes(`h ${visual.height}`), `${problem.id} initial shared-height visual must not reveal the hidden height`);
+    if (!visual.showRightBase) assert.ok(!html.includes(`>${visual.rightBase}<`), `${problem.id} initial shared-height visual must not reveal hidden right base`);
+    if (!visual.showRightHyp) assert.ok(!html.includes(`>${visual.rightHyp}<`), `${problem.id} initial shared-height visual must not reveal hidden right hypotenuse`);
+  }
+  if (visual.type === "isoArea") {
+    assert.ok(!html.includes(`height ${visual.height}`), `${problem.id} initial isosceles-area visual must not reveal the hidden height`);
+  }
+  if (visual.type === "areaPerimeter") {
+    assert.ok(!html.includes(`height ${visual.height}`), `${problem.id} initial area-to-perimeter visual must not reveal the hidden height`);
+    assert.ok(!html.includes(`>${visual.equal}<`), `${problem.id} initial area-to-perimeter visual must not reveal the equal side`);
+  }
+  if (visual.type === "path") {
+    assert.ok(!html.includes(`perpendicular totals: ${visual.x} and ${visual.y}`), `${problem.id} initial path visual must not reveal the grouped totals`);
+  }
+}
+
 function run() {
   const required = [
     "triangle-gate",
@@ -32,6 +67,7 @@ function run() {
       const visual = mod.renderProblemVisual(problem, "solution");
       assert.ok(visual.html.includes('role="img"'), `${problem.id} should render an accessible visual`);
       assert.ok(visual.text.length > 20, `${problem.id} visual text should explain the diagram`);
+      assertNoInitialVisualLeak(problem);
       prompts.add(problem.prompt);
       answerModes.add(problem.answerMode);
       visualTypes.add(problem.visual.type);
