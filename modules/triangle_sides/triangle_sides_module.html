@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PMC Math Quest - Triangle Sides</title>
+    <link rel="stylesheet" href="triangle_sides_module.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Think Academy Lesson 17</p>
+          <h1>Relationship Between Sides In Triangles</h1>
+        </div>
+        <nav class="module-nav" aria-label="Module navigation">
+          <a href="../../run/pmc_simulation_app.html">Missions</a>
+          <a href="../../dashboard/math_skill_command_center.html">Command center</a>
+          <button id="show-intro" type="button" class="secondary">Intro</button>
+          <button id="show-practice" type="button">Train</button>
+        </nav>
+      </header>
+
+      <section id="intro-screen" class="intro-screen">
+        <div class="intro-copy">
+          <span class="intro-kicker">New mission</span>
+          <h2>Can The Triangle Close?</h2>
+          <p>Before we calculate, we check the shape: can three sides really meet, and is there a right angle we can trust?</p>
+          <div class="intro-rule">
+            <span>Main moves</span>
+            <strong>short + short &gt; longest</strong>
+            <strong>a² + b² = c²</strong>
+          </div>
+          <div id="intro-skill-grid" class="intro-skill-grid"></div>
+          <div class="action-row">
+            <button id="intro-play" type="button">Play intro</button>
+            <button id="intro-next" type="button" class="secondary">Next scene</button>
+            <button id="intro-start" type="button">Start exercises</button>
+          </div>
+        </div>
+        <div class="intro-video">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Concept intro</p>
+              <h2 id="intro-title">Triangle Gate</h2>
+            </div>
+            <span id="intro-count" class="state-label">1 of 8</span>
+          </div>
+          <div id="intro-frame" class="visual-frame"></div>
+          <p id="intro-caption" class="visual-text"></p>
+          <ol id="intro-storyboard" class="intro-storyboard"></ol>
+        </div>
+      </section>
+
+      <section id="practice-grid" class="practice-grid" hidden>
+        <section class="practice-panel">
+          <div class="panel-head">
+            <div>
+              <p id="classic-label" class="eyebrow">Triangle Gate</p>
+              <h2 id="practice-heading">Practice</h2>
+            </div>
+            <span id="session-count" class="state-label">1 of 8</span>
+          </div>
+          <div id="mastery-chips" class="mastery-chips"></div>
+          <div id="live-score" class="live-score">Score 0 / 0</div>
+          <p id="problem-prompt" class="problem-prompt"></p>
+          <form id="answer-form" class="answer-form">
+            <div id="answer-host"></div>
+            <div class="action-row">
+              <button id="check-button" type="submit">Check</button>
+              <button id="hint-button" type="button" class="secondary">Hint</button>
+              <button id="why-button" type="button" class="secondary">Show why</button>
+              <button id="similar-button" type="button" class="secondary" hidden>Try similar</button>
+              <button id="next-button" type="button" class="secondary">Next</button>
+            </div>
+          </form>
+          <div id="hint-ladder" class="hint-ladder"></div>
+          <div id="feedback" class="feedback-card muted" role="status" aria-live="polite">Choose or type an answer, then check it.</div>
+        </section>
+        <section class="visual-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Visual explainer</p>
+              <h2>Triangle map</h2>
+            </div>
+            <span id="visual-state" class="state-label">initial</span>
+          </div>
+          <div id="visual-frame" class="visual-frame"></div>
+          <p id="visual-text" class="visual-text"></p>
+        </section>
+      </section>
+
+      <section id="round-recap" class="round-recap" hidden>
+        <p class="eyebrow">Round recap</p>
+        <h2>What this round taught you</h2>
+        <div id="recap-content" class="recap-content"></div>
+        <div class="action-row">
+          <button id="fresh-round-button" type="button">Fresh round</button>
+          <button id="review-intro-button" type="button" class="secondary">Review intro</button>
+        </div>
+      </section>
+    </main>
+    <script src="triangle_sides_module.js"></script>
+  </body>
+</html>

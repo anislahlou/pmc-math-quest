@@ -340,6 +340,16 @@
         background: #dcf8e5;
       }
 
+      .quest-node:nth-child(6) {
+        align-self: end;
+        background: #fff8e8;
+      }
+
+      .quest-node:nth-child(7) {
+        align-self: start;
+        background: #e8f6ff;
+      }
+
       .node-number {
         width: 34px;
         height: 34px;
@@ -441,6 +451,10 @@
 
       .module-card.angles {
         background: #f7f2ff;
+      }
+
+      .module-card.triangle-sides {
+        background: #e8f6ff;
       }
 
       .module-card.volume {
@@ -914,10 +928,11 @@
             <a class="button coral" href="../modules/u2t2_units/u2t2_units_mission.html">Open U2T2 Units</a>
             <a class="button secondary" href="../modules/volume_prisms/volume_prisms_module.html">Launch Volume</a>
             <a class="button secondary" href="../modules/volume_problem_extension/volume_extension_module.html">Launch Extension</a>
+            <a class="button secondary" href="../modules/triangle_sides/triangle_sides_module.html">Launch Triangle Sides</a>
             <a class="button secondary" href="#missions">See all missions</a>
           </div>
           <div class="mission-stats" aria-label="Quest stats">
-            <div class="stat"><strong>6</strong><span>missions ready</span></div>
+            <div class="stat"><strong>7</strong><span>missions ready</span></div>
             <div class="stat"><strong>17</strong><span>U2T2 submodules</span></div>
             <div class="stat"><strong>10</strong><span>prism classics</span></div>
           </div>
@@ -959,6 +974,11 @@
               <strong>Volume Extension</strong>
               <small>Cube lab</small>
             </a>
+            <a class="quest-node" href="../modules/triangle_sides/triangle_sides_module.html">
+              <span class="node-number">7</span>
+              <strong>Triangle Sides</strong>
+              <small>Pythagoras lab</small>
+            </a>
           </div>
           <div class="level-bar" aria-label="Quest progress">
             <div class="level-copy">
@@ -973,7 +993,7 @@
       <section class="section-head" id="missions">
         <div>
           <p class="eyebrow">Choose a mission</p>
-          <h2>Six ways to level up</h2>
+          <h2>Seven ways to level up</h2>
         </div>
         <p>Single chapters build sharp skills. The U2T2 Units mission maps the whole year into smaller submodule quests.</p>
       </section>
@@ -1190,6 +1210,47 @@
           <div class="actions">
             <a class="button" href="../modules/angles/angles_practice_share.html">Launch Angles</a>
             <a class="button secondary" href="../modules/angles/angles_module.html">Source version</a>
+          </div>
+        </article>
+
+        <article class="module-card triangle-sides">
+          <div class="card-top">
+            <div>
+              <span class="chapter">Lesson 17</span>
+              <h3>Relationship Between Sides in Triangles</h3>
+            </div>
+            <div class="difficulty" aria-label="Difficulty: four out of five">
+              <span>Power level</span>
+              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></span>
+            </div>
+          </div>
+          <p>Decide whether three lengths can make a triangle, then use isosceles splits and Pythagoras to find hidden sides, perimeters, areas, and right-turn distances.</p>
+          <div class="card-visual" aria-hidden="true">
+            <svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Triangle sides preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <polygon points="54,148 156,148 112,58" fill="#e8f6ff" stroke="#0d263f" stroke-width="4"></polygon>
+              <path d="M112 58 L112 148" stroke="#0d263f" stroke-width="3" stroke-dasharray="6 5"></path>
+              <path d="M112 148 L156 148" stroke="#f36f45" stroke-width="5"></path>
+              <path d="M112 58 L156 148" stroke="#1790a6" stroke-width="5"></path>
+              <text x="83" y="108" text-anchor="middle">13</text>
+              <text x="132" y="168" text-anchor="middle">5</text>
+              <text x="154" y="102" text-anchor="middle">?</text>
+              <text x="221" y="74" text-anchor="middle">a² + b²</text>
+              <text x="221" y="103" text-anchor="middle">= c²</text>
+              <path d="M206 122 L246 122 L246 150" fill="none" stroke="#0d263f" stroke-width="5" stroke-linecap="round"></path>
+              <circle cx="246" cy="150" r="8" fill="#f36f45"></circle>
+            </svg>
+          </div>
+          <div class="skill-list" aria-label="Triangle sides skills">
+            <span>Triangle inequality</span>
+            <span>Isosceles choice</span>
+            <span>Pythagoras</span>
+            <span>Missing leg</span>
+            <span>Area chase</span>
+          </div>
+          <div class="actions">
+            <a class="button" href="../modules/triangle_sides/triangle_sides_module.html">Launch Triangle Sides</a>
+            <a class="button secondary" href="../modules/triangle_sides/triangle_sides_source_extract.md">Source extract</a>
           </div>
         </article>
       </section>

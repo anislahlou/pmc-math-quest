@@ -31,6 +31,14 @@ Run this before trusting or packaging the app:
 - `volume_prisms_module_tests.js`
   - Checks the Volume of Prisms intro, exercise bank, answer checker, repair-question flow, diagrams, and app wiring.
 
+- `triangle_sides_bank_quality_audit.js`
+  - Generates 16 variants for each Lesson 17 triangle-sides classic.
+  - Checks triangle inequality, isosceles side-choice, Pythagorean missing sides, shared-height chases, isosceles area, reverse area-to-perimeter, and the right-turn challenge.
+  - Verifies source page tracking, fresh prompt variety, accessible visuals, answer checking, and varied multiple-choice positions.
+
+- `triangle_sides_module_tests.js`
+  - Checks the Lesson 17 app wiring, intro, answer checker, visual explainers, recap, and known source-example answers.
+
 - `math_display_quality_check.js`
   - Checks that displayed powers are formatted as superscripts, such as `5¹`, `x²`, `cm³`, and `2⁽ʳᵒʷ⁻¹⁾`.
   - Checks that Pascal still accepts typed power answers using superscript notation.
