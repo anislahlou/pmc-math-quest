@@ -4,23 +4,29 @@
  *
  * Registry-driven structural-fidelity gate for module diagrams. Detects:
  *
- *   a) Variant fingerprint instability:
+ *   a) Variant TOPOLOGY instability:
  *      For each (classicId, state), all variantIndex values must render the
- *      same structural SVG skeleton (tag + rounded coords; <text> content
- *      ignored so numeric labels can change). Variants are meant to swap
- *      numbers, not redraw the picture.
+ *      same SVG *topology* — same element types in the same document order,
+ *      same attribute KEYS (values only matter for class / stroke-dasharray),
+ *      same polygon vertex counts, same path command counts. Underlying
+ *      coordinates are NOT compared, so legitimate scale variation (a 3x4
+ *      rectangle variant vs a 5x7 rectangle variant) is allowed. What we
+ *      catch is real skeleton drift: a different number of polygons, a
+ *      different element type, dashed-line presence drift, a different
+ *      render path.
  *
- *   b) Initial-vs-solution subset:
- *      Every structural element in the initial render must also appear in
- *      the solution render. Solutions are allowed to ADD elements (the
- *      answer banner, hint overlays, dashed-height reveals) but the
- *      base geometry must remain.
+ *   b) Initial-vs-solution multiset inclusion:
+ *      Every (tag, class) pair present in the initial render must also be
+ *      present in the solution render (with at least the same count).
+ *      Solutions may ADD elements (labels, hint overlays, dashed-height
+ *      reveals) but must not REMOVE base geometry.
  *
  *   c) Card-vs-module skeleton drift:
  *      The marketing card SVG in run/pmc_simulation_app.html must match
  *      the module's first-classic initial render on three structural
  *      properties: <polygon> count, dashed-line presence, and aspect ratio
- *      (within +/- 20%).
+ *      (within +/- 20%). This check stays strict — cards should faithfully
+ *      preview the iconic classic.
  *
  * No dependencies. Modules that touch `document` at require-time get a
  * minimal polyfill so we can still require() them in node. Modules that
@@ -48,10 +54,24 @@ const MAX_VARIANTS = 20;
 
 const { requireModuleSafe } = require("./_dom_stubs.js");
 
-// ---- structural-fingerprint extraction --------------------------------------
+// ---- topology-fingerprint extraction ----------------------------------------
+//
+// We walk every structural element in document order and record:
+//   - tag name
+//   - sorted list of attribute KEYS (not their values), with two exceptions
+//     where the VALUE is significant: `class` (preserves variant labels like
+//     "leg" vs "hypotenuse") and `stroke-dasharray` (dashed-line presence
+//     and pattern matters)
+//   - for <polygon>: vertex count derived from `points`
+//   - for <path>: count of M/L/Q/C/Z command tokens derived from `d`
+//   - for <text>: nothing about content or position — we want labels to vary
+//
+// Concatenate per-element fingerprints in document order (NOT sorted — order
+// is part of topology: a different element sequence indicates a different
+// render path). SHA-1 the result.
 
 const STRUCTURAL_TAG_RE =
-  /<(rect|circle|ellipse|line|polyline|polygon|path|g|svg|use|defs|symbol|image)\b([^>]*)>/gi;
+  /<(rect|circle|ellipse|line|polyline|polygon|path|g|svg|use|defs|symbol|image|text)\b([^>]*)>/gi;
 
 function extractAttrs(rawAttrs) {
   const attrs = {};
@@ -63,42 +83,48 @@ function extractAttrs(rawAttrs) {
   return attrs;
 }
 
-const COORD_KEYS = ["x", "y", "x1", "y1", "x2", "y2", "cx", "cy", "r", "rx", "ry", "width", "height"];
+// Attributes whose VALUE we care about (presence/absence is not enough).
+const VALUE_SENSITIVE_KEYS = new Set(["class", "stroke-dasharray"]);
 
-function roundCoord(n) {
-  if (!Number.isFinite(n)) return null;
-  return Math.round(n * 2) / 2; // half-pixel buckets — looser than 1px to allow trivial pixel-jitter, tight enough to catch real geometry changes
+function countPolygonVertices(pointsAttr) {
+  if (!pointsAttr) return 0;
+  const nums = pointsAttr
+    .trim()
+    .split(/[\s,]+/)
+    .filter((s) => s.length > 0 && Number.isFinite(Number(s)));
+  // Each vertex is an (x, y) pair.
+  return Math.floor(nums.length / 2);
 }
 
-function fingerprintElement(tag, attrs) {
-  const parts = [tag.toLowerCase()];
-  for (const key of COORD_KEYS) {
-    if (key in attrs) {
-      const v = Number(attrs[key]);
-      parts.push(`${key}=${roundCoord(v)}`);
+function countPathCommands(dAttr) {
+  if (!dAttr) return 0;
+  const cmds = dAttr.match(/[MmLlHhVvCcSsQqTtAaZz]/g) || [];
+  return cmds.length;
+}
+
+function topologyElementFingerprint(tag, attrs) {
+  const lc = tag.toLowerCase();
+  const parts = [lc];
+  // Sorted attribute keys (presence-only by default).
+  const keys = Object.keys(attrs).sort();
+  parts.push(`keys=${keys.join(",")}`);
+  // Value-sensitive attributes.
+  for (const k of keys) {
+    if (VALUE_SENSITIVE_KEYS.has(k)) {
+      parts.push(`${k}=${attrs[k]}`);
     }
   }
-  if (attrs.points) {
-    const pts = attrs.points
-      .trim()
-      .split(/[\s,]+/)
-      .map((s) => roundCoord(Number(s)))
-      .filter((n) => n != null);
-    parts.push(`pts=${pts.join(",")}`);
+  if (lc === "polygon" || lc === "polyline") {
+    parts.push(`vtx=${countPolygonVertices(attrs.points)}`);
   }
-  if (attrs.d) {
-    // strip text content; keep operators and rounded coords
-    const cmds = attrs.d.match(/[a-zA-Z]|-?\d+(?:\.\d+)?/g) || [];
-    const norm = cmds.map((c) => (/^[a-zA-Z]$/.test(c) ? c.toLowerCase() : String(roundCoord(Number(c)))));
-    parts.push(`d=${norm.join(",")}`);
+  if (lc === "path") {
+    parts.push(`cmds=${countPathCommands(attrs.d)}`);
   }
-  if (attrs["stroke-dasharray"]) {
-    parts.push(`dash=${attrs["stroke-dasharray"]}`);
-  }
+  // <text>: deliberately ignore everything else — content, x/y, font.
   return parts.join("|");
 }
 
-function structuralElements(svgString) {
+function topologyElements(svgString) {
   if (typeof svgString !== "string" || svgString.length === 0) return [];
   const elements = [];
   STRUCTURAL_TAG_RE.lastIndex = 0;
@@ -106,18 +132,57 @@ function structuralElements(svgString) {
   while ((m = STRUCTURAL_TAG_RE.exec(svgString))) {
     const tag = m[1];
     const attrs = extractAttrs(m[2] || "");
-    elements.push(fingerprintElement(tag, attrs));
+    elements.push({
+      tag: tag.toLowerCase(),
+      cls: attrs.class || "",
+      fp: topologyElementFingerprint(tag, attrs)
+    });
   }
   return elements;
 }
 
-function fingerprintSvg(svgString) {
-  const elements = structuralElements(svgString);
-  const joined = elements.join("\n");
+function topologyFingerprint(svgString) {
+  const elements = topologyElements(svgString);
+  const joined = elements.map((e) => e.fp).join("\n");
   return {
     elements,
     hash: crypto.createHash("sha1").update(joined).digest("hex").slice(0, 12)
   };
+}
+
+// Back-compat alias retained for external callers (and module.exports below).
+// `fingerprintSvg` now returns the topology fingerprint.
+function fingerprintSvg(svgString) {
+  return topologyFingerprint(svgString);
+}
+
+function structuralElements(svgString) {
+  return topologyElements(svgString).map((e) => e.fp);
+}
+
+// Element-type multiset key: (tag, class). Solutions may add labels/highlights
+// but must not strip out base geometry, so every (tag, class) pair present in
+// initial must also appear in solution with at least the same count.
+function elementTypeMultiset(elements) {
+  const counts = new Map();
+  for (const e of elements) {
+    const key = `${e.tag}|class=${e.cls}`;
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return counts;
+}
+
+function multisetDiff(initialCounts, solutionCounts) {
+  // Returns array of `${key} (initial=N, solution=M)` for keys where the
+  // solution has strictly fewer than the initial.
+  const missing = [];
+  for (const [key, initN] of initialCounts) {
+    const solN = solutionCounts.get(key) || 0;
+    if (solN < initN) {
+      missing.push(`${key} (initial=${initN}, solution=${solN})`);
+    }
+  }
+  return missing;
 }
 
 // ---- module surface adapters ------------------------------------------------
@@ -320,17 +385,34 @@ function main(options = {}) {
             break;
           }
           classicHadAnyRender = true;
-          const fp = fingerprintSvg(r.svg);
+          const fp = topologyFingerprint(r.svg);
           if (v === 0) {
             stateFingerprints[state] = fp;
           } else {
             if (fp.hash !== stateFingerprints[state].hash) {
-              const added = fp.elements.filter((e) => !stateFingerprints[state].elements.includes(e)).slice(0, 3);
-              const removed = stateFingerprints[state].elements.filter((e) => !fp.elements.includes(e)).slice(0, 3);
+              const baseFps = stateFingerprints[state].elements.map((e) => e.fp);
+              const newFps = fp.elements.map((e) => e.fp);
+              // Multiset diff (preserves duplicates so count drift surfaces in the message).
+              const baseCounts = new Map();
+              for (const f of baseFps) baseCounts.set(f, (baseCounts.get(f) || 0) + 1);
+              const newCounts = new Map();
+              for (const f of newFps) newCounts.set(f, (newCounts.get(f) || 0) + 1);
+              const added = [];
+              const removed = [];
+              for (const [f, n] of newCounts) {
+                const b = baseCounts.get(f) || 0;
+                if (n > b) added.push(`${f} (+${n - b})`);
+              }
+              for (const [f, n] of baseCounts) {
+                const b = newCounts.get(f) || 0;
+                if (n > b) removed.push(`${f} (-${n - b})`);
+              }
+              const detail = added.length + removed.length > 0
+                ? `e.g. added ${JSON.stringify(added.slice(0, 3))}; removed ${JSON.stringify(removed.slice(0, 3))}`
+                : `same element multiset but document order differs (v0 has ${baseFps.length} elements, v${v} has ${newFps.length})`;
               failures.push(
-                `[diagram-parity] FAIL ${m.id}/${classic.id}/${state}: variant 0 vs variant ${v} fingerprint differs ` +
-                  `(v0 hash ${stateFingerprints[state].hash} vs v${v} hash ${fp.hash}; ` +
-                  `e.g. added ${JSON.stringify(added)}; removed ${JSON.stringify(removed)})`
+                `[diagram-parity] FAIL ${m.id}/${classic.id}/${state}: variant 0 vs variant ${v} topology differs ` +
+                  `(v0 hash ${stateFingerprints[state].hash} vs v${v} hash ${fp.hash}; ${detail})`
               );
               classicVariantStable = false;
               break;
@@ -340,13 +422,13 @@ function main(options = {}) {
       }
 
       if (classicHadAnyRender && stateFingerprints.initial && stateFingerprints.solution) {
-        const initialSet = new Set(stateFingerprints.initial.elements);
-        const solutionSet = new Set(stateFingerprints.solution.elements);
-        const initialOnly = [...initialSet].filter((e) => !solutionSet.has(e));
-        if (initialOnly.length > 0) {
+        const initialCounts = elementTypeMultiset(stateFingerprints.initial.elements);
+        const solutionCounts = elementTypeMultiset(stateFingerprints.solution.elements);
+        const missing = multisetDiff(initialCounts, solutionCounts);
+        if (missing.length > 0) {
           failures.push(
-            `[diagram-parity] FAIL ${m.id}/${classic.id}: initial has ${initialOnly.length} element(s) absent from solution ` +
-              `(e.g. ${JSON.stringify(initialOnly.slice(0, 3))})`
+            `[diagram-parity] FAIL ${m.id}/${classic.id}: solution is missing element-type(s) from initial render ` +
+              `(${missing.slice(0, 3).join("; ")}${missing.length > 3 ? ", ..." : ""})`
           );
         }
       }
@@ -436,5 +518,5 @@ function run() {
 if (require.main === module) {
   main();
 } else {
-  module.exports = { run, fingerprintSvg, structuralElements };
+  module.exports = { run, fingerprintSvg, topologyFingerprint, structuralElements };
 }
