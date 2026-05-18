@@ -86,14 +86,14 @@
       voiceover: "If the hypotenuse is already known, reverse the move. Start with the hypotenuse square, subtract the known leg square, then take the square root."
     },
     {
-      title: "Area Chase",
+      title: "Shared Height Chase",
       purpose: "Reuse one shared height across the right triangles inside a bigger figure.",
       classicId: "shared-height-chase",
       kind: "shared",
       audio: "audio/intro_05_shared_height.wav",
       durationMs: 12350,
       caption: "One dropped height can belong to two smaller right triangles. Solve one side, then reuse the same height to chase the area.",
-      voiceover: "Area chase strings several moves together. Drop one perpendicular height inside a bigger triangle, solve the first small right triangle, then reuse the same height in the second small right triangle to finish the area."
+      voiceover: "Some diagrams hide two right triangles that share one perpendicular height. Drop a perpendicular into the bigger triangle, solve the first small right triangle to find that height, then carry the same height into the second small right triangle to finish the area."
     },
     {
       title: "Isosceles Split Area",

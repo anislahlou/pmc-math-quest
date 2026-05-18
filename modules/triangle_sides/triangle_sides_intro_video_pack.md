@@ -38,9 +38,9 @@ The learner sees this skill card before any scene starts. Each skill maps to a r
    Visual: a right triangle with hypotenuse `13` and one leg `5`. The hypotenuse square `169` shrinks by the leg square `25`, revealing the missing leg square `144` and leg length `12`. Duration: 12 seconds.
    Voiceover: When the hypotenuse is the known side, reverse the move. Start with the hypotenuse square, subtract the known leg square, then take the square root of what remains. That gives the missing leg. The same picture from scene three runs backwards.
 
-5. **Area Chase**
+5. **Shared Height Chase**
    Visual: a big triangle is sliced by a perpendicular drop. The left smaller right triangle `5, 12, 13` is solved, then the same height `12` is reused inside the right smaller right triangle `9, 12, 15`. The total area `12 * 14 / 2 = 84` lands on screen. Duration: 13 seconds.
-   Voiceover: An area chase strings several moves together. Drop one perpendicular height into a bigger triangle. Solve the first small right triangle to find that height, then carry the same height into the second small right triangle. Use Pythagoras to fill in a missing side, then turn the picture into an area or a perimeter. Name the move you are using before you write a number.
+   Voiceover: Some diagrams hide two right triangles that share one perpendicular height. Drop one perpendicular height into a bigger triangle. Solve the first small right triangle to find that height, then carry the same height into the second small right triangle. Use Pythagoras to fill in a missing side, then turn the picture into an area or a perimeter. Name the move you are using before you write a number.
 
 6. **Isosceles Split Area**
    Visual: an isosceles triangle with equal sides `13` and base `10` splits down the middle. The half-base `5` and equal side `13` give height `12` by Pythagoras, then base times height divided by two gives area `60`. Duration: 12 seconds.
