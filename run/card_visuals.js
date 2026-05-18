@@ -96,8 +96,6 @@ export const cardVisuals = {
               <line x1="36" y1="146" x2="264" y2="146" stroke="#9fb9c4" stroke-width="3"></line>
               <polygon points="48,146 116,146 78,42" fill="#e8f6ff" stroke="#0d263f" stroke-width="4"></polygon>
               <polygon points="150,146 252,146 196,42" fill="#fff1eb" stroke="#0d263f" stroke-width="4"></polygon>
-              <line x1="134" y1="42" x2="134" y2="146" stroke="#f36f45" stroke-width="4" stroke-dasharray="6 5"></line>
-              <path d="M134 128 h18 v18" fill="none" stroke="#f36f45" stroke-width="3"></path>
               <text x="82" y="168" text-anchor="middle">base 2</text>
               <text x="202" y="168" text-anchor="middle">base 3</text>
               <text x="154" y="92" text-anchor="middle">same height</text>

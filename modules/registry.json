@@ -105,7 +105,7 @@
       "tags": ["year-mission", "number", "algebra", "geometry", "ratio", "data", "3d", "exam"],
       "skills": ["Number zone", "Algebra zone", "Geometry zone", "Proportion/Data zone", "Exam arena"],
       "difficulty": 5,
-      "order": 40,
+      "order": 5,
       "status": "published",
       "cardVariant": "u2t2",
       "blurb": "Master the whole U2 maths map: number, algebra, geometry, ratio, data, 3D, and mixed exam reasoning.",
@@ -139,6 +139,7 @@
       "order": 50,
       "status": "published",
       "cardVariant": "volume",
+      "cardPreviewClassicId": "hollow-prism",
       "blurb": "Stack cross-sections, subtract holes, split composite faces, and solve water-level puzzles with fresh numbers.",
       "paths": {
         "folder": "modules/volume_prisms",
@@ -170,6 +171,7 @@
       "order": 60,
       "status": "published",
       "cardVariant": "volume-extension",
+      "cardPreviewClassicId": "layer-map-sum",
       "blurb": "Count cube solids by layers, missing cells, tunnels, height maps, front-left-plan views, and water extensions.",
       "paths": {
         "folder": "modules/volume_problem_extension",
@@ -201,6 +203,7 @@
       "order": 70,
       "status": "published",
       "cardVariant": "triangle-sides",
+      "cardPreviewClassicId": "isosceles-split-area",
       "blurb": "Decide whether three lengths can make a triangle, then use isosceles splits and Pythagoras to find hidden sides, perimeters, areas, and right-turn distances.",
       "paths": {
         "folder": "modules/triangle_sides",
@@ -232,6 +235,7 @@
       "order": 80,
       "status": "published",
       "cardVariant": "equal-height",
+      "cardPreviewClassicId": "same-base-height",
       "blurb": "Spot shared heights, compare area ratios, reverse the formula, split bases, subtract shaded regions, and solve expression-labelled triangle questions.",
       "paths": {
         "folder": "modules/equal_height_triangles",
