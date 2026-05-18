@@ -19,6 +19,25 @@
   const CLASSIC_IDS = CLASSICS.map((classic) => classic.id);
   const CLASSIC_BY_ID = Object.fromEntries(CLASSICS.map((classic) => [classic.id, classic]));
 
+  // Maps each classic to a registry skill so the skill-coverage gate can
+  // verify the bank covers every skill the registry promises.
+  // Registry skills: ["Triangle total", "Z/F/C angles", "Zigzag totals",
+  // "Angle chase", "Polygon formula"].
+  const CLASSIC_SKILLS = {
+    "angles.triangle-sum": "Triangle total",
+    "angles.isosceles-base": "Triangle total",
+    "angles.straight-line": "Triangle total",
+    "angles.alternate": "Z/F/C angles",
+    "angles.corresponding": "Z/F/C angles",
+    "angles.co-interior": "Z/F/C angles",
+    "angles.parallel-zigzag-total": "Zigzag totals",
+    "angles.parallel-chase": "Angle chase",
+    "angles.equilateral-chase": "Angle chase",
+    "angles.polygon-sum": "Polygon formula",
+    "angles.regular-polygon": "Polygon formula",
+    "angles.shape-combo": "Angle chase"
+  };
+
   function escapeHtml(value) {
     return String(value)
       .replaceAll("&", "&amp;")
@@ -313,12 +332,14 @@
     const set = PROBLEM_SETS[classicId];
     const base = set[variantIndex % set.length];
     const classic = CLASSIC_BY_ID[classicId];
+    const skillTag = CLASSIC_SKILLS[classicId];
     return {
       ...base,
       id: classicId + "." + variantIndex,
       classicId,
       nickname: classic.nickname,
       skill: classic.skill,
+      skillTag,
       source: "Lesson 3 Angles",
       rowConvention: "angles_in_degrees"
     };
@@ -981,6 +1002,7 @@
   const api = {
     CLASSICS,
     CLASSIC_IDS,
+    CLASSIC_SKILLS,
     INTRO_SCENES,
     generateProblem,
     checkAnswer,
