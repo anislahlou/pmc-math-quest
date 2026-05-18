@@ -519,8 +519,8 @@
       svg: introSceneSeatValue
     },
     {
-      title: "Reverse Address",
-      purpose: "Find row and position from a value.",
+      title: "Find Address",
+      purpose: "Find address: work backwards from a value to its row and seat.",
       caption: "To work backwards, trap the value between two row ends. Sixty is after fifty-five and before sixty-six, so it is in row eleven. It is five after fifty-five, so it is position five.",
       durationMs: 17000,
       svg: introSceneReverse
@@ -540,9 +540,9 @@
       svg: introSceneEvenTwin
     },
     {
-      title: "Wide Challenge",
-      purpose: "Separate the stretch pattern from the ordinary map.",
-      caption: "The wide challenge triangle is different. Its rows have one, three, five, seven seats. That makes its row ends square numbers, not triangular numbers.",
+      title: "Wide Row",
+      purpose: "Wide row triangle: separate the stretch pattern from the ordinary map.",
+      caption: "The wide row triangle is different. Its rows have one, three, five, seven seats. That makes its row ends square numbers, not triangular numbers.",
       durationMs: 15000,
       svg: introSceneWide
     },
@@ -903,6 +903,7 @@
   const api = {
     CLASSICS,
     CLASSIC_IDS,
+    INTRO_SCENES,
     triangular,
     ordinaryValue,
     ordinaryAddress,
