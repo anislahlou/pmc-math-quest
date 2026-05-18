@@ -47,6 +47,21 @@
   const CLASSIC_IDS = CLASSICS.map((classic) => classic.id);
   const CLASSIC_BY_ID = Object.fromEntries(CLASSICS.map((classic) => [classic.id, classic]));
 
+  // Maps each classic to a registry skill so the skill-coverage gate can
+  // verify the bank covers every skill the registry promises.
+  // Registry skills: ["Row end", "Seat value", "Find address",
+  // "Even twin", "Wide row"].
+  const CLASSIC_SKILLS = {
+    "consecutive.row-length": "Row end",
+    "consecutive.row-end": "Row end",
+    "consecutive.seat-value": "Seat value",
+    "consecutive.row-sum": "Seat value",
+    "consecutive.find-address": "Find address",
+    "even.seat-value": "Even twin",
+    "even.find-address": "Even twin",
+    "wide.seat-value": "Wide row"
+  };
+
   function triangular(n) {
     return (n * (n + 1)) / 2;
   }
@@ -329,12 +344,14 @@
     const set = PROBLEM_SETS[classicId];
     const base = set[variantIndex % set.length];
     const classic = CLASSIC_BY_ID[classicId];
+    const skillTag = CLASSIC_SKILLS[classicId];
     return {
       ...base,
       id: classicId + "." + variantIndex,
       classicId,
       nickname: classic.nickname,
       skill: classic.skill,
+      skillTag,
       source: "Lesson 7 Triangular Number Tables",
       rowConvention: "rows_start_at_1_positions_start_at_1"
     };
@@ -903,6 +920,7 @@
   const api = {
     CLASSICS,
     CLASSIC_IDS,
+    CLASSIC_SKILLS,
     INTRO_SCENES,
     triangular,
     ordinaryValue,
