@@ -3,6 +3,23 @@
 
   const ROUND_LENGTH = 10;
 
+  // Maps each classic to a registry skill so the skill-coverage gate can
+  // verify the bank covers every skill the registry promises.
+  // Registry skills: ["Base area", "Hollow prisms", "Composite faces",
+  // "Water rise", "Partial submerge"].
+  const CLASSIC_SKILLS = {
+    "cuboid-warmup": "Base area",
+    "base-area-stack": "Base area",
+    "hollow-prism": "Hollow prisms",
+    "hollow-height": "Hollow prisms",
+    "composite-cross-section": "Composite faces",
+    "water-rise-volume": "Water rise",
+    "new-water-level": "Water rise",
+    "full-tank-removal": "Partial submerge",
+    "partial-submerged-block": "Partial submerge",
+    "extensive-cross-section": "Composite faces"
+  };
+
   const CLASSICS = [
     {
       id: "cuboid-warmup",
@@ -657,7 +674,9 @@
 
   function generateProblem(classicId, variantIndex) {
     const id = CLASSIC_BY_ID[classicId] ? classicId : CLASSIC_IDS[0];
-    return GENERATORS[id](variantIndex || 0);
+    const problem = GENERATORS[id](variantIndex || 0);
+    if (problem && CLASSIC_SKILLS[id]) problem.skillTag = CLASSIC_SKILLS[id];
+    return problem;
   }
 
   function checkAnswer(problem, input) {
@@ -958,6 +977,7 @@
     CLASSICS,
     CLASSIC_IDS,
     CLASSIC_BY_ID,
+    CLASSIC_SKILLS,
     SOURCE_COVERAGE,
     INTRO_SCENES,
     ROUND_LENGTH,

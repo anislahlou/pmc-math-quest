@@ -18,6 +18,21 @@
   const CLASSIC_IDS = CLASSICS.map((classic) => classic.id);
   const CLASSIC_BY_ID = Object.fromEntries(CLASSICS.map((classic) => [classic.id, classic]));
 
+  // Maps each classic to a registry skill so the skill-coverage gate can
+  // verify the bank covers every skill the registry promises.
+  // Registry skills: ["Triangle inequality", "Isosceles choice",
+  // "Pythagoras", "Missing leg", "Area chase"].
+  const CLASSIC_SKILLS = {
+    "triangle-gate": "Triangle inequality",
+    "isosceles-choice": "Isosceles choice",
+    "hypotenuse-builder": "Pythagoras",
+    "missing-leg": "Missing leg",
+    "shared-height-chase": "Area chase",
+    "isosceles-split-area": "Area chase",
+    "area-to-perimeter": "Pythagoras",
+    "right-turn-path": "Pythagoras"
+  };
+
   const SOURCE_COVERAGE = {
     "triangle-gate": ["Map shortest path triangle inequality", "Further exercise side-set choice"],
     "isosceles-choice": ["Exploration 1 two side lengths", "Homework isosceles perimeter"],
@@ -355,7 +370,9 @@
       "area-to-perimeter": areaToPerimeterProblem,
       "right-turn-path": rightTurnPathProblem
     };
-    return generators[classicId](variantIndex);
+    const problem = generators[classicId](variantIndex);
+    if (problem && CLASSIC_SKILLS[classicId]) problem.skillTag = CLASSIC_SKILLS[classicId];
+    return problem;
   }
 
   function validateProblemMath(problem) {
@@ -505,6 +522,7 @@
   const api = {
     CLASSICS,
     CLASSIC_IDS,
+    CLASSIC_SKILLS,
     SOURCE_COVERAGE,
     INTRO_SCENES,
     INTRO_SCENE_MS,

@@ -3,6 +3,25 @@
 
   const ROUND_LENGTH = 12;
 
+  // Maps each classic to a registry skill so the skill-coverage gate can
+  // verify the bank covers every skill the registry promises.
+  // Registry skills: ["Layer maps", "Tunnel overlap", "Height maps",
+  // "Views", "Cube displacement"].
+  const CLASSIC_SKILLS = {
+    "layer-count-core": "Layer maps",
+    "layer-map-sum": "Layer maps",
+    "adjacent-cube-build": "Layer maps",
+    "cross-tunnel-overlap": "Tunnel overlap",
+    "side-slice-tunnel": "Tunnel overlap",
+    "height-map-volume": "Height maps",
+    "staircase-stack": "Height maps",
+    "front-left-view": "Views",
+    "view-rebuild": "Views",
+    "reverse-missing-layer": "Layer maps",
+    "water-cube-rise": "Cube displacement",
+    "compare-layer-solids": "Cube displacement"
+  };
+
   const CLASSICS = [
     {
       id: "layer-count-core",
@@ -730,7 +749,9 @@
 
   function generateProblem(classicId, variantIndex) {
     const id = CLASSIC_BY_ID[classicId] ? classicId : CLASSIC_IDS[0];
-    return GENERATORS[id](variantIndex || 0);
+    const problem = GENERATORS[id](variantIndex || 0);
+    if (problem && CLASSIC_SKILLS[id]) problem.skillTag = CLASSIC_SKILLS[id];
+    return problem;
   }
 
   function checkAnswer(problem, input) {
@@ -1264,6 +1285,7 @@
     CLASSICS,
     CLASSIC_IDS,
     CLASSIC_BY_ID,
+    CLASSIC_SKILLS,
     SOURCE_COVERAGE,
     INTRO_SCENES,
     ROUND_LENGTH,

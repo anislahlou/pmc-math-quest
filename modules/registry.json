@@ -103,7 +103,7 @@
       "unit": "year-map",
       "topic": "Whole-Year Maths Map",
       "tags": ["year-mission", "number", "algebra", "geometry", "ratio", "data", "3d", "exam"],
-      "skills": ["5 zones", "17 submodules", "Review Prep 9 lab", "Live practice"],
+      "skills": ["Number zone", "Algebra zone", "Geometry zone", "Proportion/Data zone", "Exam arena"],
       "difficulty": 5,
       "order": 40,
       "status": "published",
