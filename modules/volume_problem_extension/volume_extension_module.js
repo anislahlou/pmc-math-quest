@@ -118,7 +118,7 @@
   const INTRO_SCENES = [
     {
       title: "Slice The Solid",
-      purpose: "Count one layer before counting the whole model.",
+      purpose: "Layer maps: count one layer at a time before adding the whole model.",
       kind: "layer",
       caption: "A complicated cube solid becomes friendly when you slice it into floors. Count what is kept on each floor, then add the floors."
     },
@@ -130,7 +130,7 @@
     },
     {
       title: "Tunnels Can Overlap",
-      purpose: "Avoid subtracting the same cube twice.",
+      purpose: "Tunnel overlap: avoid subtracting the same cube twice when tunnels cross.",
       kind: "tunnel",
       caption: "Two tunnels that cross share one cube in the middle. Subtract both tunnels, then put the overlap back once."
     },
@@ -172,7 +172,7 @@
     },
     {
       title: "Cubes Move Water",
-      purpose: "Connect counted cubes back to displacement.",
+      purpose: "Cube displacement: connect counted cubes back to displaced volume.",
       kind: "water",
       caption: "Once you know how many 1 cm cubes are in the solid, you know its volume in cubic centimetres. That can raise water."
     },
