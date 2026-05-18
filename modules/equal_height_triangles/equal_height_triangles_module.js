@@ -103,7 +103,7 @@
   const INTRO_SCENES = [
     {
       title: "Same Height Spotter",
-      purpose: "See what equal height actually means.",
+      purpose: "Height detective work: see what equal height actually means.",
       classicId: "diagram-interpretation",
       kind: "height-spotter",
       audio: "audio/intro_01_same_height_spotter.wav",
@@ -143,7 +143,7 @@
     },
     {
       title: "Double Then Divide",
-      purpose: "Reverse the area rule safely.",
+      purpose: "Reverse formula: undo area = base x height / 2 safely.",
       classicId: "reverse-from-area",
       kind: "reverse",
       audio: "audio/intro_05_double_then_divide.wav",
