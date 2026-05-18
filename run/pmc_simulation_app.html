@@ -969,8 +969,16 @@
 
       <section class="module-grid" id="module-grid" aria-label="Available modules"></section>
 
-      <script type="module">
-        import { cardVisuals, cardMeta, questNodeVisuals } from "./card_visuals.js";
+      <script src="../modules/registry.js"></script>
+      <script src="./card_visuals.js"></script>
+      <script>
+        const CARD_VISUAL_GLOBALS = (typeof window !== "undefined" && window.PMC_CARD_VISUALS) || {};
+        const cardVisuals = CARD_VISUAL_GLOBALS.cardVisuals || {};
+        const cardMeta = CARD_VISUAL_GLOBALS.cardMeta || {};
+        const questNodeVisuals = CARD_VISUAL_GLOBALS.questNodeVisuals || {};
+        if (!CARD_VISUAL_GLOBALS.cardVisuals) {
+          console.warn("[run-app] window.PMC_CARD_VISUALS is missing — was run/card_visuals.js loaded?");
+        }
 
         const DIFFICULTY_WORDS = ["zero", "one", "two", "three", "four", "five"];
 
@@ -1035,13 +1043,10 @@
           return article;
         }
 
-        async function main() {
-          let registry;
-          try {
-            const res = await fetch("../modules/registry.json?v=1");
-            registry = await res.json();
-          } catch (err) {
-            console.error("[run-app] failed to load registry:", err);
+        function main() {
+          const registry = (typeof window !== "undefined" && window.PMC_REGISTRY) || null;
+          if (registry == null) {
+            console.warn("[run-app] window.PMC_REGISTRY is missing — was modules/registry.js loaded?");
             return;
           }
           const modules = (registry.modules || [])

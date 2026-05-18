@@ -4,8 +4,10 @@
   "version": "0.0.0",
   "type": "commonjs",
   "scripts": {
-    "qa": "node qa/run_all_quality_checks.js",
+    "qa": "node qa/registry_js_sync_lint.js && node qa/run_all_quality_checks.js",
     "lint:registry": "node qa/registry_lint.js",
+    "lint:registry-js-sync": "node qa/registry_js_sync_lint.js",
+    "sync:registry": "node scripts/sync-registry-js.mjs",
     "new-module": "node scripts/new-module.mjs"
   }
 }

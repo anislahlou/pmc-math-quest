@@ -15,9 +15,13 @@
  *
  * Contents are byte-identical to what was previously hand-coded into the
  * HTML. Do not redraw or simplify any path — copy verbatim.
+ *
+ * Loaded as a plain <script src> tag (NOT type="module") so the run app
+ * works when opened from file://. Exposes the three maps on
+ * window.PMC_CARD_VISUALS at the bottom of the file.
  */
 
-export const cardVisuals = {
+const cardVisuals = {
   u2t2: `<div class="unit-map">
               <span>Number</span>
               <span>Algebra</span>
@@ -107,7 +111,7 @@ export const cardVisuals = {
  * HTML — skill-list aria-label and the action-button HTML. Keyed by
  * registry module id. Kept here so the render code stays generic.
  */
-export const cardMeta = {
+const cardMeta = {
   pascal: {
     skillsAriaLabel: "Pascal skills",
     actionsHtml: `<a class="button" href="../modules/pascal/pascal_triangle_practice_share.html">Launch Pascal</a>`
@@ -151,7 +155,7 @@ export const cardMeta = {
  * HTML (no glyphs/SVGs). Adding a custom glyph for a module later means
  * editing only this map.
  */
-export const questNodeVisuals = {
+const questNodeVisuals = {
   pascal: `<span class="node-number">1</span>
               <strong>Pascal Triangle</strong>
               <small>Pattern lab</small>`,
@@ -177,3 +181,18 @@ export const questNodeVisuals = {
               <strong>Equal Height</strong>
               <small>Area ratio lab</small>`
 };
+
+/*
+ * Browser global mirror.
+ *
+ * The run app HTML is opened directly from disk (file://) by double-click,
+ * where Chrome/Edge block fetch() of local files AND, in some configurations,
+ * also block ES module imports. To keep the page working from file://, we
+ * additionally expose the same three maps on `window.PMC_CARD_VISUALS` so the
+ * run app can read them via a regular <script src> tag without using
+ * <script type="module">. The `export const` statements above are kept for
+ * any future ES-module consumers.
+ */
+if (typeof window !== "undefined") {
+  window.PMC_CARD_VISUALS = { cardVisuals, cardMeta, questNodeVisuals };
+}

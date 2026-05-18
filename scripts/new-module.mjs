@@ -805,6 +805,18 @@ async function main() {
 
     await appendRegistryEntry(newEntry);
 
+    // ---- step 7b: keep modules/registry.js in sync with registry.json so
+    // the dashboard + run app (which read window.PMC_REGISTRY via
+    // <script src>) see the new module immediately without an extra command.
+    let registryJsSynced = false;
+    try {
+      const { syncRegistryJs } = await import("./sync-registry-js.mjs");
+      syncRegistryJs();
+      registryJsSynced = true;
+    } catch (syncErr) {
+      console.warn(`[new-module] WARN: failed to sync modules/registry.js: ${syncErr.message}`);
+    }
+
     // ---- step 8: summary
     const fileCount = writtenPaths.filter((p) => !p.endsWith(newDir) && !p.endsWith(path.join(newDir, "audio"))).length;
     const lines = [];
@@ -812,13 +824,21 @@ async function main() {
     lines.push(`- folder: modules/${slug}`);
     lines.push(`- ${fileCount} files scaffolded`);
     lines.push(`- registered in modules/registry.json (status=draft, order=${order})`);
+    if (registryJsSynced) {
+      lines.push(`- regenerated modules/registry.js to match registry.json`);
+    }
     lines.push("");
     lines.push("Next steps:");
     lines.push(`  1. Edit modules/${slug}/${slug}_module.js — replace placeholder classics.`);
     lines.push(`  2. Edit modules/${slug}/${slug}_intro_video_pack.md — replace TODOs.`);
     lines.push(`  3. Add a card SVG entry for cardVariant "${args.variant}" in run/card_visuals.js.`);
     lines.push(`  4. Run: node qa/run_all_quality_checks.js`);
-    lines.push(`  5. When ready, flip status to "published" in modules/registry.json.`);
+    if (!registryJsSynced) {
+      lines.push(`  5. Run: node scripts/sync-registry-js.mjs (registry.js auto-sync failed; do it manually)`);
+      lines.push(`  6. When ready, flip status to "published" in modules/registry.json.`);
+    } else {
+      lines.push(`  5. When ready, flip status to "published" in modules/registry.json.`);
+    }
     console.log(lines.join("\n"));
   } catch (err) {
     console.error(`[new-module] ERROR: ${err.message}`);

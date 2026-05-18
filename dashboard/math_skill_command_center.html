@@ -517,7 +517,8 @@
         add or update the bank checks, then register it here and in the main app.
       </p>
     </main>
-    <script type="module">
+    <script src="../modules/registry.js"></script>
+    <script>
       const REPO_ROOT = '..';
       const grid = document.getElementById('mission-grid');
 
@@ -571,11 +572,13 @@
           </article>`;
       }
 
-      (async function loadRegistry() {
+      (function loadRegistry() {
         try {
-          const res = await fetch(`${REPO_ROOT}/modules/registry.json?v=1`);
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const registry = await res.json();
+          const registry = window.PMC_REGISTRY;
+          if (registry == null) {
+            console.warn('mission-grid: window.PMC_REGISTRY is missing — was modules/registry.js loaded?');
+            return;
+          }
           const mods = (registry.modules || [])
             .filter((m) => m && m.status === 'published')
             .sort((a, b) => (a.order || 0) - (b.order || 0));
