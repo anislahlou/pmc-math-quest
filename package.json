@@ -1,0 +1,11 @@
+{
+  "name": "pmc-math-quest",
+  "private": true,
+  "version": "0.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "qa": "node qa/run_all_quality_checks.js",
+    "lint:registry": "node qa/registry_lint.js",
+    "new-module": "node scripts/new-module.mjs"
+  }
+}
