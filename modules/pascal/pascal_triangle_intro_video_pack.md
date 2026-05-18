@@ -59,114 +59,52 @@ The intro must name the wider Pascal skill set first. The learner should be able
 4. Explain the third diagonal bridge: parent sums create a running total.
 5. Calculate `1 + 2 + ... + n` using `(n + 1) x n / 2`.
 6. Use the row shift: third number in row `r` is `1 + 2 + ... + (r - 2)`.
-7. Recognise that row totals double.
-8. Understand that some questions work backwards from a clue.
+7. Recognise that row totals double, using the Row doubler shortcut.
+8. Understand that some questions work backwards from a clue, using Reverse clues reasoning.
+
+## Named Skills
+
+The learner sees this skill card before any scene starts. Each skill maps to a registry token used by the practice bank:
+
+- Parent rule - every inside number is the sum of the two parents directly above it.
+- Row doubler - the total of each row doubles as you move one row down.
+- Third stair - the third diagonal of Pascal Triangle is a running total of consecutive numbers.
+- Reverse clues - some questions give a value or a total and ask you to find the row, position, or rule that produced it.
 
 ## Video Structure
 
 | Scene | Time | Purpose | Visual | Voiceover |
 |---|---:|---|---|---|
-| 1. Learning Map | 0:00-0:15 | Name the full skill set | Actual Pascal Triangle plus five skill labels | "This is not only a formula lesson. You are training five Pascal moves." |
-| 2. Parent Rule | 0:15-0:27 | Show the local Pascal rule | Triangle with two parents making a child number | "Each inside number is made by adding the two parents above." |
-| 3. Diagonal Map | 0:27-0:41 | Identify edge, second, and third diagonals | Same triangle with green, blue, and gold diagonals | "The edge is always one. The second diagonal is row minus one. The third diagonal is the interesting one." |
-| 4. The Bridge | 0:41-0:58 | Make parent sums become running totals visually | Triangle plus side ladder: `1`, `1 + 2`, `1 + 2 + 3`, `1 + 2 + 3 + 4` | "The gold number keeps its old value and adds the next blue number. Parent sums create a running total." |
-| 5. Shortcut | 0:58-1:11 | Introduce the formula after the bridge | Pairing card for `1 + ... + n` | "Now the shortcut is useful, not mysterious." |
-| 6. Row Shift | 1:11-1:24 | Teach the exact Third Stair method | Row 13 -> stop at 11 -> 66 | "For row `r`, the third number stops at `r - 2`." |
-| 7. Totals & Reverse | 1:24-1:36 | Signal the wider exercise set | Row totals and reverse clue cards | "The session also checks row totals and backwards clues." |
-| 8. Ready | 1:36-1:45 | Move into training | Watch again / Train now choice | "Start training, and the triangle will come back when you need hints." |
+| 1. Learning Map | 0:00-0:15 | Name the full skill set so each scene names its move. | Actual Pascal Triangle plus four skill labels: parent rule, third stair, row doubler, reverse clues. | "This is not only a formula lesson. You are training four named Pascal moves: parent rule, third stair, row doubler, and reverse clues. Name the move before you write a number." |
+| 2. Parent Rule | 0:15-0:27 | Show the local Pascal rule before introducing any formula. | Triangle with two parents glowing above a child number. | "Every inside number is made by adding the two parents directly above it. That is the parent rule, the local rule that builds every row of Pascal Triangle." |
+| 3. Diagonal Map | 0:27-0:41 | Identify edge, second, and third diagonals so the next scene has somewhere to point. | Same triangle with green edge, blue second diagonal, and gold third diagonal highlighted. | "The edge of the triangle is always one. The second diagonal is row minus one. The third diagonal is the interesting one, because the parent rule turns it into a running total." |
+| 4. The Bridge | 0:41-0:58 | Make parent sums become running totals visually before any formula appears. | Triangle plus side ladder showing 1, 1 + 2, 1 + 2 + 3, 1 + 2 + 3 + 4. | "Each gold number keeps its old value and adds the next blue number. So parent sums create a running total of consecutive numbers down the third diagonal. That is the third stair." |
+| 5. Shortcut | 0:58-1:11 | Introduce the formula after the visual bridge is settled. | Pairing card showing 1 + 2 + ... + n grouped into matching pairs. | "Now the shortcut is useful, not mysterious. The running total `1 + 2 + ... + n` always equals `(n + 1) x n / 2`, because the numbers pair up from the ends inward." |
+| 6. Row Shift | 1:11-1:24 | Teach the exact third stair method for an actual row. | Row 13 -> stop at 11 -> 66 worked example. | "For row `r`, the third number stops at `r - 2`. So the third number in row 13 is `1 + 2 + ... + 11`, which is `12 x 11 / 2 = 66`. Use the running total, not the row number." |
+| 7. Row Doubler & Reverse Clues | 1:24-1:36 | Signal the wider exercise set with row doubler and reverse clues. | Row totals 1, 2, 4, 8, 16 on one card; backwards-clue cards on the other. | "Practice also checks the row doubler shortcut: every row total is double the previous row total. And reverse clues, where you start from a given value or row total and work backwards to the address inside the triangle." |
+| 8. Ready | 1:36-1:45 | Move into training with the skill set named. | Watch again or train now choice with the four-skill checklist. | "Now start training. The triangle will come back if you need hints. Name the move first: parent rule, third stair, row doubler, or reverse clues. Then calculate, and pass the answer on to the next step." |
 
 ## Full Voiceover Draft
 
-The book starts with long sums like `1 + 2 + ... + 10`, then longer ones like up to 39 and 80.
+The book starts with long sums like `1 + 2 + ... + 10`, then longer sums up to 39 and 80. Adding one number at a time works, but it is painfully slow. So we learn a shortcut first, before we open Pascal Triangle. Pair the first and last numbers: `1 + 10 = 11`. Then `2 + 9 = 11`, then `3 + 8 = 11`, and the same idea continues right across the sum.
 
-Adding one by one works, but it is slow. So we use a shortcut.
+Imagine writing the sum forwards and backwards. Each column adds to 11, and there are 10 columns. So the doubled sum is `11 x 10`, which is one hundred and ten. But that counts the same sum twice, so we divide by two to get fifty-five. For any last number `n`, the same pairing argument gives `1 + 2 + ... + n = (n + 1) x n / 2`. That is the shortcut formula.
 
-Look at `1 + 2 + ... + 10`.
+Now pause, because Pascal Triangle has a different rule. Inside Pascal Triangle, a number is made by adding the two parents above it, the parent rule. For example, `3 + 3 = 6`. That one parent-sum is not the shortcut formula. The shortcut appears because of what happens when we keep using the parent rule down the third diagonal, scene after scene.
 
-Pair the first and last number: `1 + 10 = 11`.
+The third diagonal starts at one. The next third-diagonal number is `1 + 2 = 3`. The next one is `3 + 3 = 6`, which is the same as `1 + 2 + 3`. The next one is `6 + 4 = 10`, which is the same as `1 + 2 + 3 + 4`. So the third diagonal is a running total of consecutive numbers: `1, 3, 6, 10, 15`, and so on. That is the third stair move.
 
-Then `2 + 9 = 11`, `3 + 8 = 11`, and the same idea continues.
+Now the shortcut from the start of the lesson becomes useful. If a question asks for the third number in row `r`, we do not add all the way to `r`. We add up to `r - 2`. For example, row 13 uses `1 + 2 + ... + 11`. The shortcut gives `(12 x 11) / 2 = 66`, so the third number in row 13 is 66.
 
-Imagine writing the sum forwards and backwards. Each column makes 11, and there are 10 columns.
+The practice also trains the row doubler shortcut: row totals follow the doubling pattern 1, 2, 4, 8, 16, 32. And reverse clues, where the question gives a value or a row total and asks you to find the row, position, or rule that produced it. In every problem, name the move first: parent rule, third stair, row doubler, or reverse clues. Then calculate, then pass the answer on to the next step of the question.
 
-So the doubled sum is `11 x 10`.
+## Misconception Risks
 
-But that counts the same sum twice, so divide by 2.
-
-That gives:
-
-```text
-1 + 2 + ... + 10 = (11 x 10) / 2 = 55
-```
-
-For any last number `n`, the rule is:
-
-```text
-1 + 2 + ... + n = (n + 1) x n / 2
-```
-
-Now pause.
-
-Pascal Triangle has a different rule.
-
-Inside Pascal Triangle, a number is made by adding the two parents above it.
-
-For example, `3 + 3 = 6`.
-
-That one parent-sum is not the shortcut formula.
-
-The shortcut appears because of what happens when we keep using the parent rule down the third diagonal.
-
-The third diagonal starts at `1`.
-
-The next third-diagonal number is `1 + 2 = 3`.
-
-The next one is `3 + 3 = 6`, which is the same as `1 + 2 + 3`.
-
-The next one is `6 + 4 = 10`, which is the same as `1 + 2 + 3 + 4`.
-
-So the third diagonal is a running total:
-
-```text
-1
-1 + 2
-1 + 2 + 3
-1 + 2 + 3 + 4
-```
-
-That is why it becomes:
-
-```text
-1, 3, 6, 10, 15...
-```
-
-Now the shortcut is useful.
-
-If a question asks for the third number in row `r`, we do not add all the way to `r`.
-
-We add up to `r - 2`.
-
-For example, row 13 uses:
-
-```text
-1 + 2 + ... + 11
-```
-
-So:
-
-```text
-(12 x 11) / 2 = 66
-```
-
-That is why the third number in row 13 is 66.
-
-In the practice round, remember the difference:
-
-Pascal Triangle rows are built by adding the two parents above.
-
-When we follow that rule down the third diagonal, it creates a running total.
-
-Then the consecutive-sum shortcut calculates that running total quickly.
+- Confusing one parent-sum with the running-total formula, so the child writes `(n + 1) x n / 2` after a single addition.
+- Using the row number `r` directly in `1 + 2 + ... + r` for the third diagonal, instead of stopping at `r - 2`.
+- Treating Pascal Triangle like an ordinary consecutive-number triangle and ignoring the parent rule.
+- Forgetting that row totals double when using the row doubler shortcut.
+- Reading reverse clues forwards and missing the cue that the question starts from the answer.
 
 Now try the warmup check.
 
