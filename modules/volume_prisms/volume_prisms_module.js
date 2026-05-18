@@ -114,13 +114,13 @@
     },
     {
       title: "Hollow Means Subtract",
-      purpose: "Keep the missing space visible.",
+      purpose: "Hollow prisms: keep the missing space visible.",
       kind: "hollow",
       caption: "A hole is missing space. Find the outside area, remove the hole area, then multiply by the prism height."
     },
     {
       title: "Split The Cross-Section",
-      purpose: "Prepare composite prisms.",
+      purpose: "Composite faces: split the cross-section into friendly shapes.",
       kind: "composite",
       caption: "For a composite prism, split the front face into friendly shapes. Add their areas, then stretch that area through the prism."
     },
