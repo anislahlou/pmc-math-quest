@@ -43,6 +43,7 @@ const crypto = require("crypto");
 const REPO_ROOT = path.resolve(__dirname, "..");
 const REGISTRY_PATH = path.join(REPO_ROOT, "modules", "registry.json");
 const SIM_APP_PATH = path.join(REPO_ROOT, "run", "pmc_simulation_app.html");
+const CARD_VISUALS_PATH = path.join(REPO_ROOT, "run", "card_visuals.js");
 const MAX_VARIANTS = 20;
 
 const { requireModuleSafe } = require("./_dom_stubs.js");
@@ -162,8 +163,15 @@ function classicsFromModule(mod) {
 
 function findCardSvg(html, cardVariant) {
   if (!cardVariant) return null;
-  // locate <article class="module-card <variant>">...</article>
-  // robust scan: find anchor by class, then capture the surrounding <article>
+  // Phase 4 refactor: the sim app no longer hand-codes each card's SVG
+  // inline. The card visuals now live in run/card_visuals.js, keyed by
+  // cardVariant. Prefer that source. If it's unreadable or doesn't yet
+  // have the variant, fall back to the legacy inline <article> scan so
+  // older snapshots of the HTML still work.
+  const fromVisualsFile = findCardSvgInVisualsFile(cardVariant);
+  if (fromVisualsFile) return fromVisualsFile;
+
+  // legacy: inline <article class="module-card <variant>">...</article>
   const variantEsc = cardVariant.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
   const articleRe = new RegExp(
     `<article\\b[^>]*class="[^"]*\\bmodule-card\\b[^"]*\\b${variantEsc}\\b[^"]*"[\\s\\S]*?<\\/article>`,
@@ -174,6 +182,36 @@ function findCardSvg(html, cardVariant) {
   const article = articleMatch[0];
   const svgRe = /<svg\b[^>]*>[\s\S]*?<\/svg>/i;
   const svgMatch = svgRe.exec(article);
+  if (!svgMatch) return null;
+  return svgMatch[0];
+}
+
+let _cardVisualsCache = null;
+function loadCardVisualsSource() {
+  if (_cardVisualsCache !== null) return _cardVisualsCache;
+  if (!fs.existsSync(CARD_VISUALS_PATH)) {
+    _cardVisualsCache = "";
+    return _cardVisualsCache;
+  }
+  _cardVisualsCache = fs.readFileSync(CARD_VISUALS_PATH, "utf8");
+  return _cardVisualsCache;
+}
+
+function findCardSvgInVisualsFile(cardVariant) {
+  const src = loadCardVisualsSource();
+  if (!src) return null;
+  // Match either bare-identifier or quoted keys: `pascal:` or `"volume-extension":`
+  // followed by a backtick-template string. Capture the template body.
+  const variantEsc = cardVariant.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+  const re = new RegExp(
+    `(?:["']${variantEsc}["']|\\b${variantEsc}\\b)\\s*:\\s*\`([\\s\\S]*?)\``,
+    "m"
+  );
+  const m = re.exec(src);
+  if (!m) return null;
+  const body = m[1];
+  const svgRe = /<svg\b[^>]*>[\s\S]*?<\/svg>/i;
+  const svgMatch = svgRe.exec(body);
   if (!svgMatch) return null;
   return svgMatch[0];
 }
