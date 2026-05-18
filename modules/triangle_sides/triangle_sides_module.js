@@ -46,14 +46,14 @@
 
   const INTRO_SCENES = [
     {
-      title: "Triangle Gate",
-      purpose: "Check whether the sides can close.",
+      title: "Triangle Inequality",
+      purpose: "Check whether three lengths can close into a triangle.",
       classicId: "triangle-gate",
       kind: "gate",
       audio: "audio/intro_01_triangle_gate.wav",
       durationMs: 12200,
       caption: "Order the sides, then test short + short > longest. If the shorter pair cannot pass the longest side, no triangle forms.",
-      voiceover: "Start with the triangle gate. Put the three side lengths in order. Then ask one question: do the two shorter sides reach farther than the longest side?"
+      voiceover: "Start with the triangle inequality. Put the three side lengths in order. Then ask one question: do the two shorter sides reach farther than the longest side?"
     },
     {
       title: "Isosceles Choice",
@@ -62,12 +62,12 @@
       kind: "iso-choice",
       audio: "audio/intro_02_isosceles_choice.wav",
       durationMs: 12250,
-      caption: "When two sides are equal, the repeated side must still pass the triangle gate before you add the perimeter.",
+      caption: "When two sides are equal, the repeated side must still pass the triangle inequality before you add the perimeter.",
       voiceover: "For an isosceles triangle, two sides are equal. But do not repeat a side blindly. The two equal sides still have to close around the base."
     },
     {
-      title: "Hypotenuse Builder",
-      purpose: "Name and build the side across the right angle.",
+      title: "Pythagoras",
+      purpose: "Build the side across the right angle.",
       classicId: "hypotenuse-builder",
       kind: "hyp",
       audio: "audio/intro_03_hypotenuse_builder.wav",
@@ -77,7 +77,7 @@
     },
     {
       title: "Missing Leg",
-      purpose: "Reverse Pythagoras when the longest side is known.",
+      purpose: "Reverse Pythagoras when the hypotenuse is known.",
       classicId: "missing-leg",
       kind: "leg",
       audio: "audio/intro_04_missing_leg.wav",
@@ -86,14 +86,14 @@
       voiceover: "If the hypotenuse is already known, reverse the move. Start with the hypotenuse square, subtract the known leg square, then take the square root."
     },
     {
-      title: "Shared Height Chase",
-      purpose: "Use one hidden height in two right triangles.",
+      title: "Area Chase",
+      purpose: "Reuse one shared height across the right triangles inside a bigger figure.",
       classicId: "shared-height-chase",
       kind: "shared",
       audio: "audio/intro_05_shared_height.wav",
       durationMs: 12350,
-      caption: "One dropped height can belong to two smaller right triangles. Solve one side, then reuse the same height.",
-      voiceover: "Some diagrams hide two right triangles inside one bigger shape. Find the shared height in the first triangle, then use that same height again in the second triangle."
+      caption: "One dropped height can belong to two smaller right triangles. Solve one side, then reuse the same height to chase the area.",
+      voiceover: "Area chase strings several moves together. Drop one perpendicular height inside a bigger triangle, solve the first small right triangle, then reuse the same height in the second small right triangle to finish the area."
     },
     {
       title: "Isosceles Split Area",
@@ -116,8 +116,8 @@
       voiceover: "Sometimes the book gives area first. Use the area formula backwards to find the height. Then use the half-base and height to find the equal side and the perimeter."
     },
     {
-      title: "Right-Turn Challenge",
-      purpose: "Turn a path into one right triangle.",
+      title: "Right-Turn Path",
+      purpose: "Turn a zigzag path into one big right triangle.",
       classicId: "right-turn-path",
       kind: "path",
       audio: "audio/intro_08_right_turn.wav",
