@@ -27,61 +27,81 @@
       id: "layer-count-core",
       nickname: "Layer Count",
       skill: "Count a cube solid one layer at a time, subtracting the removed squares in each layer.",
-      sourcePages: "Book 101-102 / PDF 111-112"
+      sourcePages: "Book 101-102 / PDF 111-112",
+      // Cube size, layer count, and hole positions vary per variant by design — counting differently shaped solids IS the lesson.
+      variantStability: false
     },
     {
       id: "layer-map-sum",
       nickname: "Layer Map Sum",
       skill: "Use a separate top-view grid for each layer, then add the kept cubes.",
-      sourcePages: "Book 102, 106, 108 / PDF 112, 116, 118"
+      sourcePages: "Book 102, 106, 108 / PDF 112, 116, 118",
+      // Number and shape of layer plans varies per variant by design — each set teaches reading a different cube configuration.
+      variantStability: false
     },
     {
       id: "adjacent-cube-build",
       nickname: "Adjacent Cubes",
       skill: "Count connected cube towers that touch side-to-side without losing hidden cubes.",
-      sourcePages: "Book 104, 118 / PDF 114, 118"
+      sourcePages: "Book 104, 118 / PDF 114, 118",
+      // Plan-view grid size and tower heights vary per variant by design — counting differently shaped connected towers IS the lesson.
+      variantStability: false
     },
     {
       id: "cross-tunnel-overlap",
       nickname: "Tunnel Overlap",
       skill: "Subtract tunnels through a cube without double-counting the cube where tunnels meet.",
-      sourcePages: "Book 103 / PDF 113"
+      sourcePages: "Book 103 / PDF 113",
+      // Cube size (3-6) and tunnel-axis count (2 or 3) vary per variant by design — visualising different overlap configurations IS the lesson.
+      variantStability: false
     },
     {
       id: "side-slice-tunnel",
       nickname: "Side Slice Tunnel",
       skill: "Treat a straight tunnel as a repeated missing rectangular slice.",
-      sourcePages: "Book 103, 107 / PDF 113, 117"
+      sourcePages: "Book 103, 107 / PDF 113, 117",
+      // Cuboid dimensions and tunnel cross-section vary per variant by design — each variant is a different cuboid shape.
+      variantStability: false
     },
     {
       id: "height-map-volume",
       nickname: "Height Map",
       skill: "Read plan-view numbers as tower heights and add all the towers.",
-      sourcePages: "Book 104 / PDF 114"
+      sourcePages: "Book 104 / PDF 114",
+      // Plan-view grid size and per-cell tower heights vary per variant by design — reading different tower-grid shapes IS the lesson.
+      variantStability: false
     },
     {
       id: "staircase-stack",
       nickname: "Stair Stack",
       skill: "Count a stepped solid by adding layer rows or by using triangular totals.",
-      sourcePages: "Book 104-105 / PDF 114-115"
+      sourcePages: "Book 104-105 / PDF 114-115",
+      // Staircase level count (3-6) and length vary per variant by design — each variant is a different stepped solid.
+      variantStability: false
     },
     {
       id: "front-left-view",
       nickname: "Front & Left Views",
       skill: "Read a tower plan from the front or the left by taking the tallest tower in each column or row.",
-      sourcePages: "Book 105 / PDF 115"
+      sourcePages: "Book 105 / PDF 115",
+      // Plan-view grid size, tower heights, and which view (front vs left) the variant asks for vary by design.
+      variantStability: false
     },
     {
       id: "view-rebuild",
       nickname: "View Rebuild",
       skill: "Use front, left, and plan views to rebuild a cube solid before counting it.",
-      sourcePages: "Book 105, 109 / PDF 115, 119"
+      sourcePages: "Book 105, 109 / PDF 115, 119",
+      // Plan-view grid size and tower heights vary per variant by design — each variant is a different solid to rebuild.
+      variantStability: false
     },
     {
       id: "reverse-missing-layer",
       nickname: "Reverse Missing",
       skill: "Work backwards from the total volume to find how many cubes were removed from each layer.",
-      sourcePages: "Book 106-108 / PDF 116-118"
+      sourcePages: "Book 106-108 / PDF 116-118",
+      // Cube size (3-6) and layer count (3-5) vary per variant by design — reverse-engineering different cube shapes IS the lesson.
+      variantStability: false
     },
     {
       id: "water-cube-rise",

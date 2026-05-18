@@ -196,29 +196,27 @@ function extractSvgString(rendered) {
 }
 
 function classicsFromModule(mod) {
-  if (Array.isArray(mod.CLASSICS)) {
-    return mod.CLASSICS.map((c) => ({
-      id: c.id,
-      nickname: c.nickname || c.title || c.id
-    }));
-  }
-  if (Array.isArray(mod.classics)) {
-    return mod.classics.map((c) => ({
-      id: c.id,
-      nickname: c.nickname || c.title || c.id
-    }));
-  }
-  if (Array.isArray(mod.problemBase)) {
-    return mod.problemBase.map((c) => ({
-      id: c.id,
-      nickname: c.nickname || c.title || c.id
-    }));
-  }
+  // `variantStability` is an optional per-classic opt-out: when set to
+  // `false`, the gate skips the variant-stability check for that classic
+  // (initial-vs-solution and card-vs-module checks still run). Use this when
+  // shape variation across variants IS the pedagogical lesson, e.g. a
+  // classic that teaches the regular-polygon interior-angle formula by
+  // rendering a pentagon for one variant and an octagon for another. The
+  // default (omitted or `true`) keeps the strict skeleton-stability check.
+  const mapClassic = (c) => ({
+    id: c.id,
+    nickname: c.nickname || c.title || c.id,
+    variantStability: c.variantStability !== false
+  });
+  if (Array.isArray(mod.CLASSICS)) return mod.CLASSICS.map(mapClassic);
+  if (Array.isArray(mod.classics)) return mod.classics.map(mapClassic);
+  if (Array.isArray(mod.problemBase)) return mod.problemBase.map(mapClassic);
   if (Array.isArray(mod.MODULES)) {
     // u2t2 — its "classics" are submodules
     return mod.MODULES.map((c) => ({
       id: c.id,
-      nickname: c.title || c.id
+      nickname: c.title || c.id,
+      variantStability: c.variantStability !== false
     }));
   }
   return null;
@@ -372,6 +370,12 @@ function main(options = {}) {
       const stateFingerprints = {}; // state -> { hash, elements } for variant 0
       let classicVariantStable = true;
       let classicHadAnyRender = false;
+      const checkVariantStability = classic.variantStability !== false;
+      if (!checkVariantStability) {
+        console.log(
+          `[diagram-parity] SKIP ${m.id}/${classic.id}: variantStability=false (shape variation is the lesson)`
+        );
+      }
 
       for (const state of states) {
         for (let v = 0; v < MAX_VARIANTS; v += 1) {
@@ -388,7 +392,7 @@ function main(options = {}) {
           const fp = topologyFingerprint(r.svg);
           if (v === 0) {
             stateFingerprints[state] = fp;
-          } else {
+          } else if (checkVariantStability) {
             if (fp.hash !== stateFingerprints[state].hash) {
               const baseFps = stateFingerprints[state].elements.map((e) => e.fp);
               const newFps = fp.elements.map((e) => e.fp);

@@ -11,9 +11,12 @@
     { id: "angles.parallel-zigzag-total", nickname: "Parallel Zigzag Total", skill: "Find an a + b total in a zigzag between parallel lines." },
     { id: "angles.parallel-chase", nickname: "Angle Chase", skill: "Chain straight-line, triangle, and parallel-line facts." },
     { id: "angles.equilateral-chase", nickname: "Equilateral Chase", skill: "Use equilateral-triangle facts inside a multi-step angle chase." },
-    { id: "angles.polygon-sum", nickname: "Polygon Total", skill: "Find a polygon interior-angle sum using (n - 2) x 180 degrees." },
-    { id: "angles.regular-polygon", nickname: "Regular Polygon Corner", skill: "Find a regular polygon angle from the interior-angle sum." },
-    { id: "angles.shape-combo", nickname: "Shape Stack", skill: "Combine standard angles from common regular shapes." }
+    // variantStability: false — the polygon's side count n varies per variant by design (the lesson is the (n - 2) x 180 formula across different n).
+    { id: "angles.polygon-sum", nickname: "Polygon Total", skill: "Find a polygon interior-angle sum using (n - 2) x 180 degrees.", variantStability: false },
+    // variantStability: false — the regular polygon's side count n varies per variant by design (pentagon, octagon, ... teach the same formula).
+    { id: "angles.regular-polygon", nickname: "Regular Polygon Corner", skill: "Find a regular polygon angle from the interior-angle sum.", variantStability: false },
+    // variantStability: false — the combined regular shapes vary per variant by design (hexagon+square+equilateral vs square+pentagon+octagon, etc.).
+    { id: "angles.shape-combo", nickname: "Shape Stack", skill: "Combine standard angles from common regular shapes.", variantStability: false }
   ];
 
   const CLASSIC_IDS = CLASSICS.map((classic) => classic.id);

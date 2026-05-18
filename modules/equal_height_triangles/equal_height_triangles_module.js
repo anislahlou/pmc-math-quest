@@ -15,7 +15,9 @@
       id: "equal-height-base-ratio",
       nickname: "Base Ratio Mirror",
       skill: "When triangles have the same height, their areas follow their bases in the same ratio.",
-      sourcePages: "Book Lesson 17 area review; PDF source-informed archetype, exact visual replica not claimed"
+      sourcePages: "Book Lesson 17 area review; PDF source-informed archetype, exact visual replica not claimed",
+      // Question mode alternates per variant by design (variant 0 = "find the ratio" leaves both area labels blank; variant 1 = "find Area B given Area A" labels Area A only). The diagram skeleton is the same; the label set differs because the question differs.
+      variantStability: false
     },
     {
       id: "same-base-height",
@@ -33,7 +35,9 @@
       id: "multi-triangle-height",
       nickname: "Area Order Line",
       skill: "Compare three or more same-height triangles by comparing their base lengths.",
-      sourcePages: "Book Lesson 17 mixed area reasoning; PDF source-informed archetype, exact visual replica not claimed"
+      sourcePages: "Book Lesson 17 mixed area reasoning; PDF source-informed archetype, exact visual replica not claimed",
+      // Question mode alternates per variant by design (variant 0 = "find the largest area given the smallest" labels area-0; variant 1 = "which is largest?" omits all area labels). Same three-triangle skeleton, different labels because the question differs.
+      variantStability: false
     },
     {
       id: "shared-base-split",
@@ -51,7 +55,9 @@
       id: "algebraic-targets",
       nickname: "Expression Area Chase",
       skill: "Turn equal-height area facts into an equation, then answer the exact requested target.",
-      sourcePages: "Book Lesson 17 algebraic extension; PDF source-informed archetype, exact visual replica not claimed"
+      sourcePages: "Book Lesson 17 algebraic extension; PDF source-informed archetype, exact visual replica not claimed",
+      // Question mode alternates per variant by design (variant 0 = "equal areas, solve for x" uses pure labels; variant 1 = "find a + b given the two areas" labels both areas). Same two-triangle skeleton, different label set per question type.
+      variantStability: false
     },
     {
       id: "equal-area-reverse",

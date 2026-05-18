@@ -31,7 +31,9 @@
       id: "base-area-stack",
       nickname: "Base Area Stack",
       skill: "Treat any prism as one base area stacked through a height.",
-      sourcePages: "Book 86 / PDF 96"
+      sourcePages: "Book 86 / PDF 96",
+      // Prism shape varies per variant by design (triangular / rectangular / cylinder-style / pentagonal) — recognising "any prism is base x height" across shapes IS the lesson.
+      variantStability: false
     },
     {
       id: "hollow-prism",
@@ -49,7 +51,9 @@
       id: "composite-cross-section",
       nickname: "Split The Face",
       skill: "Split a cross-section into rectangles and triangles, then multiply by prism length.",
-      sourcePages: "Book 88, 93-96 / PDF 98, 103-106"
+      sourcePages: "Book 88, 93-96 / PDF 98, 103-106",
+      // Composite shape alternates per variant (house = rectangle + triangle vs L-shape = rectangle minus corner) by design — splitting different composite cross-sections IS the lesson.
+      variantStability: false
     },
     {
       id: "water-rise-volume",
