@@ -50,6 +50,36 @@ for (const m of modules) {
   }
 }
 
+// 4) Registry-driven gates (Phase 2bcd). These run independently — one failing
+//    does NOT skip the others. The user wants every gate to show its surface.
+const gates = [
+  { id: "skill-coverage", path: "./skill_coverage_lint.js" },
+  { id: "intro-pack", path: "./intro_pack_lint.js" },
+  { id: "diagram-parity", path: "./diagram_parity_lint.js" }
+];
+const gateOutcomes = [];
+for (const gate of gates) {
+  console.log(`\n[qa] running gate: ${gate.id}`);
+  try {
+    const gateMod = require(gate.path);
+    if (typeof gateMod.run !== "function") {
+      failures++;
+      gateOutcomes.push({ id: gate.id, status: "missing-run" });
+      console.error(`[qa] gate ${gate.id} does not export run()`);
+      continue;
+    }
+    gateMod.run();
+    gateOutcomes.push({ id: gate.id, status: "pass" });
+  } catch (err) {
+    failures++;
+    gateOutcomes.push({ id: gate.id, status: "fail", message: err.message });
+    console.error(`[qa] gate ${gate.id} failed: ${err.message}`);
+  }
+}
+
+console.log("\n[qa] gate summary:");
+for (const o of gateOutcomes) console.log(`  ${o.id}: ${o.status}${o.message ? " — " + o.message : ""}`);
+
 if (failures > 0) {
   console.error(`\n[qa] ${failures} failure(s).`);
   process.exit(1);
