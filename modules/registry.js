@@ -368,7 +368,7 @@ window.PMC_REGISTRY = {
       ],
       "difficulty": 5,
       "order": 90,
-      "status": "draft",
+      "status": "published",
       "cardVariant": "word-puzzles",
       "cardPreviewClassicId": "hat-system-3-statement",
       "blurb": "Translate 'I see' statements and pair-sum puzzles into algebra: use the self-exclusion trick, build systems of equations, and recover missing pair sums.",
