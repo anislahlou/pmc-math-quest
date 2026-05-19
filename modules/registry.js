@@ -355,16 +355,23 @@ window.PMC_REGISTRY = {
       "topic": "Word Problems",
       "tags": [
         "algebra",
-        "algebraic_word_puzzles"
+        "word-problems",
+        "systems",
+        "challenge"
       ],
       "skills": [
-        "Placeholder skill"
+        "Variable substitution",
+        "Self-exclusion counting",
+        "System of equations",
+        "Pair-sum decomposition",
+        "Missing-pair logic"
       ],
       "difficulty": 5,
       "order": 90,
       "status": "draft",
       "cardVariant": "word-puzzles",
-      "blurb": "TODO: blurb for Algebraic Word Puzzles",
+      "cardPreviewClassicId": "hat-system-3-statement",
+      "blurb": "Translate 'I see' statements and pair-sum puzzles into algebra: use the self-exclusion trick, build systems of equations, and recover missing pair sums.",
       "paths": {
         "folder": "modules/algebraic_word_puzzles",
         "launch": "modules/algebraic_word_puzzles/algebraic_word_puzzles_module.html",
