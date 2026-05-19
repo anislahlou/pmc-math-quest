@@ -109,6 +109,21 @@ const cardVisuals = {
               <text x="82" y="168" text-anchor="middle">base 2</text>
               <text x="202" y="168" text-anchor="middle">base 3</text>
               <text x="154" y="92" text-anchor="middle">same height</text>
+            </svg>`,
+  "word-puzzles": `<svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Algebraic word puzzles preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <rect x="20" y="18" width="260" height="118" rx="10" fill="#fff8dc" stroke="#0d263f" stroke-width="3"></rect>
+              <text x="150" y="42" text-anchor="middle">System of equations</text>
+              <text x="38" y="72">B = ?</text>
+              <text x="38" y="96">G = ?</text>
+              <text x="38" y="120">T = ?</text>
+              <text x="172" y="72">B - G = 3</text>
+              <text x="172" y="96">G = 2T + 1</text>
+              <text x="172" y="120">B = T + 10</text>
+              <circle cx="60" cy="160" r="10" fill="#ff7654" stroke="#0d263f" stroke-width="2"></circle>
+              <circle cx="90" cy="160" r="10" fill="#f3d24f" stroke="#0d263f" stroke-width="2"></circle>
+              <circle cx="120" cy="160" r="10" fill="#5b9bd5" stroke="#0d263f" stroke-width="2"></circle>
+              <text x="180" y="166" text-anchor="middle">words to algebra</text>
             </svg>`
 };
 
@@ -153,6 +168,11 @@ const cardMeta = {
     skillsAriaLabel: "Equal height triangle skills",
     actionsHtml: `<a class="button" href="../modules/equal_height_triangles/equal_height_triangles_module.html">Launch Equal Height</a>
             <a class="button secondary" href="../modules/equal_height_triangles/equal_height_triangles_source_extract.md">Source extract</a>`
+  },
+  algebraic_word_puzzles: {
+    skillsAriaLabel: "Algebraic word puzzle skills",
+    actionsHtml: `<a class="button" href="../modules/algebraic_word_puzzles/algebraic_word_puzzles_module.html">Launch Word Puzzles</a>
+            <a class="button secondary" href="../modules/algebraic_word_puzzles/algebraic_word_puzzles_source_extract.md">Source extract</a>`
   }
 };
 
@@ -185,7 +205,10 @@ const questNodeVisuals = {
               <small>Pythagoras lab</small>`,
   equal_height_triangles: `<span class="node-number">8</span>
               <strong>Equal Height</strong>
-              <small>Area ratio lab</small>`
+              <small>Area ratio lab</small>`,
+  algebraic_word_puzzles: `<span class="node-number">9</span>
+              <strong>Word Puzzles</strong>
+              <small>Algebra arena</small>`
 };
 
 /*
