@@ -19,7 +19,13 @@
  * Loaded as a plain <script src> tag (NOT type="module") so the run app
  * works when opened from file://. Exposes the three maps on
  * window.PMC_CARD_VISUALS at the bottom of the file.
+ *
+ * Wrapped in an IIFE so the top-level `cardVisuals` / `cardMeta` /
+ * `questNodeVisuals` consts don't leak into the global script scope,
+ * which would conflict with the inline render script in the HTML.
  */
+
+(function () {
 
 const cardVisuals = {
   u2t2: `<div class="unit-map">
@@ -196,3 +202,6 @@ const questNodeVisuals = {
 if (typeof window !== "undefined") {
   window.PMC_CARD_VISUALS = { cardVisuals, cardMeta, questNodeVisuals };
 }
+
+})();
+
