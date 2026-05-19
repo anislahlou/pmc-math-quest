@@ -344,6 +344,42 @@ window.PMC_REGISTRY = {
         "hasAudit": true,
         "hasTests": true
       }
+    },
+    {
+      "id": "algebraic_word_puzzles",
+      "slug": "algebraic_word_puzzles",
+      "displayName": "Algebraic Word Puzzles",
+      "shortLabel": "Word Puzzles",
+      "chapter": "Lesson 8 Extensive Challenges",
+      "unit": "algebra",
+      "topic": "Word Problems",
+      "tags": [
+        "algebra",
+        "algebraic_word_puzzles"
+      ],
+      "skills": [
+        "Placeholder skill"
+      ],
+      "difficulty": 5,
+      "order": 90,
+      "status": "draft",
+      "cardVariant": "word-puzzles",
+      "blurb": "TODO: blurb for Algebraic Word Puzzles",
+      "paths": {
+        "folder": "modules/algebraic_word_puzzles",
+        "launch": "modules/algebraic_word_puzzles/algebraic_word_puzzles_module.html",
+        "moduleJs": "modules/algebraic_word_puzzles/algebraic_word_puzzles_module.js",
+        "auditJs": "modules/algebraic_word_puzzles/algebraic_word_puzzles_bank_quality_audit.js",
+        "testsJs": "modules/algebraic_word_puzzles/algebraic_word_puzzles_module_tests.js",
+        "introPack": "modules/algebraic_word_puzzles/algebraic_word_puzzles_intro_video_pack.md",
+        "sourceExtract": "modules/algebraic_word_puzzles/algebraic_word_puzzles_source_extract.md",
+        "audioDir": "modules/algebraic_word_puzzles/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
     }
   ]
 };
