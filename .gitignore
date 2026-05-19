@@ -1,0 +1,14 @@
+# Claude Code local config
+.claude/
+
+# QA cache
+qa/.cache/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/

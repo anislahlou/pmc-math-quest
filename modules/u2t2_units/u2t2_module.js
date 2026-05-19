@@ -1,6 +1,32 @@
 ﻿(function (root) {
   "use strict";
 
+  // Maps each submodule to its zone-level registry skill. Registry skills
+  // for u2t2_units are the five zones the year mission organises around:
+  // ["Number zone", "Algebra zone", "Geometry zone",
+  //  "Proportion/Data zone", "Exam arena"].
+  // Each MODULES entry carries a `zone` field that maps directly to the
+  // matching registry skill name (with the punctuation normalised).
+  const CLASSIC_SKILLS = {
+    "place-value-scales": "Number zone",
+    "slick-sums-four-rules": "Number zone",
+    "bidmas-powers": "Number zone",
+    "fractions-decimals-percentages": "Number zone",
+    "number-types-primes": "Number zone",
+    "algebra-expressions": "Algebra zone",
+    "brackets-formulae-substitution": "Algebra zone",
+    "solving-forming-equations": "Algebra zone",
+    "angles-shape-facts": "Geometry zone",
+    "area-perimeter-units": "Geometry zone",
+    "coordinates-area-challenges": "Geometry zone",
+    "geometry-equations-challenge": "Geometry zone",
+    "ratio-proportion": "Proportion/Data zone",
+    "three-d-volume-speed": "Proportion/Data zone",
+    "data-handling": "Proportion/Data zone",
+    "word-problem-arena": "Exam arena",
+    "review-prep-9-challenge": "Exam arena"
+  };
+
   const MODULES = [
     {
       id: "place-value-scales",
@@ -2481,10 +2507,12 @@
   };
 
   function generateProblem(moduleId, variantIndex) {
-    const generator = GENERATORS[moduleId] || GENERATORS[MODULE_IDS[0]];
+    const id = GENERATORS[moduleId] ? moduleId : MODULE_IDS[0];
+    const generator = GENERATORS[id];
     const problem = applyAnswerVariety(generator(variantIndex), variantIndex);
-    problem.id = moduleId + "-" + variantIndex;
+    problem.id = id + "-" + variantIndex;
     problem.variantIndex = variantIndex;
+    if (CLASSIC_SKILLS[id]) problem.skillTag = CLASSIC_SKILLS[id];
     return problem;
   }
 
@@ -2492,13 +2520,15 @@
     if (!hasChallengeBank(moduleId)) {
       return generateProblem(moduleId, variantIndex || 0);
     }
-    const generator = CHALLENGE_GENERATORS[moduleId] || CHALLENGE_GENERATORS[MODULE_IDS[0]];
-    const variantCount = challengeVariantCount(moduleId);
+    const id = CHALLENGE_GENERATORS[moduleId] ? moduleId : MODULE_IDS[0];
+    const generator = CHALLENGE_GENERATORS[id];
+    const variantCount = challengeVariantCount(id);
     const challengeIndex = ((variantIndex || 0) % variantCount + variantCount) % variantCount;
     const problem = applyAnswerVariety(generator(challengeIndex), challengeIndex + 1000);
-    problem.id = moduleId + "-challenge-" + challengeIndex;
+    problem.id = id + "-challenge-" + challengeIndex;
     problem.variantIndex = challengeIndex;
     problem.isChallenge = true;
+    if (CLASSIC_SKILLS[id]) problem.skillTag = CLASSIC_SKILLS[id];
     return problem;
   }
 
@@ -2576,6 +2606,7 @@
   const api = {
     MODULES,
     MODULE_IDS,
+    CLASSIC_SKILLS,
     ROUND_LENGTH,
     CHALLENGE_VARIANTS_PER_MODULE,
     CHALLENGE_VARIANTS_BY_MODULE,

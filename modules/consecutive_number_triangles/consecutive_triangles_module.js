@@ -47,6 +47,21 @@
   const CLASSIC_IDS = CLASSICS.map((classic) => classic.id);
   const CLASSIC_BY_ID = Object.fromEntries(CLASSICS.map((classic) => [classic.id, classic]));
 
+  // Maps each classic to a registry skill so the skill-coverage gate can
+  // verify the bank covers every skill the registry promises.
+  // Registry skills: ["Row end", "Seat value", "Find address",
+  // "Even twin", "Wide row"].
+  const CLASSIC_SKILLS = {
+    "consecutive.row-length": "Row end",
+    "consecutive.row-end": "Row end",
+    "consecutive.seat-value": "Seat value",
+    "consecutive.row-sum": "Seat value",
+    "consecutive.find-address": "Find address",
+    "even.seat-value": "Even twin",
+    "even.find-address": "Even twin",
+    "wide.seat-value": "Wide row"
+  };
+
   function triangular(n) {
     return (n * (n + 1)) / 2;
   }
@@ -329,12 +344,14 @@
     const set = PROBLEM_SETS[classicId];
     const base = set[variantIndex % set.length];
     const classic = CLASSIC_BY_ID[classicId];
+    const skillTag = CLASSIC_SKILLS[classicId];
     return {
       ...base,
       id: classicId + "." + variantIndex,
       classicId,
       nickname: classic.nickname,
       skill: classic.skill,
+      skillTag,
       source: "Lesson 7 Triangular Number Tables",
       rowConvention: "rows_start_at_1_positions_start_at_1"
     };
@@ -519,8 +536,8 @@
       svg: introSceneSeatValue
     },
     {
-      title: "Reverse Address",
-      purpose: "Find row and position from a value.",
+      title: "Find Address",
+      purpose: "Find address: work backwards from a value to its row and seat.",
       caption: "To work backwards, trap the value between two row ends. Sixty is after fifty-five and before sixty-six, so it is in row eleven. It is five after fifty-five, so it is position five.",
       durationMs: 17000,
       svg: introSceneReverse
@@ -540,9 +557,9 @@
       svg: introSceneEvenTwin
     },
     {
-      title: "Wide Challenge",
-      purpose: "Separate the stretch pattern from the ordinary map.",
-      caption: "The wide challenge triangle is different. Its rows have one, three, five, seven seats. That makes its row ends square numbers, not triangular numbers.",
+      title: "Wide Row",
+      purpose: "Wide row triangle: separate the stretch pattern from the ordinary map.",
+      caption: "The wide row triangle is different. Its rows have one, three, five, seven seats. That makes its row ends square numbers, not triangular numbers.",
       durationMs: 15000,
       svg: introSceneWide
     },
@@ -903,6 +920,8 @@
   const api = {
     CLASSICS,
     CLASSIC_IDS,
+    CLASSIC_SKILLS,
+    INTRO_SCENES,
     triangular,
     ordinaryValue,
     ordinaryAddress,

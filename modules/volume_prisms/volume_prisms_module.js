@@ -3,6 +3,23 @@
 
   const ROUND_LENGTH = 10;
 
+  // Maps each classic to a registry skill so the skill-coverage gate can
+  // verify the bank covers every skill the registry promises.
+  // Registry skills: ["Base area", "Hollow prisms", "Composite faces",
+  // "Water rise", "Partial submerge"].
+  const CLASSIC_SKILLS = {
+    "cuboid-warmup": "Base area",
+    "base-area-stack": "Base area",
+    "hollow-prism": "Hollow prisms",
+    "hollow-height": "Hollow prisms",
+    "composite-cross-section": "Composite faces",
+    "water-rise-volume": "Water rise",
+    "new-water-level": "Water rise",
+    "full-tank-removal": "Partial submerge",
+    "partial-submerged-block": "Partial submerge",
+    "extensive-cross-section": "Composite faces"
+  };
+
   const CLASSICS = [
     {
       id: "cuboid-warmup",
@@ -14,7 +31,9 @@
       id: "base-area-stack",
       nickname: "Base Area Stack",
       skill: "Treat any prism as one base area stacked through a height.",
-      sourcePages: "Book 86 / PDF 96"
+      sourcePages: "Book 86 / PDF 96",
+      // Prism shape varies per variant by design (triangular / rectangular / cylinder-style / pentagonal) — recognising "any prism is base x height" across shapes IS the lesson.
+      variantStability: false
     },
     {
       id: "hollow-prism",
@@ -32,7 +51,9 @@
       id: "composite-cross-section",
       nickname: "Split The Face",
       skill: "Split a cross-section into rectangles and triangles, then multiply by prism length.",
-      sourcePages: "Book 88, 93-96 / PDF 98, 103-106"
+      sourcePages: "Book 88, 93-96 / PDF 98, 103-106",
+      // Composite shape alternates per variant (house = rectangle + triangle vs L-shape = rectangle minus corner) by design — splitting different composite cross-sections IS the lesson.
+      variantStability: false
     },
     {
       id: "water-rise-volume",
@@ -97,13 +118,13 @@
     },
     {
       title: "Hollow Means Subtract",
-      purpose: "Keep the missing space visible.",
+      purpose: "Hollow prisms: keep the missing space visible.",
       kind: "hollow",
       caption: "A hole is missing space. Find the outside area, remove the hole area, then multiply by the prism height."
     },
     {
       title: "Split The Cross-Section",
-      purpose: "Prepare composite prisms.",
+      purpose: "Composite faces: split the cross-section into friendly shapes.",
       kind: "composite",
       caption: "For a composite prism, split the front face into friendly shapes. Add their areas, then stretch that area through the prism."
     },
@@ -657,7 +678,9 @@
 
   function generateProblem(classicId, variantIndex) {
     const id = CLASSIC_BY_ID[classicId] ? classicId : CLASSIC_IDS[0];
-    return GENERATORS[id](variantIndex || 0);
+    const problem = GENERATORS[id](variantIndex || 0);
+    if (problem && CLASSIC_SKILLS[id]) problem.skillTag = CLASSIC_SKILLS[id];
+    return problem;
   }
 
   function checkAnswer(problem, input) {
@@ -958,6 +981,7 @@
     CLASSICS,
     CLASSIC_IDS,
     CLASSIC_BY_ID,
+    CLASSIC_SKILLS,
     SOURCE_COVERAGE,
     INTRO_SCENES,
     ROUND_LENGTH,

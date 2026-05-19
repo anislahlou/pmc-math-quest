@@ -26,7 +26,12 @@ function run() {
   assert.ok(dashboard.includes("Agent Orchestration Dashboard"), "Dashboard should describe the agent command center");
   assert.ok(dashboard.includes("data-agent="), "Dashboard should identify agent steps");
   assert.ok(dashboard.includes("../agents/"), "Dashboard should link to agent protocols");
-  assert.ok(dashboard.includes("../modules/"), "Dashboard should link to module folders");
+  assert.ok(dashboard.includes("registry.json"), "Dashboard should load module list from the registry");
+  assert.ok(dashboard.includes("mission-grid"), "Dashboard should render a mission-grid container");
+  const registry = JSON.parse(fs.readFileSync(path.join(__dirname, "../modules/registry.json"), "utf8"));
+  const published = (registry.modules || []).filter((m) => m && m.status === "published");
+  assert.ok(published.length > 0, "Registry should expose at least one published module");
+  assert.ok(published.every((m) => m.paths && typeof m.paths.launch === "string" && m.paths.launch.startsWith("modules/")), "Every published module should have a paths.launch under modules/");
 }
 
 if (require.main === module) {

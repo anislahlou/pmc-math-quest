@@ -15,7 +15,9 @@
       id: "equal-height-base-ratio",
       nickname: "Base Ratio Mirror",
       skill: "When triangles have the same height, their areas follow their bases in the same ratio.",
-      sourcePages: "Book Lesson 17 area review; PDF source-informed archetype, exact visual replica not claimed"
+      sourcePages: "Book Lesson 17 area review; PDF source-informed archetype, exact visual replica not claimed",
+      // Question mode alternates per variant by design (variant 0 = "find the ratio" leaves both area labels blank; variant 1 = "find Area B given Area A" labels Area A only). The diagram skeleton is the same; the label set differs because the question differs.
+      variantStability: false
     },
     {
       id: "same-base-height",
@@ -33,7 +35,9 @@
       id: "multi-triangle-height",
       nickname: "Area Order Line",
       skill: "Compare three or more same-height triangles by comparing their base lengths.",
-      sourcePages: "Book Lesson 17 mixed area reasoning; PDF source-informed archetype, exact visual replica not claimed"
+      sourcePages: "Book Lesson 17 mixed area reasoning; PDF source-informed archetype, exact visual replica not claimed",
+      // Question mode alternates per variant by design (variant 0 = "find the largest area given the smallest" labels area-0; variant 1 = "which is largest?" omits all area labels). Same three-triangle skeleton, different labels because the question differs.
+      variantStability: false
     },
     {
       id: "shared-base-split",
@@ -51,7 +55,9 @@
       id: "algebraic-targets",
       nickname: "Expression Area Chase",
       skill: "Turn equal-height area facts into an equation, then answer the exact requested target.",
-      sourcePages: "Book Lesson 17 algebraic extension; PDF source-informed archetype, exact visual replica not claimed"
+      sourcePages: "Book Lesson 17 algebraic extension; PDF source-informed archetype, exact visual replica not claimed",
+      // Question mode alternates per variant by design (variant 0 = "equal areas, solve for x" uses pure labels; variant 1 = "find a + b given the two areas" labels both areas). Same two-triangle skeleton, different label set per question type.
+      variantStability: false
     },
     {
       id: "equal-area-reverse",
@@ -70,6 +76,23 @@
   const CLASSIC_IDS = CLASSICS.map((classic) => classic.id);
   const CLASSIC_BY_ID = Object.fromEntries(CLASSICS.map((classic) => [classic.id, classic]));
 
+  // Maps each classic to a registry skill so the skill-coverage gate can
+  // verify the bank covers every skill the registry promises.
+  // Registry skills: ["Height detective", "Area ratios", "Split bases",
+  // "Reverse formula", "Algebra targets"].
+  const CLASSIC_SKILLS = {
+    "area-formula": "Height detective",
+    "equal-height-base-ratio": "Area ratios",
+    "same-base-height": "Area ratios",
+    "reverse-from-area": "Reverse formula",
+    "multi-triangle-height": "Area ratios",
+    "shared-base-split": "Split bases",
+    "compound-difference": "Split bases",
+    "algebraic-targets": "Algebra targets",
+    "equal-area-reverse": "Reverse formula",
+    "diagram-interpretation": "Height detective"
+  };
+
   const SOURCE_COVERAGE = {
     "area-formula": ["Triangle area rule: area = base x perpendicular height / 2", "Misconception: sloping side is not the height"],
     "equal-height-base-ratio": ["Same-height area comparison derived from the common 1/2 x height factor"],
@@ -86,7 +109,7 @@
   const INTRO_SCENES = [
     {
       title: "Same Height Spotter",
-      purpose: "See what equal height actually means.",
+      purpose: "Height detective work: see what equal height actually means.",
       classicId: "diagram-interpretation",
       kind: "height-spotter",
       audio: "audio/intro_01_same_height_spotter.wav",
@@ -126,7 +149,7 @@
     },
     {
       title: "Double Then Divide",
-      purpose: "Reverse the area rule safely.",
+      purpose: "Reverse formula: undo area = base x height / 2 safely.",
       classicId: "reverse-from-area",
       kind: "reverse",
       audio: "audio/intro_05_double_then_divide.wav",
@@ -726,8 +749,11 @@
   }
 
   function generateProblem(classicId, variantIndex) {
-    const generator = GENERATORS[classicId] || GENERATORS[CLASSIC_IDS[0]];
-    return generator(variantIndex || 0);
+    const id = GENERATORS[classicId] ? classicId : CLASSIC_IDS[0];
+    const generator = GENERATORS[id];
+    const problem = generator(variantIndex || 0);
+    if (problem && CLASSIC_SKILLS[id]) problem.skillTag = CLASSIC_SKILLS[id];
+    return problem;
   }
 
   function generateChallengeProblem(variantIndex) {
@@ -1018,6 +1044,7 @@
   const api = {
     CLASSICS,
     CLASSIC_IDS,
+    CLASSIC_SKILLS,
     SOURCE_COVERAGE,
     INTRO_SCENES,
     INTRO_SCENE_MS,

@@ -948,48 +948,7 @@
             <strong>Mission map</strong>
             <span class="xp-pill">Skill XP active</span>
           </div>
-          <div class="quest-map">
-            <a class="quest-node" href="../modules/pascal/pascal_triangle_practice_share.html">
-              <span class="node-number">1</span>
-              <strong>Pascal Triangle</strong>
-              <small>Pattern lab</small>
-            </a>
-            <a class="quest-node" href="../modules/consecutive_number_triangles/consecutive_triangles_practice_share.html">
-              <span class="node-number">2</span>
-              <strong>Number Triangles</strong>
-              <small>Clue chase</small>
-            </a>
-            <a class="quest-node" href="../modules/angles/angles_practice_share.html">
-              <span class="node-number">3</span>
-              <strong>Angles</strong>
-              <small>Boss puzzle</small>
-            </a>
-            <a class="quest-node" href="../modules/u2t2_units/u2t2_units_mission.html">
-              <span class="node-number">4</span>
-              <strong>U2T2 Units</strong>
-              <small>Year quest</small>
-            </a>
-            <a class="quest-node" href="../modules/volume_prisms/volume_prisms_module.html">
-              <span class="node-number">5</span>
-              <strong>Volume of Prisms</strong>
-              <small>Stack lab</small>
-            </a>
-            <a class="quest-node" href="../modules/volume_problem_extension/volume_extension_module.html">
-              <span class="node-number">6</span>
-              <strong>Volume Extension</strong>
-              <small>Cube lab</small>
-            </a>
-            <a class="quest-node" href="../modules/triangle_sides/triangle_sides_module.html">
-              <span class="node-number">7</span>
-              <strong>Triangle Sides</strong>
-              <small>Pythagoras lab</small>
-            </a>
-            <a class="quest-node" href="../modules/equal_height_triangles/equal_height_triangles_module.html">
-              <span class="node-number">8</span>
-              <strong>Equal Height</strong>
-              <small>Area ratio lab</small>
-            </a>
-          </div>
+          <div class="quest-map" id="quest-map"></div>
           <div class="level-bar" aria-label="Quest progress">
             <div class="level-copy">
               <span>Pattern power</span>
@@ -1008,301 +967,111 @@
         <p>Single chapters build sharp skills. The U2T2 Units mission maps the whole year into smaller submodule quests.</p>
       </section>
 
-      <section class="module-grid" aria-label="Available modules">
-        <article class="module-card u2t2">
-          <div class="card-top">
-            <div>
-              <span class="chapter">Year mission</span>
-              <h3>U2T2 Units</h3>
-            </div>
-            <div class="difficulty" aria-label="Difficulty: five out of five">
-              <span>Power level</span>
-              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span></span>
-            </div>
-          </div>
-          <p>Master the whole U2 maths map: number, algebra, geometry, ratio, data, 3D, and mixed exam reasoning.</p>
-          <div class="card-visual" aria-hidden="true">
-            <div class="unit-map">
-              <span>Number</span>
-              <span>Algebra</span>
-              <span>Geometry</span>
-              <span>Ratio + Data</span>
-              <span>Exam Arena</span>
-            </div>
-          </div>
-          <div class="skill-list" aria-label="U2T2 skills">
-            <span>5 zones</span>
-            <span>17 submodules</span>
-            <span>Review Prep 9 lab</span>
-            <span>Live practice</span>
-          </div>
-          <div class="actions">
-            <a class="button coral" href="../modules/u2t2_units/u2t2_units_mission.html">Open U2T2 Units</a>
-          </div>
-        </article>
+      <section class="module-grid" id="module-grid" aria-label="Available modules"></section>
 
-        <article class="module-card pascal">
-          <div class="card-top">
-            <div>
-              <span class="chapter">Chapter 1</span>
-              <h3>Pascal Triangle</h3>
-            </div>
-            <div class="difficulty" aria-label="Difficulty: two out of five">
-              <span>Power level</span>
-              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span></span><span></span><span></span></span>
-            </div>
-          </div>
-          <p>Spot row patterns, parent rules, row totals, and reverse clues inside a number pyramid.</p>
-          <div class="card-visual" aria-hidden="true">
-            <div class="pascal-stack">
-              <div class="pascal-row"><span>1</span></div>
-              <div class="pascal-row"><span>1</span><span>1</span></div>
-              <div class="pascal-row"><span>1</span><span>2</span><span>1</span></div>
-              <div class="pascal-row"><span>1</span><span>3</span><span>3</span><span>1</span></div>
-            </div>
-          </div>
-          <div class="skill-list" aria-label="Pascal skills">
-            <span>Parent rule</span>
-            <span>Row doubler</span>
-            <span>Third stair</span>
-            <span>Reverse clues</span>
-          </div>
-          <div class="actions">
-            <a class="button" href="../modules/pascal/pascal_triangle_practice_share.html">Launch Pascal</a>
-          </div>
-        </article>
+      <script src="../modules/registry.js"></script>
+      <script src="./card_visuals.js"></script>
+      <script>
+        const CARD_VISUAL_GLOBALS = (typeof window !== "undefined" && window.PMC_CARD_VISUALS) || {};
+        const cardVisuals = CARD_VISUAL_GLOBALS.cardVisuals || {};
+        const cardMeta = CARD_VISUAL_GLOBALS.cardMeta || {};
+        const questNodeVisuals = CARD_VISUAL_GLOBALS.questNodeVisuals || {};
+        if (!CARD_VISUAL_GLOBALS.cardVisuals) {
+          console.warn("[run-app] window.PMC_CARD_VISUALS is missing — was run/card_visuals.js loaded?");
+        }
 
-        <article class="module-card volume">
-          <div class="card-top">
-            <div>
-              <span class="chapter">Lesson 15</span>
-              <h3>Volume of Prisms</h3>
-            </div>
-            <div class="difficulty" aria-label="Difficulty: four out of five">
-              <span>Power level</span>
-              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></span>
-            </div>
-          </div>
-          <p>Stack cross-sections, subtract holes, split composite faces, and solve water-level puzzles with fresh numbers.</p>
-          <div class="card-visual" aria-hidden="true">
-            <svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Volume prism preview">
-              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
-              <polygon points="65,48 168,48 212,75 110,75" fill="#e5f7f9" stroke="#0d263f" stroke-width="3"></polygon>
-              <rect x="65" y="75" width="103" height="82" fill="#fff8dc" stroke="#0d263f" stroke-width="3"></rect>
-              <polygon points="168,75 212,48 212,130 168,157" fill="#cdeff4" stroke="#0d263f" stroke-width="3"></polygon>
-              <polygon points="105,55 130,55 140,61 116,61" fill="#607983" stroke="#0d263f" stroke-width="2"></polygon>
-              <rect x="190" y="96" width="70" height="60" fill="#ffffff" stroke="#0d263f" stroke-width="3"></rect>
-              <rect x="193" y="125" width="64" height="28" fill="#95dcf2" opacity="0.8"></rect>
-              <circle cx="225" cy="137" r="11" fill="#607983"></circle>
-              <text x="117" y="174" text-anchor="middle">area x height</text>
-              <text x="226" y="174" text-anchor="middle">water rise</text>
-            </svg>
-          </div>
-          <div class="skill-list" aria-label="Volume skills">
-            <span>Base area</span>
-            <span>Hollow prisms</span>
-            <span>Composite faces</span>
-            <span>Water rise</span>
-            <span>Partial submerge</span>
-          </div>
-          <div class="actions">
-            <a class="button" href="../modules/volume_prisms/volume_prisms_module.html">Launch Volume</a>
-          </div>
-        </article>
+        const DIFFICULTY_WORDS = ["zero", "one", "two", "three", "four", "five"];
 
-        <article class="module-card volume-extension">
-          <div class="card-top">
-            <div>
-              <span class="chapter">Lesson 16</span>
-              <h3>Volume Problem Extension</h3>
-            </div>
-            <div class="difficulty" aria-label="Difficulty: four out of five">
-              <span>Power level</span>
-              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></span>
-            </div>
-          </div>
-          <p>Count cube solids by layers, missing cells, tunnels, height maps, front-left-plan views, and water extensions.</p>
-          <div class="card-visual" aria-hidden="true">
-            <svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Volume extension preview">
-              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
-              <g stroke="#0d263f" stroke-width="2">
-                <rect x="44" y="36" width="34" height="34" fill="#d8e6ea"></rect>
-                <rect x="78" y="36" width="34" height="34" fill="#d8e6ea"></rect>
-                <rect x="112" y="36" width="34" height="34" fill="#d8e6ea"></rect>
-                <rect x="44" y="70" width="34" height="34" fill="#d8e6ea"></rect>
-                <rect x="78" y="70" width="34" height="34" fill="#ffffff"></rect>
-                <rect x="112" y="70" width="34" height="34" fill="#d8e6ea"></rect>
-                <rect x="44" y="104" width="34" height="34" fill="#d8e6ea"></rect>
-                <rect x="78" y="104" width="34" height="34" fill="#d8e6ea"></rect>
-                <rect x="112" y="104" width="34" height="34" fill="#d8e6ea"></rect>
-              </g>
-              <text x="95" y="164" text-anchor="middle">layer count</text>
-              <g transform="translate(184 42)" stroke="#0d263f" stroke-width="2">
-                <rect x="0" y="78" width="28" height="28" fill="#fff8dc"></rect>
-                <rect x="28" y="50" width="28" height="56" fill="#fff8dc"></rect>
-                <rect x="56" y="22" width="28" height="84" fill="#fff8dc"></rect>
-              </g>
-              <text x="226" y="164" text-anchor="middle">height map</text>
-            </svg>
-          </div>
-          <div class="skill-list" aria-label="Volume extension skills">
-            <span>Layer maps</span>
-            <span>Tunnel overlap</span>
-            <span>Height maps</span>
-            <span>Views</span>
-            <span>Cube displacement</span>
-          </div>
-          <div class="actions">
-            <a class="button" href="../modules/volume_problem_extension/volume_extension_module.html">Launch Extension</a>
-          </div>
-        </article>
+        function renderQuestNode(mod) {
+          const inner = questNodeVisuals[mod.id];
+          if (inner == null) {
+            console.warn(`[run-app] no questNodeVisuals entry for ${mod.id}`);
+          }
+          const a = document.createElement("a");
+          a.className = "quest-node";
+          a.href = "../" + mod.paths.launch;
+          a.innerHTML = inner != null ? inner : `<strong>${mod.displayName}</strong>`;
+          return a;
+        }
 
-        <article class="module-card triangles">
-          <div class="card-top">
-            <div>
-              <span class="chapter">Chapter 2</span>
-              <h3>Consecutive Number Triangles</h3>
-            </div>
-            <div class="difficulty" aria-label="Difficulty: three out of five">
-              <span>Power level</span>
-              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span><span></span></span>
-            </div>
-          </div>
-          <p>Use row-and-seat addresses to find the number hiding in each triangle position.</p>
-          <div class="card-visual" aria-hidden="true">
-            <div class="number-triangle">
-              <div class="pascal-row"><span>1</span></div>
-              <div class="pascal-row"><span>2</span><span>3</span></div>
-              <div class="pascal-row"><span>4</span><span>5</span><span>6</span></div>
-              <div class="pascal-row wide"><span>7</span><span>8</span><span>9</span><span>10</span></div>
-            </div>
-          </div>
-          <div class="skill-list" aria-label="Consecutive triangle skills">
-            <span>Row end</span>
-            <span>Seat value</span>
-            <span>Find address</span>
-            <span>Even twin</span>
-            <span>Wide row</span>
-          </div>
-          <div class="actions">
-            <a class="button" href="../modules/consecutive_number_triangles/consecutive_triangles_practice_share.html">Launch Chapter 2</a>
-            <a class="button secondary" href="../modules/consecutive_number_triangles/consecutive_triangles_module.html">Source version</a>
-          </div>
-        </article>
+        function renderDots(difficulty) {
+          const total = 5;
+          const filled = Math.max(0, Math.min(total, difficulty | 0));
+          let html = "";
+          for (let i = 0; i < total; i += 1) {
+            html += i < filled ? "<span class=\"filled\"></span>" : "<span></span>";
+          }
+          return html;
+        }
 
-        <article class="module-card angles">
-          <div class="card-top">
-            <div>
-              <span class="chapter">Chapter 3</span>
-              <h3>Angles</h3>
-            </div>
-            <div class="difficulty" aria-label="Difficulty: four out of five">
-              <span>Power level</span>
-              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></span>
-            </div>
-          </div>
-          <p>Chase triangle totals, parallel lines, zigzags, polygons, and regular corners.</p>
-          <div class="card-visual" aria-hidden="true">
-            <div class="angle-stage">
-              <span class="angle-line one"></span>
-              <span class="angle-line two"></span>
-              <span class="angle-arc"></span>
-              <span class="angle-badge">x = ?</span>
-            </div>
-          </div>
-          <div class="skill-list" aria-label="Angle skills">
-            <span>Triangle total</span>
-            <span>Z/F/C angles</span>
-            <span>Zigzag totals</span>
-            <span>Angle chase</span>
-            <span>Polygon formula</span>
-          </div>
-          <div class="actions">
-            <a class="button" href="../modules/angles/angles_practice_share.html">Launch Angles</a>
-            <a class="button secondary" href="../modules/angles/angles_module.html">Source version</a>
-          </div>
-        </article>
+        function renderCard(mod) {
+          const meta = cardMeta[mod.id] || {};
+          const visual = cardVisuals[mod.cardVariant];
+          if (visual == null) {
+            console.warn(`[run-app] no cardVisuals entry for cardVariant=${mod.cardVariant} (module ${mod.id})`);
+          }
+          const skillsAriaLabel = meta.skillsAriaLabel || `${mod.displayName} skills`;
+          const actionsHtml =
+            meta.actionsHtml ||
+            `<a class="button" href="../${mod.paths.launch}">Launch ${mod.shortLabel || mod.displayName}</a>`;
+          const diffWord = DIFFICULTY_WORDS[Math.max(0, Math.min(5, mod.difficulty | 0))];
+          const skillsHtml = (mod.skills || []).map((s) => `<span>${s}</span>`).join("\n            ");
 
-        <article class="module-card triangle-sides">
+          const article = document.createElement("article");
+          article.className = `module-card ${mod.cardVariant}`;
+          article.innerHTML = `
           <div class="card-top">
             <div>
-              <span class="chapter">Lesson 17</span>
-              <h3>Relationship Between Sides in Triangles</h3>
+              <span class="chapter">${mod.chapter}</span>
+              <h3>${mod.displayName}</h3>
             </div>
-            <div class="difficulty" aria-label="Difficulty: four out of five">
+            <div class="difficulty" aria-label="Difficulty: ${diffWord} out of five">
               <span>Power level</span>
-              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></span>
+              <span class="dots" aria-hidden="true">${renderDots(mod.difficulty)}</span>
             </div>
           </div>
-          <p>Decide whether three lengths can make a triangle, then use isosceles splits and Pythagoras to find hidden sides, perimeters, areas, and right-turn distances.</p>
+          <p>${mod.blurb}</p>
           <div class="card-visual" aria-hidden="true">
-            <svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Triangle sides preview">
-              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
-              <polygon points="54,148 156,148 112,58" fill="#e8f6ff" stroke="#0d263f" stroke-width="4"></polygon>
-              <path d="M112 58 L112 148" stroke="#0d263f" stroke-width="3" stroke-dasharray="6 5"></path>
-              <path d="M112 148 L156 148" stroke="#f36f45" stroke-width="5"></path>
-              <path d="M112 58 L156 148" stroke="#1790a6" stroke-width="5"></path>
-              <text x="83" y="108" text-anchor="middle">13</text>
-              <text x="132" y="168" text-anchor="middle">5</text>
-              <text x="154" y="102" text-anchor="middle">?</text>
-              <text x="221" y="74" text-anchor="middle">a² + b²</text>
-              <text x="221" y="103" text-anchor="middle">= c²</text>
-              <path d="M206 122 L246 122 L246 150" fill="none" stroke="#0d263f" stroke-width="5" stroke-linecap="round"></path>
-              <circle cx="246" cy="150" r="8" fill="#f36f45"></circle>
-            </svg>
+            ${visual != null ? visual : ""}
           </div>
-          <div class="skill-list" aria-label="Triangle sides skills">
-            <span>Triangle inequality</span>
-            <span>Isosceles choice</span>
-            <span>Pythagoras</span>
-            <span>Missing leg</span>
-            <span>Area chase</span>
+          <div class="skill-list" aria-label="${skillsAriaLabel}">
+            ${skillsHtml}
           </div>
           <div class="actions">
-            <a class="button" href="../modules/triangle_sides/triangle_sides_module.html">Launch Triangle Sides</a>
-            <a class="button secondary" href="../modules/triangle_sides/triangle_sides_source_extract.md">Source extract</a>
-          </div>
-        </article>
+            ${actionsHtml}
+          </div>`;
+          return article;
+        }
 
-        <article class="module-card equal-height">
-          <div class="card-top">
-            <div>
-              <span class="chapter">Geometry</span>
-              <h3>Triangles With Equal Height</h3>
-            </div>
-            <div class="difficulty" aria-label="Difficulty: four out of five">
-              <span>Power level</span>
-              <span class="dots" aria-hidden="true"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></span>
-            </div>
-          </div>
-          <p>Spot shared heights, compare area ratios, reverse the formula, split bases, subtract shaded regions, and solve expression-labelled triangle questions.</p>
-          <div class="card-visual" aria-hidden="true">
-            <svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Equal-height triangles preview">
-              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
-              <line x1="36" y1="42" x2="264" y2="42" stroke="#9fb9c4" stroke-width="3"></line>
-              <line x1="36" y1="146" x2="264" y2="146" stroke="#9fb9c4" stroke-width="3"></line>
-              <polygon points="48,146 116,146 78,42" fill="#e8f6ff" stroke="#0d263f" stroke-width="4"></polygon>
-              <polygon points="150,146 252,146 196,42" fill="#fff1eb" stroke="#0d263f" stroke-width="4"></polygon>
-              <line x1="134" y1="42" x2="134" y2="146" stroke="#f36f45" stroke-width="4" stroke-dasharray="6 5"></line>
-              <path d="M134 128 h18 v18" fill="none" stroke="#f36f45" stroke-width="3"></path>
-              <text x="82" y="168" text-anchor="middle">base 2</text>
-              <text x="202" y="168" text-anchor="middle">base 3</text>
-              <text x="154" y="92" text-anchor="middle">same height</text>
-            </svg>
-          </div>
-          <div class="skill-list" aria-label="Equal height triangle skills">
-            <span>Height detective</span>
-            <span>Area ratios</span>
-            <span>Split bases</span>
-            <span>Reverse formula</span>
-            <span>Algebra targets</span>
-          </div>
-          <div class="actions">
-            <a class="button" href="../modules/equal_height_triangles/equal_height_triangles_module.html">Launch Equal Height</a>
-            <a class="button secondary" href="../modules/equal_height_triangles/equal_height_triangles_source_extract.md">Source extract</a>
-          </div>
-        </article>
-      </section>
+        function main() {
+          const registry = (typeof window !== "undefined" && window.PMC_REGISTRY) || null;
+          if (registry == null) {
+            console.warn("[run-app] window.PMC_REGISTRY is missing — was modules/registry.js loaded?");
+            return;
+          }
+          const modules = (registry.modules || [])
+            .filter((m) => m.status === "published")
+            .sort((a, b) => a.order - b.order);
+
+          const questMap = document.getElementById("quest-map");
+          const moduleGrid = document.getElementById("module-grid");
+
+          for (const mod of modules) {
+            try {
+              if (questMap) questMap.appendChild(renderQuestNode(mod));
+            } catch (err) {
+              console.warn(`[run-app] skipping quest node ${mod.id}: ${err.message}`);
+            }
+            try {
+              if (moduleGrid) moduleGrid.appendChild(renderCard(mod));
+            } catch (err) {
+              console.warn(`[run-app] skipping ${mod.id}: ${err.message}`);
+            }
+          }
+        }
+
+        main();
+      </script>
 
       <section class="learning-powers" aria-label="Learning style">
         <div class="power">

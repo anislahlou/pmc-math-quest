@@ -1,23 +1,87 @@
-require("../modules/u2t2_units/u2t2_bank_quality_audit.js").run();
-require("../modules/u2t2_units/u2t2_module_tests.js").run();
-console.log("All U2T2 module tests passed.");
+const path = require("path");
+const fs = require("fs");
 
-require("../modules/volume_prisms/volume_prisms_bank_quality_audit.js").run();
-require("../modules/volume_prisms/volume_prisms_module_tests.js").run();
+const repoRoot = path.resolve(__dirname, "..");
+const registryPath = path.join(repoRoot, "modules", "registry.json");
+const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
 
-require("../modules/volume_problem_extension/volume_extension_bank_quality_audit.js").run();
-require("../modules/volume_problem_extension/volume_extension_module_tests.js").run();
+let failures = 0;
 
-require("../modules/triangle_sides/triangle_sides_bank_quality_audit.js").run();
-require("../modules/triangle_sides/triangle_sides_module_tests.js").run();
+// Sort by order so QA output is deterministic and matches the user-facing module sequence.
+const modules = [...registry.modules].sort((a, b) => a.order - b.order);
 
-require("../modules/equal_height_triangles/equal_height_triangles_bank_quality_audit.js").run();
-require("../modules/equal_height_triangles/equal_height_triangles_module_tests.js").run();
+// 1) Audits
+for (const m of modules) {
+  if (!m.qa.hasAudit) continue;
+  const auditAbs = path.join(repoRoot, m.paths.auditJs);
+  try {
+    const audit = require(auditAbs);
+    if (typeof audit.run === "function") {
+      audit.run();
+    }
+    // else: audit self-executes at require time (legacy pattern), which is fine.
+  } catch (err) {
+    failures++;
+    console.error(`[qa] audit failed for ${m.id}: ${err.message}`);
+  }
+}
 
-require("./math_display_quality_check.js").run();
-console.log("Math display quality check passed.");
+// 2) Math display check (cross-module)
+try {
+  require("./math_display_quality_check.js").run();
+} catch (err) {
+  failures++;
+  console.error(`[qa] math_display_quality_check failed: ${err.message}`);
+}
 
-require("../modules/angles/angles_module_tests.js");
-require("../modules/consecutive_number_triangles/consecutive_triangles_module_tests.js");
+// 3) Module tests
+for (const m of modules) {
+  if (!m.qa.hasTests) continue;
+  const testsAbs = path.join(repoRoot, m.paths.testsJs);
+  try {
+    const tests = require(testsAbs);
+    if (typeof tests.run === "function") {
+      tests.run();
+    }
+    // else: tests self-execute (some legacy test files do this), which is fine.
+  } catch (err) {
+    failures++;
+    console.error(`[qa] tests failed for ${m.id}: ${err.message}`);
+  }
+}
 
+// 4) Registry-driven gates (Phase 2bcd). These run independently — one failing
+//    does NOT skip the others. The user wants every gate to show its surface.
+const gates = [
+  { id: "skill-coverage", path: "./skill_coverage_lint.js" },
+  { id: "intro-pack", path: "./intro_pack_lint.js" },
+  { id: "diagram-parity", path: "./diagram_parity_lint.js" }
+];
+const gateOutcomes = [];
+for (const gate of gates) {
+  console.log(`\n[qa] running gate: ${gate.id}`);
+  try {
+    const gateMod = require(gate.path);
+    if (typeof gateMod.run !== "function") {
+      failures++;
+      gateOutcomes.push({ id: gate.id, status: "missing-run" });
+      console.error(`[qa] gate ${gate.id} does not export run()`);
+      continue;
+    }
+    gateMod.run();
+    gateOutcomes.push({ id: gate.id, status: "pass" });
+  } catch (err) {
+    failures++;
+    gateOutcomes.push({ id: gate.id, status: "fail", message: err.message });
+    console.error(`[qa] gate ${gate.id} failed: ${err.message}`);
+  }
+}
+
+console.log("\n[qa] gate summary:");
+for (const o of gateOutcomes) console.log(`  ${o.id}: ${o.status}${o.message ? " — " + o.message : ""}`);
+
+if (failures > 0) {
+  console.error(`\n[qa] ${failures} failure(s).`);
+  process.exit(1);
+}
 console.log("All app quality checks passed.");

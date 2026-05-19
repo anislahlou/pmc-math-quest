@@ -18,6 +18,21 @@
   const CLASSIC_IDS = CLASSICS.map((classic) => classic.id);
   const CLASSIC_BY_ID = Object.fromEntries(CLASSICS.map((classic) => [classic.id, classic]));
 
+  // Maps each classic to a registry skill so the skill-coverage gate can
+  // verify the bank covers every skill the registry promises.
+  // Registry skills: ["Triangle inequality", "Isosceles choice",
+  // "Pythagoras", "Missing leg", "Area chase"].
+  const CLASSIC_SKILLS = {
+    "triangle-gate": "Triangle inequality",
+    "isosceles-choice": "Isosceles choice",
+    "hypotenuse-builder": "Pythagoras",
+    "missing-leg": "Missing leg",
+    "shared-height-chase": "Area chase",
+    "isosceles-split-area": "Area chase",
+    "area-to-perimeter": "Pythagoras",
+    "right-turn-path": "Pythagoras"
+  };
+
   const SOURCE_COVERAGE = {
     "triangle-gate": ["Map shortest path triangle inequality", "Further exercise side-set choice"],
     "isosceles-choice": ["Exploration 1 two side lengths", "Homework isosceles perimeter"],
@@ -31,14 +46,14 @@
 
   const INTRO_SCENES = [
     {
-      title: "Triangle Gate",
-      purpose: "Check whether the sides can close.",
+      title: "Triangle Inequality",
+      purpose: "Check whether three lengths can close into a triangle.",
       classicId: "triangle-gate",
       kind: "gate",
       audio: "audio/intro_01_triangle_gate.wav",
       durationMs: 12200,
       caption: "Order the sides, then test short + short > longest. If the shorter pair cannot pass the longest side, no triangle forms.",
-      voiceover: "Start with the triangle gate. Put the three side lengths in order. Then ask one question: do the two shorter sides reach farther than the longest side?"
+      voiceover: "Start with the triangle inequality. Put the three side lengths in order. Then ask one question: do the two shorter sides reach farther than the longest side?"
     },
     {
       title: "Isosceles Choice",
@@ -47,12 +62,12 @@
       kind: "iso-choice",
       audio: "audio/intro_02_isosceles_choice.wav",
       durationMs: 12250,
-      caption: "When two sides are equal, the repeated side must still pass the triangle gate before you add the perimeter.",
+      caption: "When two sides are equal, the repeated side must still pass the triangle inequality before you add the perimeter.",
       voiceover: "For an isosceles triangle, two sides are equal. But do not repeat a side blindly. The two equal sides still have to close around the base."
     },
     {
-      title: "Hypotenuse Builder",
-      purpose: "Name and build the side across the right angle.",
+      title: "Pythagoras",
+      purpose: "Build the side across the right angle.",
       classicId: "hypotenuse-builder",
       kind: "hyp",
       audio: "audio/intro_03_hypotenuse_builder.wav",
@@ -62,7 +77,7 @@
     },
     {
       title: "Missing Leg",
-      purpose: "Reverse Pythagoras when the longest side is known.",
+      purpose: "Reverse Pythagoras when the hypotenuse is known.",
       classicId: "missing-leg",
       kind: "leg",
       audio: "audio/intro_04_missing_leg.wav",
@@ -72,13 +87,13 @@
     },
     {
       title: "Shared Height Chase",
-      purpose: "Use one hidden height in two right triangles.",
+      purpose: "Reuse one shared height across the right triangles inside a bigger figure.",
       classicId: "shared-height-chase",
       kind: "shared",
       audio: "audio/intro_05_shared_height.wav",
       durationMs: 12350,
-      caption: "One dropped height can belong to two smaller right triangles. Solve one side, then reuse the same height.",
-      voiceover: "Some diagrams hide two right triangles inside one bigger shape. Find the shared height in the first triangle, then use that same height again in the second triangle."
+      caption: "One dropped height can belong to two smaller right triangles. Solve one side, then reuse the same height to chase the area.",
+      voiceover: "Some diagrams hide two right triangles that share one perpendicular height. Drop a perpendicular into the bigger triangle, solve the first small right triangle to find that height, then carry the same height into the second small right triangle to finish the area."
     },
     {
       title: "Isosceles Split Area",
@@ -101,8 +116,8 @@
       voiceover: "Sometimes the book gives area first. Use the area formula backwards to find the height. Then use the half-base and height to find the equal side and the perimeter."
     },
     {
-      title: "Right-Turn Challenge",
-      purpose: "Turn a path into one right triangle.",
+      title: "Right-Turn Path",
+      purpose: "Turn a zigzag path into one big right triangle.",
       classicId: "right-turn-path",
       kind: "path",
       audio: "audio/intro_08_right_turn.wav",
@@ -355,7 +370,9 @@
       "area-to-perimeter": areaToPerimeterProblem,
       "right-turn-path": rightTurnPathProblem
     };
-    return generators[classicId](variantIndex);
+    const problem = generators[classicId](variantIndex);
+    if (problem && CLASSIC_SKILLS[classicId]) problem.skillTag = CLASSIC_SKILLS[classicId];
+    return problem;
   }
 
   function validateProblemMath(problem) {
@@ -505,6 +522,7 @@
   const api = {
     CLASSICS,
     CLASSIC_IDS,
+    CLASSIC_SKILLS,
     SOURCE_COVERAGE,
     INTRO_SCENES,
     INTRO_SCENE_MS,

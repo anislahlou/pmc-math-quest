@@ -11,13 +11,35 @@
     { id: "angles.parallel-zigzag-total", nickname: "Parallel Zigzag Total", skill: "Find an a + b total in a zigzag between parallel lines." },
     { id: "angles.parallel-chase", nickname: "Angle Chase", skill: "Chain straight-line, triangle, and parallel-line facts." },
     { id: "angles.equilateral-chase", nickname: "Equilateral Chase", skill: "Use equilateral-triangle facts inside a multi-step angle chase." },
-    { id: "angles.polygon-sum", nickname: "Polygon Total", skill: "Find a polygon interior-angle sum using (n - 2) x 180 degrees." },
-    { id: "angles.regular-polygon", nickname: "Regular Polygon Corner", skill: "Find a regular polygon angle from the interior-angle sum." },
-    { id: "angles.shape-combo", nickname: "Shape Stack", skill: "Combine standard angles from common regular shapes." }
+    // variantStability: false — the polygon's side count n varies per variant by design (the lesson is the (n - 2) x 180 formula across different n).
+    { id: "angles.polygon-sum", nickname: "Polygon Total", skill: "Find a polygon interior-angle sum using (n - 2) x 180 degrees.", variantStability: false },
+    // variantStability: false — the regular polygon's side count n varies per variant by design (pentagon, octagon, ... teach the same formula).
+    { id: "angles.regular-polygon", nickname: "Regular Polygon Corner", skill: "Find a regular polygon angle from the interior-angle sum.", variantStability: false },
+    // variantStability: false — the combined regular shapes vary per variant by design (hexagon+square+equilateral vs square+pentagon+octagon, etc.).
+    { id: "angles.shape-combo", nickname: "Shape Stack", skill: "Combine standard angles from common regular shapes.", variantStability: false }
   ];
 
   const CLASSIC_IDS = CLASSICS.map((classic) => classic.id);
   const CLASSIC_BY_ID = Object.fromEntries(CLASSICS.map((classic) => [classic.id, classic]));
+
+  // Maps each classic to a registry skill so the skill-coverage gate can
+  // verify the bank covers every skill the registry promises.
+  // Registry skills: ["Triangle total", "Z/F/C angles", "Zigzag totals",
+  // "Angle chase", "Polygon formula"].
+  const CLASSIC_SKILLS = {
+    "angles.triangle-sum": "Triangle total",
+    "angles.isosceles-base": "Triangle total",
+    "angles.straight-line": "Triangle total",
+    "angles.alternate": "Z/F/C angles",
+    "angles.corresponding": "Z/F/C angles",
+    "angles.co-interior": "Z/F/C angles",
+    "angles.parallel-zigzag-total": "Zigzag totals",
+    "angles.parallel-chase": "Angle chase",
+    "angles.equilateral-chase": "Angle chase",
+    "angles.polygon-sum": "Polygon formula",
+    "angles.regular-polygon": "Polygon formula",
+    "angles.shape-combo": "Angle chase"
+  };
 
   function escapeHtml(value) {
     return String(value)
@@ -313,12 +335,14 @@
     const set = PROBLEM_SETS[classicId];
     const base = set[variantIndex % set.length];
     const classic = CLASSIC_BY_ID[classicId];
+    const skillTag = CLASSIC_SKILLS[classicId];
     return {
       ...base,
       id: classicId + "." + variantIndex,
       classicId,
       nickname: classic.nickname,
       skill: classic.skill,
+      skillTag,
       source: "Lesson 3 Angles",
       rowConvention: "angles_in_degrees"
     };
@@ -681,12 +705,12 @@
     { title: "Angle Toolkit", purpose: "Name the moves before calculating.", caption: "Angles are not about guessing. This chapter gives you a toolkit: straight line, triangle, isosceles, Z-angle, F-angle, C-angle, parallel zigzag totals, equilateral chases, and polygon sums.", durationMs: 14000, svg: introSceneToolkit },
     { title: "Straight + Triangle", purpose: "Use the two 180 degree tools.", caption: "Two of your best tools are 180 degrees. Angles on a straight line add to one hundred eighty, and angles inside a triangle also add to one hundred eighty.", durationMs: 14000, svg: () => svgShell(svgText(500, 42, "Two different 180° tools", 31, "#174c5f") + line(130, 220, 450, 220) + arcLabel(250, 190, "180°", "#fff6df") + triangleDiagram(50, 60, "70°") + svgText(500, 500, "Line total and triangle total are both powerful.", 24, "#607983")) },
     { title: "Isosceles", purpose: "Equal sides create equal base angles.", caption: "In an isosceles triangle, matching side marks create matching base angles. If the top angle is thirty degrees, the other two share the remaining one hundred fifty degrees.", durationMs: 15000, svg: () => svgShell(svgText(500, 42, "Matching sides make matching angles", 31, "#174c5f") + triangleDiagram("75°", "75°", "30°") + line(375, 250, 390, 270, "#20313a", 4) + line(610, 270, 625, 250, "#20313a", 4)) },
-    { title: "Parallel Equal Moves", purpose: "Recognise Z and F equal angles.", caption: "When a line cuts through parallel lines, Z-angles are equal and F-angles are equal. These are pass-the-angle moves.", durationMs: 15000, svg: () => svgShell(svgText(500, 42, "Z and F angles match", 31, "#174c5f") + parallelDiagram("alternate", 64, 64)) },
-    { title: "Parallel 180 Move", purpose: "Use C-angles as a supplement pair.", caption: "C-angles are different. They do not match. They add to one hundred eighty degrees, so one angle is one hundred eighty minus the other.", durationMs: 15000, svg: () => svgShell(svgText(500, 42, "C angles add to 180°", 31, "#174c5f") + parallelDiagram("cointerior", 132, 48)) },
-    { title: "Parallel Zigzag", purpose: "Find a + b totals, not only single angles.", caption: "Some parallel-line questions ask for a plus b. In the source zigzag, keep both target angles in view and collect the turns that feed into the total.", durationMs: 16000, svg: () => visualSvg(generateProblem("angles.parallel-zigzag-total", 0), "worked") },
+    { title: "Z/F/C Angles", purpose: "Recognise Z, F, and C parallel-line moves together.", caption: "When a line cuts through parallel lines, Z-angles are equal and F-angles are equal, but C-angles add to 180 degrees. These are the three pass-the-angle moves you reach for first.", durationMs: 15000, svg: () => svgShell(svgText(500, 42, "Z and F angles match", 31, "#174c5f") + parallelDiagram("alternate", 64, 64)) },
+    { title: "Parallel 180 Move", purpose: "Use C-angles as a supplement pair within the Z/F/C angles family.", caption: "C-angles are different from Z-angles and F-angles. They do not match. They add to one hundred eighty degrees, so one angle is one hundred eighty minus the other.", durationMs: 15000, svg: () => svgShell(svgText(500, 42, "C angles add to 180°", 31, "#174c5f") + parallelDiagram("cointerior", 132, 48)) },
+    { title: "Zigzag Totals", purpose: "Find a + b zigzag totals, not only single angles.", caption: "Some parallel-line questions ask for a plus b. In the source zigzag, keep both target angles in view and collect the turns that feed into the total.", durationMs: 16000, svg: () => visualSvg(generateProblem("angles.parallel-zigzag-total", 0), "worked") },
     { title: "Angle Chase", purpose: "Chain two or three moves.", caption: "Competition diagrams often hide the answer two or three moves away. Convert outside angles with straight lines, then use the triangle total or parallel-line moves.", durationMs: 16000, svg: () => visualSvg(generateProblem("angles.parallel-chase", 0), "worked") },
     { title: "Equilateral Chase", purpose: "Bring the hidden 60 degree angles into the chase.", caption: "When an equilateral triangle appears, write in sixty degrees first. Then the extra given angles tell you how the crossing angle has turned.", durationMs: 16000, svg: () => visualSvg(generateProblem("angles.equilateral-chase", 0), "worked") },
-    { title: "Polygon Sum", purpose: "Use (n - 2) x 180, then divide if regular.", caption: "A polygon with n sides splits into n minus two triangles. That gives the total interior angle sum. If the polygon is regular, divide that total by the number of sides.", durationMs: 16000, svg: () => visualSvg(generateProblem("angles.regular-polygon", 0), "worked") },
+    { title: "Polygon Sum", purpose: "Polygon formula: use (n - 2) x 180, then divide by n if the polygon is regular.", caption: "A polygon with n sides splits into n minus two triangles. That gives the total interior angle sum. If the polygon is regular, divide that total by the number of sides.", durationMs: 16000, svg: () => visualSvg(generateProblem("angles.regular-polygon", 0), "worked") },
     { title: "Ready", purpose: "Move into practice.", caption: "Now train the moves. Say the name of the rule first, then calculate the angle.", durationMs: 9000, svg: () => svgShell(svgText(500, 58, "Ready to angle chase?", 36, "#174c5f") + svgCard(110, 150, 780, 58, "1. Name the move", "#ffffff", "#174c5f", 28) + svgCard(110, 245, 780, 58, "2. Calculate carefully", "#fff6df", "#b17700", 28) + svgCard(110, 340, 780, 58, "3. Pass the angle on", "#e8f6ef", "#2e7d5b", 28)) }
   ];
 
@@ -981,6 +1005,8 @@
   const api = {
     CLASSICS,
     CLASSIC_IDS,
+    CLASSIC_SKILLS,
+    INTRO_SCENES,
     generateProblem,
     checkAnswer,
     renderProblemVisual

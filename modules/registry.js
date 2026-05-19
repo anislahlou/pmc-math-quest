@@ -1,0 +1,392 @@
+// AUTO-GENERATED from modules/registry.json. Do not edit by hand.
+// Re-generate with: node scripts/sync-registry-js.mjs
+window.PMC_REGISTRY = {
+  "schemaVersion": 1,
+  "modules": [
+    {
+      "id": "pascal",
+      "slug": "pascal",
+      "displayName": "Pascal Triangle",
+      "shortLabel": "Pascal Triangle",
+      "chapter": "Chapter 1",
+      "unit": "patterns",
+      "topic": "Number Patterns",
+      "tags": [
+        "pascal",
+        "patterns",
+        "number-pyramid"
+      ],
+      "skills": [
+        "Parent rule",
+        "Row doubler",
+        "Third stair",
+        "Reverse clues"
+      ],
+      "difficulty": 2,
+      "order": 10,
+      "status": "published",
+      "cardVariant": "pascal",
+      "blurb": "Spot row patterns, parent rules, row totals, and reverse clues inside a number pyramid.",
+      "paths": {
+        "folder": "modules/pascal",
+        "launch": "modules/pascal/pascal_triangle_practice_share.html",
+        "moduleJs": null,
+        "auditJs": null,
+        "testsJs": null,
+        "introPack": "modules/pascal/pascal_triangle_intro_video_pack.md",
+        "sourceExtract": null,
+        "audioDir": null,
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": false,
+        "hasTests": false
+      }
+    },
+    {
+      "id": "consecutive_number_triangles",
+      "slug": "consecutive_number_triangles",
+      "displayName": "Consecutive Number Triangles",
+      "shortLabel": "Number Triangles",
+      "chapter": "Chapter 2",
+      "unit": "patterns",
+      "topic": "Number Triangles",
+      "tags": [
+        "triangles",
+        "patterns",
+        "addresses"
+      ],
+      "skills": [
+        "Row end",
+        "Seat value",
+        "Find address",
+        "Even twin",
+        "Wide row"
+      ],
+      "difficulty": 3,
+      "order": 20,
+      "status": "published",
+      "cardVariant": "triangles",
+      "blurb": "Use row-and-seat addresses to find the number hiding in each triangle position.",
+      "paths": {
+        "folder": "modules/consecutive_number_triangles",
+        "launch": "modules/consecutive_number_triangles/consecutive_triangles_practice_share.html",
+        "moduleJs": "modules/consecutive_number_triangles/consecutive_triangles_module.js",
+        "auditJs": null,
+        "testsJs": "modules/consecutive_number_triangles/consecutive_triangles_module_tests.js",
+        "introPack": "modules/consecutive_number_triangles/consecutive_triangles_intro_video_pack.md",
+        "sourceExtract": null,
+        "audioDir": null,
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": false,
+        "hasTests": true
+      }
+    },
+    {
+      "id": "angles",
+      "slug": "angles",
+      "displayName": "Angles",
+      "shortLabel": "Angles",
+      "chapter": "Chapter 3",
+      "unit": "geometry",
+      "topic": "Angles",
+      "tags": [
+        "angles",
+        "geometry",
+        "polygons"
+      ],
+      "skills": [
+        "Triangle total",
+        "Z/F/C angles",
+        "Zigzag totals",
+        "Angle chase",
+        "Polygon formula"
+      ],
+      "difficulty": 4,
+      "order": 30,
+      "status": "published",
+      "cardVariant": "angles",
+      "blurb": "Chase triangle totals, parallel lines, zigzags, polygons, and regular corners.",
+      "paths": {
+        "folder": "modules/angles",
+        "launch": "modules/angles/angles_practice_share.html",
+        "moduleJs": "modules/angles/angles_module.js",
+        "auditJs": null,
+        "testsJs": "modules/angles/angles_module_tests.js",
+        "introPack": "modules/angles/angles_intro_video_pack.md",
+        "sourceExtract": null,
+        "audioDir": null,
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": false,
+        "hasTests": true
+      }
+    },
+    {
+      "id": "u2t2_units",
+      "slug": "u2t2_units",
+      "displayName": "U2T2 Units",
+      "shortLabel": "U2T2 Units",
+      "chapter": "Year mission",
+      "unit": "year-map",
+      "topic": "Whole-Year Maths Map",
+      "tags": [
+        "year-mission",
+        "number",
+        "algebra",
+        "geometry",
+        "ratio",
+        "data",
+        "3d",
+        "exam"
+      ],
+      "skills": [
+        "Number zone",
+        "Algebra zone",
+        "Geometry zone",
+        "Proportion/Data zone",
+        "Exam arena"
+      ],
+      "difficulty": 5,
+      "order": 5,
+      "status": "published",
+      "cardVariant": "u2t2",
+      "blurb": "Master the whole U2 maths map: number, algebra, geometry, ratio, data, 3D, and mixed exam reasoning.",
+      "paths": {
+        "folder": "modules/u2t2_units",
+        "launch": "modules/u2t2_units/u2t2_units_mission.html",
+        "moduleJs": "modules/u2t2_units/u2t2_module.js",
+        "auditJs": "modules/u2t2_units/u2t2_bank_quality_audit.js",
+        "testsJs": "modules/u2t2_units/u2t2_module_tests.js",
+        "introPack": null,
+        "sourceExtract": "modules/u2t2_units/review_prep_9_challenge_source.md",
+        "audioDir": null,
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
+    },
+    {
+      "id": "volume_prisms",
+      "slug": "volume_prisms",
+      "displayName": "Volume of Prisms",
+      "shortLabel": "Volume of Prisms",
+      "chapter": "Lesson 15",
+      "unit": "geometry",
+      "topic": "Volume of Prisms",
+      "tags": [
+        "volume",
+        "prisms",
+        "geometry",
+        "3d"
+      ],
+      "skills": [
+        "Base area",
+        "Hollow prisms",
+        "Composite faces",
+        "Water rise",
+        "Partial submerge"
+      ],
+      "difficulty": 4,
+      "order": 50,
+      "status": "published",
+      "cardVariant": "volume",
+      "cardPreviewClassicId": "hollow-prism",
+      "blurb": "Stack cross-sections, subtract holes, split composite faces, and solve water-level puzzles with fresh numbers.",
+      "paths": {
+        "folder": "modules/volume_prisms",
+        "launch": "modules/volume_prisms/volume_prisms_module.html",
+        "moduleJs": "modules/volume_prisms/volume_prisms_module.js",
+        "auditJs": "modules/volume_prisms/volume_prisms_bank_quality_audit.js",
+        "testsJs": "modules/volume_prisms/volume_prisms_module_tests.js",
+        "introPack": "modules/volume_prisms/volume_prisms_intro_video_pack.md",
+        "sourceExtract": "modules/volume_prisms/volume_prisms_source_extract.md",
+        "audioDir": null,
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
+    },
+    {
+      "id": "volume_problem_extension",
+      "slug": "volume_problem_extension",
+      "displayName": "Volume Problem Extension",
+      "shortLabel": "Volume Extension",
+      "chapter": "Lesson 16",
+      "unit": "geometry",
+      "topic": "Volume Problem Extension",
+      "tags": [
+        "volume",
+        "cubes",
+        "geometry",
+        "3d",
+        "views"
+      ],
+      "skills": [
+        "Layer maps",
+        "Tunnel overlap",
+        "Height maps",
+        "Views",
+        "Cube displacement"
+      ],
+      "difficulty": 4,
+      "order": 60,
+      "status": "published",
+      "cardVariant": "volume-extension",
+      "cardPreviewClassicId": "layer-map-sum",
+      "blurb": "Count cube solids by layers, missing cells, tunnels, height maps, front-left-plan views, and water extensions.",
+      "paths": {
+        "folder": "modules/volume_problem_extension",
+        "launch": "modules/volume_problem_extension/volume_extension_module.html",
+        "moduleJs": "modules/volume_problem_extension/volume_extension_module.js",
+        "auditJs": "modules/volume_problem_extension/volume_extension_bank_quality_audit.js",
+        "testsJs": "modules/volume_problem_extension/volume_extension_module_tests.js",
+        "introPack": "modules/volume_problem_extension/volume_extension_intro_video_pack.md",
+        "sourceExtract": "modules/volume_problem_extension/volume_extension_source_extract.md",
+        "audioDir": null,
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
+    },
+    {
+      "id": "triangle_sides",
+      "slug": "triangle_sides",
+      "displayName": "Relationship Between Sides in Triangles",
+      "shortLabel": "Triangle Sides",
+      "chapter": "Lesson 17",
+      "unit": "geometry",
+      "topic": "Triangle Sides",
+      "tags": [
+        "triangles",
+        "pythagoras",
+        "geometry",
+        "isosceles"
+      ],
+      "skills": [
+        "Triangle inequality",
+        "Isosceles choice",
+        "Pythagoras",
+        "Missing leg",
+        "Area chase"
+      ],
+      "difficulty": 4,
+      "order": 70,
+      "status": "published",
+      "cardVariant": "triangle-sides",
+      "cardPreviewClassicId": "isosceles-split-area",
+      "blurb": "Decide whether three lengths can make a triangle, then use isosceles splits and Pythagoras to find hidden sides, perimeters, areas, and right-turn distances.",
+      "paths": {
+        "folder": "modules/triangle_sides",
+        "launch": "modules/triangle_sides/triangle_sides_module.html",
+        "moduleJs": "modules/triangle_sides/triangle_sides_module.js",
+        "auditJs": "modules/triangle_sides/triangle_sides_bank_quality_audit.js",
+        "testsJs": "modules/triangle_sides/triangle_sides_module_tests.js",
+        "introPack": "modules/triangle_sides/triangle_sides_intro_video_pack.md",
+        "sourceExtract": "modules/triangle_sides/triangle_sides_source_extract.md",
+        "audioDir": "modules/triangle_sides/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
+    },
+    {
+      "id": "equal_height_triangles",
+      "slug": "equal_height_triangles",
+      "displayName": "Triangles With Equal Height",
+      "shortLabel": "Equal Height",
+      "chapter": "Geometry",
+      "unit": "geometry",
+      "topic": "Equal-Height Triangles",
+      "tags": [
+        "triangles",
+        "area",
+        "ratios",
+        "geometry",
+        "algebra"
+      ],
+      "skills": [
+        "Height detective",
+        "Area ratios",
+        "Split bases",
+        "Reverse formula",
+        "Algebra targets"
+      ],
+      "difficulty": 4,
+      "order": 80,
+      "status": "published",
+      "cardVariant": "equal-height",
+      "cardPreviewClassicId": "same-base-height",
+      "blurb": "Spot shared heights, compare area ratios, reverse the formula, split bases, subtract shaded regions, and solve expression-labelled triangle questions.",
+      "paths": {
+        "folder": "modules/equal_height_triangles",
+        "launch": "modules/equal_height_triangles/equal_height_triangles_module.html",
+        "moduleJs": "modules/equal_height_triangles/equal_height_triangles_module.js",
+        "auditJs": "modules/equal_height_triangles/equal_height_triangles_bank_quality_audit.js",
+        "testsJs": "modules/equal_height_triangles/equal_height_triangles_module_tests.js",
+        "introPack": "modules/equal_height_triangles/equal_height_triangles_intro_video_pack.md",
+        "sourceExtract": "modules/equal_height_triangles/equal_height_triangles_source_extract.md",
+        "audioDir": "modules/equal_height_triangles/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
+    },
+    {
+      "id": "algebraic_word_puzzles",
+      "slug": "algebraic_word_puzzles",
+      "displayName": "Algebraic Word Puzzles",
+      "shortLabel": "Word Puzzles",
+      "chapter": "Lesson 8 Extensive Challenges",
+      "unit": "algebra",
+      "topic": "Word Problems",
+      "tags": [
+        "algebra",
+        "word-problems",
+        "systems",
+        "challenge"
+      ],
+      "skills": [
+        "Variable substitution",
+        "Self-exclusion counting",
+        "System of equations",
+        "Pair-sum decomposition",
+        "Missing-pair logic"
+      ],
+      "difficulty": 5,
+      "order": 90,
+      "status": "published",
+      "cardVariant": "word-puzzles",
+      "cardPreviewClassicId": "hat-system-3-statement",
+      "blurb": "Translate 'I see' statements and pair-sum puzzles into algebra: use the self-exclusion trick, build systems of equations, and recover missing pair sums.",
+      "paths": {
+        "folder": "modules/algebraic_word_puzzles",
+        "launch": "modules/algebraic_word_puzzles/algebraic_word_puzzles_module.html",
+        "moduleJs": "modules/algebraic_word_puzzles/algebraic_word_puzzles_module.js",
+        "auditJs": "modules/algebraic_word_puzzles/algebraic_word_puzzles_bank_quality_audit.js",
+        "testsJs": "modules/algebraic_word_puzzles/algebraic_word_puzzles_module_tests.js",
+        "introPack": "modules/algebraic_word_puzzles/algebraic_word_puzzles_intro_video_pack.md",
+        "sourceExtract": "modules/algebraic_word_puzzles/algebraic_word_puzzles_source_extract.md",
+        "audioDir": "modules/algebraic_word_puzzles/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
+    }
+  ]
+};
