@@ -8,7 +8,6 @@
  * with another module's title or with an empty intro frame.
  *
  * For each module in modules/registry.json that:
- *   - has paths.moduleJs != null
  *   - has paths.launch != null
  *   - has qa.hasIntro !== false (default: enabled)
  * launch the module HTML in a headless Chromium browser (Playwright) and
@@ -16,14 +15,27 @@
  *
  *   1. document.title does NOT contain another module's displayName
  *      (cross-template leak check).
- *   2. #intro-title text contains a substantial token match against the
- *      module JS's INTRO_SCENES[0].title (case-insensitive token match,
- *      not pixel-perfect).
+ *   2. The INTRO_SCENES[0].title appears (token overlap, case-insensitive)
+ *      in ANY of: #intro-title, #intro-scene-title, #intro-caption,
+ *      #intro-frame innerHTML, or the surrounding DOM neighbourhood.
+ *      DOM-ID variation between templates is expected — older modules use
+ *      #intro-scene-title (a sibling <h2>) instead of #intro-title.
  *   3. #intro-frame innerHTML length > 200 chars.
  *   4. #intro-frame innerHTML contains "<svg" OR a substantial DOM mosaic
  *      (we currently look for "<svg" since every module uses SVG diagrams).
  *   5. No console.error during page load. favicon.ico 404 is filtered out.
  *   6. #intro-storyboard child element count >= INTRO_SCENES.length.
+ *
+ * Modules without paths.moduleJs (e.g. pascal, which is a static practice
+ * share) or whose module JS exports no INTRO_SCENES (e.g. u2t2_units, a
+ * year-mission map) are SKIPped — they show up in the report as
+ * "[module-integration] SKIP <id>: <reason>" and do NOT count toward
+ * failures.
+ *
+ * For each scene with an `audio: "..."` field, we also resolve the file
+ * relative to the module's folder and emit a soft "[module-integration]
+ * WARN" if it is missing. Missing audio does NOT fail the gate — the page
+ * still works without it — but the author should know.
  *
  * Playwright is loaded via require("playwright-core") (an optional dev
  * dependency). If it is not installed, the gate prints a SKIP banner
@@ -183,12 +195,34 @@ async function checkOneModule(page, modRecord, allDisplayNames, introScenes) {
     pageTitle = await page.title();
     dom = await page.evaluate(() => {
       const introTitle = document.getElementById("intro-title");
+      const introCaption = document.getElementById("intro-caption");
       const introFrame = document.getElementById("intro-frame");
       const storyboard = document.getElementById("intro-storyboard");
+      // Build a "neighbourhood" of text near intro-frame so we can match
+      // titles rendered in a sibling <h2>/<h3> (e.g. older modules use
+      // #intro-scene-title rather than #intro-title).
+      let neighbourhood = "";
+      if (introFrame) {
+        // Walk up to 2 ancestors, collect their textContent so we capture
+        // sibling headings/captions surrounding the frame.
+        let node = introFrame;
+        for (let i = 0; i < 3 && node; i += 1) {
+          if (node.textContent) neighbourhood += " " + node.textContent;
+          node = node.parentElement;
+        }
+        // Trim to a reasonable size — we only need a window around the frame.
+        if (neighbourhood.length > 2000) neighbourhood = neighbourhood.slice(0, 2000);
+      }
+      // Some older templates name the title element `intro-scene-title`.
+      const sceneTitle = document.getElementById("intro-scene-title");
       return {
         introTitleText: introTitle ? introTitle.textContent : null,
+        introSceneTitleText: sceneTitle ? sceneTitle.textContent : null,
+        introCaptionText: introCaption ? introCaption.textContent : null,
         introFrameLen: introFrame ? introFrame.innerHTML.length : 0,
+        introFrameHTML: introFrame ? introFrame.innerHTML : "",
         introFrameHasSvg: introFrame ? introFrame.innerHTML.includes("<svg") : false,
+        introNeighbourhood: neighbourhood,
         storyboardCount: storyboard ? storyboard.children.length : 0
       };
     });
@@ -211,16 +245,47 @@ async function checkOneModule(page, modRecord, allDisplayNames, introScenes) {
     }
   }
 
-  // 2) intro-title token match against INTRO_SCENES[0].title.
-  if (Array.isArray(introScenes) && introScenes[0] && introScenes[0].title) {
-    const expected = introScenes[0].title;
-    const overlap = tokenOverlap(dom.introTitleText, expected);
-    if (overlap < 1) {
-      failures.push(`intro-title ${JSON.stringify(dom.introTitleText)} has no token overlap with INTRO_SCENES[0].title ${JSON.stringify(expected)}`);
+  // 2) Title token-overlap match against INTRO_SCENES[0].title.
+  //    DOM-ID structure varies between templates: newer modules render the
+  //    scene title in #intro-title, older ones use #intro-scene-title
+  //    (a sibling <h2> near #intro-frame), and some embed the title in
+  //    the SVG itself or in the surrounding heading. We accept a token
+  //    overlap (>= 2 tokens, or >= 1 token for single-token titles) in
+  //    ANY of these locations.
+  const expected = (Array.isArray(introScenes) && introScenes[0] && introScenes[0].title) || null;
+  if (expected) {
+    const candidates = [
+      ["#intro-title", dom.introTitleText],
+      ["#intro-scene-title", dom.introSceneTitleText],
+      ["#intro-caption", dom.introCaptionText],
+      ["#intro-frame innerHTML", dom.introFrameHTML],
+      ["frame neighbourhood", dom.introNeighbourhood]
+    ];
+    const expectedTokens = tokenise(expected);
+    // Require >= 2 token hits unless the title only HAS 1 meaningful token.
+    const required = expectedTokens.length >= 2 ? 2 : 1;
+    let matched = false;
+    let bestSource = null;
+    let bestOverlap = 0;
+    for (const [src, text] of candidates) {
+      const overlap = tokenOverlap(text, expected);
+      if (overlap > bestOverlap) {
+        bestOverlap = overlap;
+        bestSource = src;
+      }
+      if (overlap >= required) {
+        matched = true;
+        break;
+      }
     }
-  } else {
-    failures.push("module JS does not expose INTRO_SCENES (cannot verify intro-title)");
+    if (!matched) {
+      failures.push(
+        `no DOM location contains >= ${required} token(s) of INTRO_SCENES[0].title ${JSON.stringify(expected)} ` +
+        `(best match: ${bestOverlap} token(s) in ${bestSource || "n/a"})`
+      );
+    }
   }
+  // (If `expected` is null the caller has already SKIPped this module.)
 
   // 3) intro-frame innerHTML length floor.
   if (dom.introFrameLen <= 200) {
@@ -246,6 +311,26 @@ async function checkOneModule(page, modRecord, allDisplayNames, introScenes) {
   return { url, pageTitle, dom, failures };
 }
 
+function checkAudioFiles(modRecord, introScenes) {
+  // Returns an array of WARN strings for missing audio files referenced
+  // by INTRO_SCENES. Audio paths are resolved relative to the module's
+  // folder (paths.folder from the registry).
+  const warns = [];
+  if (!Array.isArray(introScenes)) return warns;
+  const folder = modRecord.paths && modRecord.paths.folder;
+  if (!folder) return warns;
+  const folderAbs = path.join(REPO_ROOT, folder);
+  for (const scene of introScenes) {
+    if (!scene || typeof scene.audio !== "string" || scene.audio.length === 0) continue;
+    const audioAbs = path.join(folderAbs, scene.audio);
+    if (!fs.existsSync(audioAbs)) {
+      const sceneLabel = scene.title || "(untitled)";
+      warns.push(`${modRecord.id}/${sceneLabel}: audio file missing — ${scene.audio}`);
+    }
+  }
+  return warns;
+}
+
 async function runAsync() {
   if (!fs.existsSync(REGISTRY_PATH)) {
     throw new Error(`registry not found at ${REGISTRY_PATH}`);
@@ -254,9 +339,11 @@ async function runAsync() {
   const allDisplayNames = registry.modules.map((m) => m.displayName).filter(Boolean);
 
   // Select modules eligible for the gate.
+  // We include modules that have a launch HTML but no moduleJs as well —
+  // they will be reported as SKIP (no INTRO_SCENES to verify) so the
+  // user gets a clear signal rather than a silent omission.
   const targets = registry.modules.filter((m) => {
     if (!m.paths) return false;
-    if (!m.paths.moduleJs) return false;
     if (!m.paths.launch) return false;
     if (m.qa && m.qa.hasIntro === false) return false;
     return true;
@@ -264,7 +351,7 @@ async function runAsync() {
 
   if (targets.length === 0) {
     console.log("[module-integration] no eligible modules — nothing to check");
-    return { failures: 0, results: [] };
+    return { failures: 0, results: [], skips: [], audioWarns: [] };
   }
 
   const playwrightHandle = tryRequirePlaywright();
@@ -287,15 +374,31 @@ async function runAsync() {
 
   const browser = await playwrightHandle.lib.chromium.launch({ headless: true });
   const results = [];
+  const skips = [];
+  const audioWarns = [];
   let failures = 0;
   try {
     const context = await browser.newContext();
     const page = await context.newPage();
     for (const m of targets) {
+      // SKIP modules that have no module JS at all (e.g. pascal, which
+      // ships only a static HTML practice share with no INTRO_SCENES).
+      if (!m.paths.moduleJs) {
+        skips.push({ id: m.id, reason: "no module JS" });
+        continue;
+      }
       const introScenes = loadIntroScenesFor(m);
       if (introScenes && introScenes.error) {
         results.push({ id: m.id, failures: [`module JS require failed: ${introScenes.error}`] });
         failures += 1;
+        continue;
+      }
+      // SKIP modules whose JS exports no INTRO_SCENES — there is nothing
+      // intro-related to verify, and the storyboard / intro-frame are
+      // expected to be empty for these (e.g. u2t2_units, which is a
+      // year-mission map rather than a lesson with an intro video).
+      if (!Array.isArray(introScenes)) {
+        skips.push({ id: m.id, reason: "no INTRO_SCENES exported" });
         continue;
       }
       try {
@@ -307,6 +410,9 @@ async function runAsync() {
         results.push({ id: m.id, failures: [`exception during check: ${err.message}`] });
         failures += 1;
       }
+      // Audio-file existence is WARN-only and does NOT count toward failures.
+      const warns = checkAudioFiles(m, introScenes);
+      for (const w of warns) audioWarns.push(w);
     }
     await context.close();
   } finally {
@@ -314,7 +420,7 @@ async function runAsync() {
     if (startedServer) startedServer.stop();
   }
 
-  return { failures, results };
+  return { failures, results, skips, audioWarns };
 }
 
 function printResults(out) {
@@ -328,8 +434,26 @@ function printResults(out) {
       console.log(`[module-integration] OK   ${r.id}  (title=${JSON.stringify(r.pageTitle)}, frameLen=${r.dom.introFrameLen})`);
     }
   }
+  // Skipped modules (no module JS / no INTRO_SCENES) — informational only.
+  if (Array.isArray(out.skips) && out.skips.length) {
+    for (const s of out.skips) {
+      console.log(`[module-integration] SKIP ${s.id}: ${s.reason}`);
+    }
+  }
+  // Audio-file warnings — soft, do not affect pass/fail.
+  if (Array.isArray(out.audioWarns) && out.audioWarns.length) {
+    console.log("");
+    for (const w of out.audioWarns) {
+      console.log(`[module-integration] WARN ${w}`);
+    }
+  }
   console.log("");
-  console.log(`[module-integration] checked ${out.results.length} module(s), ${out.failures} failure(s)`);
+  const skipCount = (out.skips && out.skips.length) || 0;
+  const warnCount = (out.audioWarns && out.audioWarns.length) || 0;
+  console.log(
+    `[module-integration] checked ${out.results.length} module(s), ` +
+    `${out.failures} failure(s), ${skipCount} skip(s), ${warnCount} audio warning(s)`
+  );
 }
 
 async function run() {
