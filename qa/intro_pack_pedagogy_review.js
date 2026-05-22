@@ -13,8 +13,13 @@
  * Responses are cached on disk by SHA-1 of pack contents in
  * qa/.cache/intro_review_<hash>.json so repeated runs are cheap.
  *
- * This script is NOT wired into qa/run_all_quality_checks.js — run it
- * explicitly when you want the LLM judgment:
+ * Wiring: this gate IS opt-in but is now part of qa/run_all_quality_checks.js.
+ * When ANTHROPIC_API_KEY is unset, the runner sees a clean SKIP and the
+ * overall QA pass/fail is unaffected. When the key IS set, each pack is
+ * reviewed and per-module verdicts are printed. Per-pack "fail" verdicts
+ * are advisory — they are NOT translated into a thrown error here, so the
+ * orchestrator continues to its next gate regardless. To run only this
+ * gate standalone:
  *
  *     ANTHROPIC_API_KEY=sk-ant-... node qa/intro_pack_pedagogy_review.js
  *
@@ -151,8 +156,8 @@ async function reviewPack(apiKey, moduleId, packPath, packBody, agentBlobs) {
 async function main() {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    console.log("[pedagogy-review] SKIP (no ANTHROPIC_API_KEY)");
-    process.exit(0);
+    console.log("[pedagogy-review] SKIP — set ANTHROPIC_API_KEY to enable LLM-judged intro review");
+    return { skipped: true, verdicts: [] };
   }
   const registry = JSON.parse(fs.readFileSync(REGISTRY_PATH, "utf8"));
   const modules = [...registry.modules].sort((a, b) => a.order - b.order);
@@ -191,6 +196,24 @@ async function main() {
   console.log("");
   console.log("[pedagogy-review] summary:");
   for (const v of verdicts) console.log(`  ${v.id}: ${v.verdict}${v.cached ? " (cached)" : ""}`);
+  return { skipped: false, verdicts };
+}
+
+// Runner entry point.
+//
+// When called by qa/run_all_quality_checks.js this returns a Promise that:
+//   - resolves cleanly if ANTHROPIC_API_KEY is unset (SKIP — no impact on
+//     the overall QA pass/fail);
+//   - resolves cleanly when all packs are reviewed (any per-pack errors
+//     are logged and reflected in the per-module verdict, but do not throw);
+//   - rejects only on an unexpected fatal — e.g. registry unreadable.
+//
+// Per-pack "fail" verdicts are NOT translated into a thrown error from
+// run(): the LLM judgment is advisory, and the user reads the verdict
+// list to decide what to fix. If we ever want hard-failing pedagogy
+// review, switch this to throw when any verdict === "fail".
+async function run() {
+  await main();
 }
 
 if (require.main === module) {
@@ -199,3 +222,5 @@ if (require.main === module) {
     process.exit(1);
   });
 }
+
+module.exports = { run, main };

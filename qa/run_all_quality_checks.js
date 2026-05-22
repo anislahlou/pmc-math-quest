@@ -61,7 +61,13 @@ const gates = [
   { id: "skill-coverage", path: "./skill_coverage_lint.js" },
   { id: "intro-pack", path: "./intro_pack_lint.js" },
   { id: "diagram-parity", path: "./diagram_parity_lint.js" },
-  { id: "module-integration", path: "./module_integration_lint.js", soft: true }
+  { id: "module-integration", path: "./module_integration_lint.js", soft: true },
+  // The pedagogy-review gate is OPT-IN: when ANTHROPIC_API_KEY is unset
+  // it prints a SKIP banner and resolves cleanly (no impact on QA pass/fail).
+  // When the key IS set, it sends each intro pack to Claude for an
+  // LLM-judged verdict — placed AFTER module-integration so contributors
+  // see structural issues first.
+  { id: "pedagogy-review", path: "./intro_pack_pedagogy_review.js", soft: true }
 ];
 
 async function runAllGates() {
