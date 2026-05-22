@@ -26,7 +26,7 @@ function run() {
   assert.ok(dashboard.includes("Agent Orchestration Dashboard"), "Dashboard should describe the agent command center");
   assert.ok(dashboard.includes("data-agent="), "Dashboard should identify agent steps");
   assert.ok(dashboard.includes("../agents/"), "Dashboard should link to agent protocols");
-  assert.ok(dashboard.includes("registry.json"), "Dashboard should load module list from the registry");
+  assert.ok(dashboard.includes("registry.js") || dashboard.includes("registry.json"), "Dashboard should load module list from the registry (registry.js for file:// or registry.json via fetch)");
   assert.ok(dashboard.includes("mission-grid"), "Dashboard should render a mission-grid container");
   const registry = JSON.parse(fs.readFileSync(path.join(__dirname, "../modules/registry.json"), "utf8"));
   const published = (registry.modules || []).filter((m) => m && m.status === "published");

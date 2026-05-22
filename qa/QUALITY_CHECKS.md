@@ -51,6 +51,23 @@ Run this before trusting or packaging the app:
   - Checks that displayed powers are formatted as superscripts, such as `5¹`, `x²`, `cm³`, and `2⁽ʳᵒʷ⁻¹⁾`.
   - Checks that Pascal still accepts typed power answers using superscript notation.
 
+- `module_integration_lint.js`
+  - End-to-end smoke gate that catches "module HTML and module JS got out of sync" bugs — the class of bug where a module is duplicated from a template, the JS forgets to wire its intro player, and the page renders with another module's title or with an empty intro frame.
+  - For each module in `modules/registry.json` with `paths.moduleJs != null`, `paths.launch != null`, and `qa.hasIntro !== false` (default: enabled), launches the module HTML in a headless Chromium browser and asserts:
+    - The page `<title>` does NOT contain another module's `displayName` (cross-template leak check).
+    - `intro-title` text contains a token overlap with the first `INTRO_SCENES[0].title` (case-insensitive token match — not pixel-perfect).
+    - `intro-frame` innerHTML length is greater than 200 chars.
+    - `intro-frame` innerHTML contains `<svg`.
+    - No `console.error` during page load (favicon.ico 404s are explicitly filtered).
+    - `intro-storyboard` child count is at least `INTRO_SCENES.length`.
+  - This is a SOFT gate. It loads Playwright via `require("playwright-core")` (or `require("playwright")`). If Playwright is not installed it prints a SKIP banner with install instructions and exits 0, so contributors without it still get a clean QA run. If Playwright IS installed, an assertion failure fails the run loudly.
+  - To enable the gate locally:
+    ```
+    npm install --save-dev playwright-core@latest
+    npx playwright install chromium
+    ```
+  - When run standalone (`node qa/module_integration_lint.js`), the gate will auto-start the project's static server on port 8765 if one is not already running.
+
 - `angles_module_tests.js`
   - Runs the existing Angles module checks.
 

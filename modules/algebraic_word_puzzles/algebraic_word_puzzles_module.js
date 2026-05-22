@@ -649,4 +649,347 @@
   }
 
   root.AlgebraicWordPuzzlesModule = api;
+
+  // ---- runtime (browser only) ---------------------------------------------
+  // Mirrors the intro player + practice loop used by triangle_sides. Adapted
+  // to read from this module's INTRO_SCENES (which omit per-scene audio
+  // files — scenes fall through to the SpeechSynthesis fallback).
+
+  const state = {
+    introIndex: 0,
+    introPlaying: false,
+    introStartedAt: 0,
+    introTimer: null,
+    audioEnabled: true,
+    currentUtterance: null,
+    roundOffset: 0,
+    round: createRound(0),
+    current: 0,
+    answers: [],
+    hintCount: 0
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  function speechEngine() {
+    return typeof window !== "undefined" && "speechSynthesis" in window ? window.speechSynthesis : null;
+  }
+
+  function chooseNarrationVoice() {
+    const synth = speechEngine();
+    if (!synth) return null;
+    const voices = synth.getVoices();
+    const englishVoices = voices.filter((voice) => /^en/i.test(voice.lang || ""));
+    return englishVoices.find((voice) => /natural|online|neural|jenny|aria|sonia|libby/i.test(voice.name))
+      || englishVoices.find((voice) => /microsoft|google/i.test(voice.name))
+      || englishVoices[0]
+      || voices[0]
+      || null;
+  }
+
+  function updateAudioStatus(message) {
+    const status = $("intro-audio-status");
+    if (status) status.textContent = message;
+    const button = $("intro-audio");
+    if (button) button.textContent = state.audioEnabled ? "Audio on" : "Audio off";
+  }
+
+  function cancelIntroSpeech() {
+    const synth = speechEngine();
+    if (synth) synth.cancel();
+    const audio = $("intro-audio-player");
+    if (audio) {
+      audio.onended = null;
+      audio.onerror = null;
+      audio.onplay = null;
+      audio.pause();
+      try {
+        audio.currentTime = 0;
+      } catch (error) {
+        // Some browsers cannot reset currentTime until metadata has loaded.
+      }
+    }
+    state.currentUtterance = null;
+  }
+
+  function speakIntroSceneFallback() {
+    const synth = speechEngine();
+    if (!synth || typeof SpeechSynthesisUtterance === "undefined") {
+      updateAudioStatus("Audio is not available in this browser, but the narration text is shown below the animation.");
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(INTRO_SCENES[state.introIndex].voiceover);
+    const voice = chooseNarrationVoice();
+    if (voice) utterance.voice = voice;
+    utterance.rate = 0.94;
+    utterance.pitch = 1.04;
+    utterance.volume = 1;
+    utterance.onstart = () => updateAudioStatus("Audio playing.");
+    utterance.onend = () => {
+      state.currentUtterance = null;
+      updateAudioStatus(state.introPlaying ? "Audio ready for the next scene." : "Audio ready.");
+    };
+    utterance.onerror = () => {
+      state.currentUtterance = null;
+      updateAudioStatus("Audio was blocked by the browser. Press Play intro video again to restart it.");
+    };
+    state.currentUtterance = utterance;
+    updateAudioStatus("Audio starting.");
+    synth.speak(utterance);
+  }
+
+  function speakIntroScene() {
+    if (!state.audioEnabled) {
+      updateAudioStatus("Audio off. Turn it on to hear the narration.");
+      return;
+    }
+    cancelIntroSpeech();
+    const scene = INTRO_SCENES[state.introIndex];
+    const audio = $("intro-audio-player");
+    if (!audio || !scene.audio) {
+      speakIntroSceneFallback();
+      return;
+    }
+    let fallbackStarted = false;
+    const startFallback = () => {
+      if (fallbackStarted) return;
+      fallbackStarted = true;
+      updateAudioStatus("Audio file was blocked, so I am trying the browser narration instead.");
+      speakIntroSceneFallback();
+    };
+    audio.src = scene.audio;
+    try {
+      audio.currentTime = 0;
+    } catch (error) {
+      // The browser may need metadata before accepting a seek.
+    }
+    audio.onplay = () => updateAudioStatus("Audio playing.");
+    audio.onended = () => updateAudioStatus(state.introPlaying ? "Audio ready for the next scene." : "Audio ready.");
+    audio.onerror = startFallback;
+    updateAudioStatus("Audio starting.");
+    const playAttempt = audio.play();
+    if (playAttempt && typeof playAttempt.catch === "function") playAttempt.catch(startFallback);
+  }
+
+  function currentIntroDurationMs() {
+    const scene = INTRO_SCENES[state.introIndex];
+    return scene.durationMs || INTRO_SCENE_MS;
+  }
+
+  function toggleIntroAudio() {
+    state.audioEnabled = !state.audioEnabled;
+    if (!state.audioEnabled) {
+      cancelIntroSpeech();
+      updateAudioStatus("Audio off. The narration text remains visible.");
+      return;
+    }
+    updateAudioStatus("Audio on. Press Play intro video to hear the narration.");
+    if (state.introPlaying) speakIntroScene();
+  }
+
+  function renderIntro() {
+    const scene = INTRO_SCENES[state.introIndex];
+    $("intro-title").textContent = scene.title;
+    $("intro-count").textContent = `${state.introIndex + 1} of ${INTRO_SCENES.length}`;
+    $("intro-frame").innerHTML = renderIntroScene(state.introIndex);
+    $("intro-frame").classList.toggle("playing", state.introPlaying);
+    $("intro-voiceover").textContent = scene.voiceover;
+    $("intro-caption").textContent = scene.caption;
+    $("intro-storyboard").innerHTML = INTRO_SCENES.map((item, index) => `<li class="${index === state.introIndex ? "active" : ""}"><strong>${escapeHtml(item.title)}</strong><br>${escapeHtml(item.purpose)}</li>`).join("");
+    $("intro-play").textContent = state.introPlaying ? "Pause intro" : (state.introIndex === INTRO_SCENES.length - 1 ? "Replay intro" : "Play intro video");
+    updateAudioStatus(state.audioEnabled ? "Audio ready. Press Play intro video to hear the narration." : "Audio off. The narration text remains visible.");
+  }
+
+  function clearIntroTimer() {
+    if (state.introTimer) {
+      clearInterval(state.introTimer);
+      state.introTimer = null;
+    }
+  }
+
+  function setIntroProgress(percent) {
+    const fill = $("intro-progress-fill");
+    if (fill) fill.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+  }
+
+  function stopIntroPlayback(progress = 0) {
+    clearIntroTimer();
+    cancelIntroSpeech();
+    state.introPlaying = false;
+    setIntroProgress(progress);
+    renderIntro();
+  }
+
+  function advanceIntro(keepPlaying = false) {
+    const atEnd = state.introIndex >= INTRO_SCENES.length - 1;
+    if (atEnd && keepPlaying) {
+      stopIntroPlayback(100);
+      return;
+    }
+    state.introIndex = atEnd ? 0 : state.introIndex + 1;
+    if (keepPlaying) startIntroPlayback();
+    else {
+      cancelIntroSpeech();
+      state.introPlaying = false;
+      setIntroProgress(0);
+      renderIntro();
+    }
+  }
+
+  function startIntroPlayback() {
+    clearIntroTimer();
+    if (state.introIndex >= INTRO_SCENES.length - 1 && !state.introPlaying) state.introIndex = 0;
+    state.introPlaying = true;
+    state.introStartedAt = Date.now();
+    setIntroProgress(0);
+    renderIntro();
+    speakIntroScene();
+    state.introTimer = setInterval(() => {
+      const percent = ((Date.now() - state.introStartedAt) / currentIntroDurationMs()) * 100;
+      setIntroProgress(percent);
+      if (percent >= 100) advanceIntro(true);
+    }, 80);
+  }
+
+  function toggleIntroPlayback() {
+    if (state.introPlaying) stopIntroPlayback(Number($("intro-progress-fill").style.width.replace("%", "")) || 0);
+    else startIntroPlayback();
+  }
+
+  function renderSkills() {
+    $("intro-skill-grid").innerHTML = CLASSICS.map((classic) => `<div class="skill-tile"><strong>${escapeHtml(classic.nickname)}</strong><span>${escapeHtml(classic.skill)}</span></div>`).join("");
+    $("mastery-chips").innerHTML = CLASSICS.map((classic) => `<div class="classic-chip"><strong>${escapeHtml(classic.nickname)}</strong></div>`).join("");
+  }
+
+  function showIntro() {
+    $("intro-screen").hidden = false;
+    $("practice-grid").hidden = true;
+    $("round-recap").hidden = true;
+    renderIntro();
+  }
+
+  function showPractice() {
+    stopIntroPlayback(0);
+    $("intro-screen").hidden = true;
+    $("practice-grid").hidden = false;
+    $("round-recap").hidden = true;
+    renderProblem();
+  }
+
+  function currentProblem() {
+    return state.round[state.current];
+  }
+
+  function renderAnswerHost(problem) {
+    if (problem.answerType === "choice") {
+      return `<div class="choice-grid">${problem.choices.map((choice) => `<label class="choice-card"><input type="radio" name="choice" value="${escapeHtml(choice.label)}"><span>${escapeHtml(formatMathText(choice.label))}</span></label>`).join("")}</div>`;
+    }
+    return `<input class="filled-answer" name="value" autocomplete="off" inputmode="decimal" placeholder="Type the number">`;
+  }
+
+  function renderProblem() {
+    const problem = currentProblem();
+    state.hintCount = 0;
+    $("classic-label").textContent = problem.classic;
+    $("session-count").textContent = `${state.current + 1} of ${state.round.length}`;
+    $("problem-prompt").textContent = problem.prompt;
+    $("answer-host").innerHTML = renderAnswerHost(problem);
+    $("hint-ladder").innerHTML = "";
+    $("feedback").className = "feedback-card muted";
+    $("feedback").textContent = "Choose or type an answer, then check it.";
+    $("similar-button").hidden = true;
+    renderVisual("initial");
+    renderScore();
+  }
+
+  function renderVisual(mode) {
+    const rendered = renderProblemVisual(currentProblem(), mode);
+    $("visual-frame").innerHTML = rendered.html;
+    $("visual-text").textContent = rendered.text;
+    $("visual-state").textContent = mode;
+  }
+
+  function renderScore() {
+    const attempted = state.answers.filter(Boolean).length;
+    const correct = state.answers.filter((answer) => answer && answer.isCorrect).length;
+    $("live-score").textContent = `Score ${correct} / ${attempted} · Unanswered ${state.round.length - attempted}`;
+  }
+
+  function collectInput() {
+    const form = new FormData($("answer-form"));
+    return { choice: form.get("choice"), value: form.get("value") };
+  }
+
+  function checkCurrent(event) {
+    event.preventDefault();
+    const problem = currentProblem();
+    const result = checkAnswer(problem, collectInput());
+    state.answers[state.current] = result;
+    $("feedback").className = `feedback-card ${result.isCorrect ? "correct" : "wrong"}`;
+    $("feedback").textContent = result.isCorrect ? `Correct. ${problem.solution}` : `Not quite. ${problem.hint1}`;
+    $("similar-button").hidden = result.isCorrect;
+    renderVisual(result.isCorrect ? "solution" : "hint");
+    renderScore();
+  }
+
+  function showHint() {
+    const problem = currentProblem();
+    state.hintCount += 1;
+    const hint = state.hintCount === 1 ? problem.hint1 : problem.hint2;
+    $("hint-ladder").insertAdjacentHTML("beforeend", `<div>${escapeHtml(formatMathText(hint))}</div>`);
+    renderVisual("hint");
+  }
+
+  function showWhy() {
+    $("feedback").className = "feedback-card";
+    $("feedback").textContent = currentProblem().solution;
+    renderVisual("solution");
+  }
+
+  function nextProblem() {
+    if (state.current < state.round.length - 1) {
+      state.current += 1;
+      renderProblem();
+    } else {
+      showRecap();
+    }
+  }
+
+  function showRecap() {
+    $("practice-grid").hidden = true;
+    $("round-recap").hidden = false;
+    const missed = state.round.filter((_, index) => !state.answers[index]?.isCorrect);
+    $("recap-content").innerHTML = missed.length
+      ? missed.map((problem) => `<div><strong>${escapeHtml(problem.classic)}</strong><br>${escapeHtml(problem.skill)}</div>`).join("")
+      : "<div><strong>Clean round.</strong><br>You used self-exclusion counting, systems of equations, and pair-sum decomposition accurately.</div>";
+  }
+
+  function freshRound() {
+    state.roundOffset += ROUND_LENGTH;
+    state.round = createRound(state.roundOffset);
+    state.current = 0;
+    state.answers = [];
+    showPractice();
+  }
+
+  function boot() {
+    renderSkills();
+    renderIntro();
+    $("show-intro").addEventListener("click", showIntro);
+    $("show-practice").addEventListener("click", showPractice);
+    $("intro-start").addEventListener("click", showPractice);
+    $("intro-audio").addEventListener("click", toggleIntroAudio);
+    $("intro-next").addEventListener("click", () => advanceIntro(false));
+    $("intro-play").addEventListener("click", toggleIntroPlayback);
+    $("answer-form").addEventListener("submit", checkCurrent);
+    $("hint-button").addEventListener("click", showHint);
+    $("why-button").addEventListener("click", showWhy);
+    $("next-button").addEventListener("click", nextProblem);
+    $("similar-button").addEventListener("click", () => { state.round[state.current] = generateProblem(currentProblem().classicId, currentProblem().variantIndex + ROUND_LENGTH); renderProblem(); });
+    $("fresh-round-button").addEventListener("click", freshRound);
+    $("review-intro-button").addEventListener("click", showIntro);
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
 })(typeof window !== "undefined" ? window : globalThis);

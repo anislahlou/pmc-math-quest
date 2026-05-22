@@ -52,36 +52,61 @@ for (const m of modules) {
 
 // 4) Registry-driven gates (Phase 2bcd). These run independently — one failing
 //    does NOT skip the others. The user wants every gate to show its surface.
+//
+// The module-integration gate is "soft" by default: when Playwright is not
+// installed it prints a SKIP banner and exports `{ skipped: true }` rather
+// than throwing, so contributors without Playwright still get a clean run.
+// When Playwright IS installed, any assertion failure throws and fails QA.
 const gates = [
   { id: "skill-coverage", path: "./skill_coverage_lint.js" },
   { id: "intro-pack", path: "./intro_pack_lint.js" },
-  { id: "diagram-parity", path: "./diagram_parity_lint.js" }
+  { id: "diagram-parity", path: "./diagram_parity_lint.js" },
+  { id: "module-integration", path: "./module_integration_lint.js", soft: true },
+  // The pedagogy-review gate is OPT-IN: when ANTHROPIC_API_KEY is unset
+  // it prints a SKIP banner and resolves cleanly (no impact on QA pass/fail).
+  // When the key IS set, it sends each intro pack to Claude for an
+  // LLM-judged verdict — placed AFTER module-integration so contributors
+  // see structural issues first.
+  { id: "pedagogy-review", path: "./intro_pack_pedagogy_review.js", soft: true }
 ];
-const gateOutcomes = [];
-for (const gate of gates) {
-  console.log(`\n[qa] running gate: ${gate.id}`);
-  try {
-    const gateMod = require(gate.path);
-    if (typeof gateMod.run !== "function") {
+
+async function runAllGates() {
+  const gateOutcomes = [];
+  for (const gate of gates) {
+    console.log(`\n[qa] running gate: ${gate.id}`);
+    try {
+      const gateMod = require(gate.path);
+      if (typeof gateMod.run !== "function") {
+        failures++;
+        gateOutcomes.push({ id: gate.id, status: "missing-run" });
+        console.error(`[qa] gate ${gate.id} does not export run()`);
+        continue;
+      }
+      // Some gates are sync (throw on failure); the soft module-integration
+      // gate is async (returns a Promise). Awaiting works for both — and
+      // when Playwright is missing the soft gate resolves cleanly after
+      // printing a SKIP banner so we record it as "pass" with no failures.
+      await gateMod.run();
+      gateOutcomes.push({ id: gate.id, status: "pass" });
+    } catch (err) {
       failures++;
-      gateOutcomes.push({ id: gate.id, status: "missing-run" });
-      console.error(`[qa] gate ${gate.id} does not export run()`);
-      continue;
+      gateOutcomes.push({ id: gate.id, status: "fail", message: err.message });
+      console.error(`[qa] gate ${gate.id} failed: ${err.message}`);
     }
-    gateMod.run();
-    gateOutcomes.push({ id: gate.id, status: "pass" });
-  } catch (err) {
-    failures++;
-    gateOutcomes.push({ id: gate.id, status: "fail", message: err.message });
-    console.error(`[qa] gate ${gate.id} failed: ${err.message}`);
   }
+  return gateOutcomes;
 }
 
-console.log("\n[qa] gate summary:");
-for (const o of gateOutcomes) console.log(`  ${o.id}: ${o.status}${o.message ? " — " + o.message : ""}`);
+runAllGates().then((gateOutcomes) => {
+  console.log("\n[qa] gate summary:");
+  for (const o of gateOutcomes) console.log(`  ${o.id}: ${o.status}${o.message ? " — " + o.message : ""}`);
 
-if (failures > 0) {
-  console.error(`\n[qa] ${failures} failure(s).`);
+  if (failures > 0) {
+    console.error(`\n[qa] ${failures} failure(s).`);
+    process.exit(1);
+  }
+  console.log("All app quality checks passed.");
+}).catch((err) => {
+  console.error(`[qa] fatal orchestrator error: ${err.message}`);
   process.exit(1);
-}
-console.log("All app quality checks passed.");
+});
