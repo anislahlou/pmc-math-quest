@@ -398,16 +398,24 @@ window.PMC_REGISTRY = {
       "topic": "Forming Numbers and Bundling",
       "tags": [
         "counting",
-        "addition_multiplication_2"
+        "multiplication",
+        "permutations",
+        "combinatorics",
+        "bundling"
       ],
       "skills": [
-        "Placeholder skill"
+        "Position-by-position counting",
+        "Zero-leading constraint",
+        "No-repeat decrement",
+        "Odd/even via last digit",
+        "Bundling method"
       ],
       "difficulty": 4,
       "order": 100,
       "status": "draft",
       "cardVariant": "counting-principles",
-      "blurb": "TODO: blurb for Principle of Addition and Multiplication (2)",
+      "cardPreviewClassicId": "zero-leading-constraint",
+      "blurb": "Count by position, fix the leading and last digits first when zero or parity gets in the way, then use the bundling method to glue adjacent items.",
       "paths": {
         "folder": "modules/addition_multiplication_2",
         "launch": "modules/addition_multiplication_2/addition_multiplication_2_module.html",
