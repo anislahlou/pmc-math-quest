@@ -124,6 +124,21 @@ const cardVisuals = {
               <circle cx="90" cy="160" r="10" fill="#f3d24f" stroke="#0d263f" stroke-width="2"></circle>
               <circle cx="120" cy="160" r="10" fill="#5b9bd5" stroke="#0d263f" stroke-width="2"></circle>
               <text x="180" y="166" text-anchor="middle">words to algebra</text>
+            </svg>`,
+  "counting-principles": `<svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Counting principles preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <rect x="30" y="22" width="240" height="34" rx="8" fill="#fff8dc" stroke="#0d263f" stroke-width="2"></rect>
+              <text x="150" y="44" text-anchor="middle">digits: { 0, 1, 2, 3 }</text>
+              <rect x="60" y="80" width="56" height="56" rx="10" fill="#ffe6e0" stroke="#0d263f" stroke-width="3"></rect>
+              <text x="88" y="116" text-anchor="middle">3</text>
+              <text x="132" y="116" text-anchor="middle">×</text>
+              <rect x="148" y="80" width="56" height="56" rx="10" fill="#fff8dc" stroke="#0d263f" stroke-width="3"></rect>
+              <text x="176" y="116" text-anchor="middle">4</text>
+              <text x="220" y="116" text-anchor="middle">=</text>
+              <text x="252" y="116" text-anchor="middle">12</text>
+              <text x="88" y="156" text-anchor="middle">leading</text>
+              <text x="176" y="156" text-anchor="middle">last</text>
+              <text x="150" y="180" text-anchor="middle">no leading zero</text>
             </svg>`
 };
 
@@ -173,6 +188,11 @@ const cardMeta = {
     skillsAriaLabel: "Algebraic word puzzle skills",
     actionsHtml: `<a class="button" href="../modules/algebraic_word_puzzles/algebraic_word_puzzles_module.html">Launch Word Puzzles</a>
             <a class="button secondary" href="../modules/algebraic_word_puzzles/algebraic_word_puzzles_source_extract.md">Source extract</a>`
+  },
+  addition_multiplication_2: {
+    skillsAriaLabel: "Counting principles skills",
+    actionsHtml: `<a class="button" href="../modules/addition_multiplication_2/addition_multiplication_2_module.html">Launch Counting Principles</a>
+            <a class="button secondary" href="../modules/addition_multiplication_2/addition_multiplication_2_source_extract.md">Source extract</a>`
   }
 };
 
@@ -208,7 +228,10 @@ const questNodeVisuals = {
               <small>Area ratio lab</small>`,
   algebraic_word_puzzles: `<span class="node-number">9</span>
               <strong>Word Puzzles</strong>
-              <small>Algebra arena</small>`
+              <small>Algebra arena</small>`,
+  addition_multiplication_2: `<span class="node-number">10</span>
+              <strong>Counting Principles 2</strong>
+              <small>Forming and bundling</small>`
 };
 
 /*
