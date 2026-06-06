@@ -387,6 +387,50 @@ window.PMC_REGISTRY = {
         "hasAudit": true,
         "hasTests": true
       }
+    },
+    {
+      "id": "addition_multiplication_2",
+      "slug": "addition_multiplication_2",
+      "displayName": "Principle of Addition and Multiplication (2)",
+      "shortLabel": "Counting Principles 2",
+      "chapter": "Lesson 21",
+      "unit": "counting",
+      "topic": "Forming Numbers and Bundling",
+      "tags": [
+        "counting",
+        "multiplication",
+        "permutations",
+        "combinatorics",
+        "bundling"
+      ],
+      "skills": [
+        "Position-by-position counting",
+        "Zero-leading constraint",
+        "No-repeat decrement",
+        "Odd/even via last digit",
+        "Bundling method"
+      ],
+      "difficulty": 4,
+      "order": 100,
+      "status": "published",
+      "cardVariant": "counting-principles",
+      "cardPreviewClassicId": "zero-leading-constraint",
+      "blurb": "Count by position, fix the leading and last digits first when zero or parity gets in the way, then use the bundling method to glue adjacent items.",
+      "paths": {
+        "folder": "modules/addition_multiplication_2",
+        "launch": "modules/addition_multiplication_2/addition_multiplication_2_module.html",
+        "moduleJs": "modules/addition_multiplication_2/addition_multiplication_2_module.js",
+        "auditJs": "modules/addition_multiplication_2/addition_multiplication_2_bank_quality_audit.js",
+        "testsJs": "modules/addition_multiplication_2/addition_multiplication_2_module_tests.js",
+        "introPack": "modules/addition_multiplication_2/addition_multiplication_2_intro_video_pack.md",
+        "sourceExtract": "modules/addition_multiplication_2/addition_multiplication_2_source_extract.md",
+        "audioDir": "modules/addition_multiplication_2/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
     }
   ]
 };

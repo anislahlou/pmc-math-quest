@@ -9,5 +9,8 @@
     "lint:registry-js-sync": "node qa/registry_js_sync_lint.js",
     "sync:registry": "node scripts/sync-registry-js.mjs",
     "new-module": "node scripts/new-module.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.60.0"
   }
 }
