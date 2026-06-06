@@ -52,11 +52,13 @@ Canonical reasoning. Glue the two Ps into one bundle. We now have four units to 
 
 If the bundled pair were distinct (e.g. two different students Pip and Bud), the answer would be 4! × 2 = 48.
 
-## Source Problem E — Multi-Bundle Challenge (Book p43 / PDF p53)
+## Source Problem E — Multi-Bundle Challenge (Book p39 / PDF p49)
 
-> Eight students stand in a row. Students A, B, C must stand together (in any internal order), and students D, E must also stand together (in any internal order). How many arrangements are possible?
+> Seven students are standing in a line. If Student A, Student B and Student C must stand next to each other, and Student D and Student E must also stand next to each other, there are _____ possible arrangements in total.
 
-Canonical reasoning. Glue ABC into one bundle and DE into another. The row now has 5 effective units: the ABC-bundle, the DE-bundle, F, G, H. Number of arrangements of 5 units: 5! = 120. Multiply by 3! = 6 for the internal order of the ABC bundle, and by 2! = 2 for the internal order of the DE bundle. Answer: **5! × 3! × 2! = 120 × 6 × 2 = 1440**.
+Canonical reasoning. Glue ABC into one bundle and DE into another. The row now has 4 effective units: the ABC-bundle, the DE-bundle, F, and G. Number of arrangements of 4 units: 4! = 24. Multiply by 3! = 6 for the internal order of the ABC bundle, and by 2! = 2 for the internal order of the DE bundle. Answer: **4! × 3! × 2! = 24 × 6 × 2 = 288**.
+
+The bank also generates an 8-student variant (effective 5 units → 5! × 3! × 2! = 1440) and shorter 6-student variants, but variant 0 reproduces the source problem verbatim.
 
 ## Teacher's Notes — General Formulas
 
@@ -78,7 +80,7 @@ These source problems sit at the top of a ladder of warm-up skills the lesson de
 4. `odd-by-last-digit-repeats` — odd/even via the last digit, with repeats allowed and no zero in the set. Introduces "fix the last digit first".
 5. `odd-or-even-no-repeats` — Pip's mistake canonical (3 × 4 × 4 = 48). Zero in the set, no repeats, parity constraint.
 6. `bundling-adjacent` — single-bundle arrangement, including the APPLE letters case.
-7. `bundling-multi-restriction` — two-bundle challenge with the 8-student canonical answer of 1440.
+7. `bundling-multi-restriction` — two-bundle challenge with the source's 7-student canonical answer of 288. Bank also includes an 8-student variant (1440) for stretching.
 
 Each classic generates 4 variants by varying the numeric constants while preserving the source's underlying structure. The canonical variant 0 of each classic reproduces the source numbers where available.
 

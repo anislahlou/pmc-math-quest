@@ -60,8 +60,10 @@ function run() {
   // C6: APPLE letters, PP adjacent → 4! = 24
   assert.strictEqual(item("bundling-adjacent", 0).expected, 24, "C6 canonical: APPLE with PP glued = 24");
 
-  // C7: 8 students with {A,B,C} together + {D,E} together → 5! × 3! × 2! = 1440
-  assert.strictEqual(item("bundling-multi-restriction", 0).expected, 1440, "C7 canonical: 5! × 3! × 2! = 1440");
+  // C7 (source p39 challenge): 7 students with {A,B,C} together + {D,E} together → 4! × 3! × 2! = 288
+  assert.strictEqual(item("bundling-multi-restriction", 0).expected, 288, "C7 canonical (source): 4! × 3! × 2! = 288");
+  // C7 variant 1: 8-student case (effective 5 units) → 5! × 3! × 2! = 1440
+  assert.strictEqual(item("bundling-multi-restriction", 1).expected, 1440, "C7 variant 1: 5! × 3! × 2! = 1440");
 
   // ---- All 7 CLASSICS appear in CLASSIC_SKILLS ------------------------------
   for (const id of mod.CLASSIC_IDS) {

@@ -45,8 +45,8 @@ The intro plays as six scenes. Each scene takes one named skill, shows the mathe
    Voiceover: Switch to arranging items in a line. The word APPLE has two P letters that must sit together. Glue them into one bundle. Now we have four units to arrange instead of five, giving four factorial arrangements. Multiply by the bundle's own two orderings if the items are distinct.
 
 6. **Multi-Bundle Challenge**
-   The closing challenge. Eight students in a row. The ABC trio must stand together AND the DE pair must stand together. Glue both groups into single units. Five effective units to arrange: 5! = 120. Multiply by 3! for the ABC bundle's internal order and 2! for the DE bundle. Total: 5! × 3! × 2! = 1440. End with the canonical answer highlighted on screen.
-   Voiceover: Now add a second bundle. Seven students stand in a row, A B C must be together, and D E must be together. Glue both groups. We now arrange five units, then multiply by the three factorial for the A B C bundle and the two factorial for the D E bundle. That gives one thousand four hundred and forty arrangements.
+   The closing challenge from the source page. Seven students in a row. The ABC trio must stand together AND the DE pair must stand together. Glue both groups into single units. Effective units to arrange: 7 − 5 + 2 = 4. So 4! = 24 arrangements. Multiply by 3! for the ABC bundle's internal order and 2! for the DE bundle. Total: 4! × 3! × 2! = 288. End with the canonical answer highlighted on screen.
+   Voiceover: Now add a second bundle. Seven students stand in a row, A B C must be together, and D E must be together. Glue both groups so the row holds four units: the ABC bundle, the DE bundle, plus two loose students. Arrange those four units in four factorial ways, then multiply by three factorial for the ABC bundle's order and two factorial for the DE bundle. That gives two hundred and eighty eight arrangements.
 
 ## Warmup Gate
 

@@ -559,10 +559,10 @@
   // Answer = (effective)! × ∏ (bundle size)! across bundles.
   function bundlingMultiProblem(variantIndex) {
     const cases = [
-      // canonical: 8 students with {A,B,C} together + {D,E} together → effective 5 units → 5! * 3! * 2! = 1440
-      { total: 8, bundleSizes: [3, 2], story: "students-row" },
+      // canonical (source p39 challenge): 7 students with {A,B,C} together + {D,E} together → effective 4 units → 4! * 3! * 2! = 288
+      { total: 7, bundleSizes: [3, 2], story: "students-row" },
+      { total: 8, bundleSizes: [3, 2], story: "students-row" },   // effective 5 → 5! * 3! * 2! = 1440
       { total: 6, bundleSizes: [2, 2], story: "students-row" },   // effective 4 → 4! * 2! * 2! = 96
-      { total: 7, bundleSizes: [3, 2], story: "students-row" },   // effective 4 → 4! * 3! * 2! = 288
       { total: 6, bundleSizes: [3, 2], story: "students-row" }    // effective 3 → 3! * 3! * 2! = 72
     ];
     const data = cases[variantIndex % cases.length];
