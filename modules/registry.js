@@ -412,7 +412,7 @@ window.PMC_REGISTRY = {
       ],
       "difficulty": 4,
       "order": 100,
-      "status": "draft",
+      "status": "published",
       "cardVariant": "counting-principles",
       "cardPreviewClassicId": "zero-leading-constraint",
       "blurb": "Count by position, fix the leading and last digits first when zero or parity gets in the way, then use the bundling method to glue adjacent items.",
