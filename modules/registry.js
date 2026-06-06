@@ -387,6 +387,42 @@ window.PMC_REGISTRY = {
         "hasAudit": true,
         "hasTests": true
       }
+    },
+    {
+      "id": "addition_multiplication_2",
+      "slug": "addition_multiplication_2",
+      "displayName": "Principle of Addition and Multiplication (2)",
+      "shortLabel": "Counting Principles 2",
+      "chapter": "Lesson 21",
+      "unit": "counting",
+      "topic": "Forming Numbers and Bundling",
+      "tags": [
+        "counting",
+        "addition_multiplication_2"
+      ],
+      "skills": [
+        "Placeholder skill"
+      ],
+      "difficulty": 4,
+      "order": 100,
+      "status": "draft",
+      "cardVariant": "counting-principles",
+      "blurb": "TODO: blurb for Principle of Addition and Multiplication (2)",
+      "paths": {
+        "folder": "modules/addition_multiplication_2",
+        "launch": "modules/addition_multiplication_2/addition_multiplication_2_module.html",
+        "moduleJs": "modules/addition_multiplication_2/addition_multiplication_2_module.js",
+        "auditJs": "modules/addition_multiplication_2/addition_multiplication_2_bank_quality_audit.js",
+        "testsJs": "modules/addition_multiplication_2/addition_multiplication_2_module_tests.js",
+        "introPack": "modules/addition_multiplication_2/addition_multiplication_2_intro_video_pack.md",
+        "sourceExtract": "modules/addition_multiplication_2/addition_multiplication_2_source_extract.md",
+        "audioDir": "modules/addition_multiplication_2/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
     }
   ]
 };
