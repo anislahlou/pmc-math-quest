@@ -28,6 +28,16 @@
 (function () {
 
 const cardVisuals = {
+  trains: `<svg viewBox="0 0 300 190" role="img" aria-label="Train problems preview" style="width:100%;height:auto;display:block">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <line x1="20" y1="142" x2="280" y2="142" stroke="#16345d" stroke-width="5"></line>
+              <rect x="38" y="114" width="120" height="28" rx="6" fill="#ff7654" stroke="#16345d" stroke-width="3"></rect>
+              <rect x="192" y="106" width="86" height="36" fill="#fff8dc" stroke="#16345d" stroke-width="3"></rect>
+              <line x1="180" y1="86" x2="180" y2="142" stroke="#0b8993" stroke-width="4"></line>
+              <text x="98" y="133" text-anchor="middle">train</text>
+              <text x="235" y="129" text-anchor="middle">bridge</text>
+              <text x="150" y="40" text-anchor="middle">train + bridge</text>
+            </svg>`,
   u2t2: `<div class="unit-map">
               <span>Number</span>
               <span>Algebra</span>

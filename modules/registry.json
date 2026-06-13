@@ -316,6 +316,37 @@
         "hasAudit": true,
         "hasTests": true
       }
+    },
+    {
+      "id": "train_problems",
+      "slug": "train_problems",
+      "displayName": "Train Problems",
+      "shortLabel": "Train Problems",
+      "chapter": "Lesson 22",
+      "unit": "rates",
+      "topic": "Speed, Distance & Time",
+      "tags": ["trains", "speed", "distance", "time", "rates"],
+      "skills": ["Pass the marker", "Clear the bridge", "Bridge speed", "Find the train", "Two-bridge solve", "Double-speed crossing"],
+      "difficulty": 4,
+      "order": 110,
+      "status": "published",
+      "cardVariant": "trains",
+      "blurb": "Use train length, bridge length, speed and time to solve how a train passes poles, bridges, tunnels and two-bridge puzzles.",
+      "paths": {
+        "folder": "modules/train_problems",
+        "launch": "modules/train_problems/train_problems_module.html",
+        "moduleJs": "modules/train_problems/train_problems_module.js",
+        "auditJs": "modules/train_problems/train_problems_bank_quality_audit.js",
+        "testsJs": "modules/train_problems/train_problems_module_tests.js",
+        "introPack": "modules/train_problems/train_problems_intro_video_pack.md",
+        "sourceExtract": "modules/train_problems/train_problems_source_extract.md",
+        "audioDir": "modules/train_problems/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
     }
   ]
 }
