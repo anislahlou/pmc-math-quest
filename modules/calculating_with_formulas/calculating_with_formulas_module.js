@@ -387,7 +387,7 @@
         <text x="470" y="156" text-anchor="middle" class="side-label">(a + b)(a − b)</text>
         <text x="280" y="44" text-anchor="middle" class="formula-note">${escapeHtml(v.formula)}</text>
         <text x="280" y="262" text-anchor="middle" class="formula-note">${escapeHtml(v.expr)}</text>
-        <text x="280" y="290" text-anchor="middle" class="formula-note">${escapeHtml(v.method)}</text>
+        <text x="280" y="290" text-anchor="middle" class="formula-note">${escapeHtml(isRevealed ? v.method : "= ?")}</text>
         ${answer}
       `);
     const text = problem.skill;
