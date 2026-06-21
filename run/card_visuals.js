@@ -215,6 +215,11 @@ const cardMeta = {
     actionsHtml: `<a class="button" href="../modules/addition_multiplication_2/addition_multiplication_2_module.html">Launch Counting Principles</a>
             <a class="button secondary" href="../modules/addition_multiplication_2/addition_multiplication_2_source_extract.md">Source extract</a>`
   },
+  train_problems: {
+    skillsAriaLabel: "Train problem skills",
+    actionsHtml: `<a class="button" href="../modules/train_problems/train_problems_module.html">Launch Train Problems</a>
+            <a class="button secondary" href="../modules/train_problems/train_problems_source_extract.md">Source extract</a>`
+  },
   calculating_with_formulas: {
     skillsAriaLabel: "Difference of squares skills",
     actionsHtml: `<a class="button" href="../modules/calculating_with_formulas/calculating_with_formulas_module.html">Launch Calculating with Formulas</a>
@@ -258,7 +263,10 @@ const questNodeVisuals = {
   addition_multiplication_2: `<span class="node-number">10</span>
               <strong>Counting Principles 2</strong>
               <small>Forming and bundling</small>`,
-  calculating_with_formulas: `<span class="node-number">11</span>
+  train_problems: `<span class="node-number">11</span>
+              <strong>Train Problems</strong>
+              <small>Speed, distance, time</small>`,
+  calculating_with_formulas: `<span class="node-number">12</span>
               <strong>Calculating with Formulas</strong>
               <small>Difference of squares</small>`
 };
