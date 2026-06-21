@@ -149,6 +149,17 @@ const cardVisuals = {
               <text x="88" y="156" text-anchor="middle">leading</text>
               <text x="176" y="156" text-anchor="middle">last</text>
               <text x="150" y="180" text-anchor="middle">no leading zero</text>
+            </svg>`,
+  "diff-squares": `<svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Difference of squares preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <rect x="26" y="40" width="98" height="98" rx="6" fill="#fff8dc" stroke="#0d263f" stroke-width="3"></rect>
+              <rect x="150" y="80" width="58" height="58" rx="6" fill="#ffe6e0" stroke="#0d263f" stroke-width="3"></rect>
+              <text x="75" y="94" text-anchor="middle">a²</text>
+              <text x="179" y="114" text-anchor="middle">b²</text>
+              <text x="136" y="94" text-anchor="middle">−</text>
+              <text x="230" y="94" text-anchor="middle">=</text>
+              <text x="266" y="94" text-anchor="middle">(a+b)(a−b)</text>
+              <text x="150" y="170" text-anchor="middle">a² − b²</text>
             </svg>`
 };
 
@@ -203,6 +214,11 @@ const cardMeta = {
     skillsAriaLabel: "Counting principles skills",
     actionsHtml: `<a class="button" href="../modules/addition_multiplication_2/addition_multiplication_2_module.html">Launch Counting Principles</a>
             <a class="button secondary" href="../modules/addition_multiplication_2/addition_multiplication_2_source_extract.md">Source extract</a>`
+  },
+  calculating_with_formulas: {
+    skillsAriaLabel: "Difference of squares skills",
+    actionsHtml: `<a class="button" href="../modules/calculating_with_formulas/calculating_with_formulas_module.html">Launch Calculating with Formulas</a>
+            <a class="button secondary" href="../modules/calculating_with_formulas/calculating_with_formulas_source_extract.md">Source extract</a>`
   }
 };
 
@@ -241,7 +257,10 @@ const questNodeVisuals = {
               <small>Algebra arena</small>`,
   addition_multiplication_2: `<span class="node-number">10</span>
               <strong>Counting Principles 2</strong>
-              <small>Forming and bundling</small>`
+              <small>Forming and bundling</small>`,
+  calculating_with_formulas: `<span class="node-number">11</span>
+              <strong>Calculating with Formulas</strong>
+              <small>Difference of squares</small>`
 };
 
 /*
