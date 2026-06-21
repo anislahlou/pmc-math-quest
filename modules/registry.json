@@ -347,6 +347,37 @@
         "hasAudit": true,
         "hasTests": true
       }
+    },
+    {
+      "id": "calculating_with_formulas",
+      "slug": "calculating_with_formulas",
+      "displayName": "Calculating with Formulas",
+      "shortLabel": "Difference of Squares",
+      "chapter": "Lesson 23",
+      "unit": "algebra",
+      "topic": "Difference of Squares",
+      "tags": ["algebra", "difference-of-squares", "formulas", "mental-math", "squares"],
+      "skills": ["Difference of two squares", "Squares in disguise", "Products near a round number", "Consecutive square chain", "Spaced square pairs", "Spot the neighbours"],
+      "difficulty": 4,
+      "order": 120,
+      "status": "published",
+      "cardVariant": "diff-squares",
+      "blurb": "Factor a squared minus b squared into (a plus b)(a minus b) to crack differences of squares, hidden squares, near-round products, and long alternating square chains in your head.",
+      "paths": {
+        "folder": "modules/calculating_with_formulas",
+        "launch": "modules/calculating_with_formulas/calculating_with_formulas_module.html",
+        "moduleJs": "modules/calculating_with_formulas/calculating_with_formulas_module.js",
+        "auditJs": "modules/calculating_with_formulas/calculating_with_formulas_bank_quality_audit.js",
+        "testsJs": "modules/calculating_with_formulas/calculating_with_formulas_module_tests.js",
+        "introPack": "modules/calculating_with_formulas/calculating_with_formulas_intro_video_pack.md",
+        "sourceExtract": "modules/calculating_with_formulas/calculating_with_formulas_source_extract.md",
+        "audioDir": "modules/calculating_with_formulas/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
     }
   ]
 }
