@@ -519,6 +519,50 @@ window.PMC_REGISTRY = {
         "hasAudit": true,
         "hasTests": true
       }
+    },
+    {
+      "id": "prime_factorisation_2",
+      "slug": "prime_factorisation_2",
+      "displayName": "Prime Factorisation (2)",
+      "shortLabel": "Prime Factorisation 2",
+      "chapter": "Lesson 24",
+      "unit": "number-theory",
+      "topic": "Prime Factorisation and Trailing Zeros",
+      "tags": [
+        "number-theory",
+        "prime-factorisation",
+        "factors",
+        "trailing-zeros",
+        "factorial"
+      ],
+      "skills": [
+        "Count zeros in a product",
+        "Zeros in a factorial",
+        "Smallest missing multiplier",
+        "Equal-product pairs",
+        "Equal-product triples",
+        "Ones digit of a product"
+      ],
+      "difficulty": 5,
+      "order": 130,
+      "status": "published",
+      "cardVariant": "prime-factors",
+      "blurb": "Use prime factorisation to count the 2s and 5s that make trailing zeros, find the smallest missing multiplier, count zeros in a factorial, and split numbers into equal-product groups.",
+      "paths": {
+        "folder": "modules/prime_factorisation_2",
+        "launch": "modules/prime_factorisation_2/prime_factorisation_2_module.html",
+        "moduleJs": "modules/prime_factorisation_2/prime_factorisation_2_module.js",
+        "auditJs": "modules/prime_factorisation_2/prime_factorisation_2_bank_quality_audit.js",
+        "testsJs": "modules/prime_factorisation_2/prime_factorisation_2_module_tests.js",
+        "introPack": "modules/prime_factorisation_2/prime_factorisation_2_intro_video_pack.md",
+        "sourceExtract": "modules/prime_factorisation_2/prime_factorisation_2_source_extract.md",
+        "audioDir": "modules/prime_factorisation_2/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
     }
   ]
 };

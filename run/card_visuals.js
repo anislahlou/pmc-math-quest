@@ -160,6 +160,15 @@ const cardVisuals = {
               <text x="230" y="94" text-anchor="middle">=</text>
               <text x="266" y="94" text-anchor="middle">(a+b)(a−b)</text>
               <text x="150" y="170" text-anchor="middle">a² − b²</text>
+            </svg>`,
+  "prime-factors": `<svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Prime factorisation preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <rect x="40" y="46" width="74" height="74" rx="8" fill="#fff8dc" stroke="#0d263f" stroke-width="3"></rect>
+              <text x="77" y="92" text-anchor="middle" style="font-size:30px">2</text>
+              <text x="150" y="88" text-anchor="middle" style="font-size:26px">×</text>
+              <rect x="186" y="46" width="74" height="74" rx="8" fill="#ffe6e0" stroke="#0d263f" stroke-width="3"></rect>
+              <text x="223" y="92" text-anchor="middle" style="font-size:30px">5</text>
+              <text x="150" y="150" text-anchor="middle">= 10  →  one zero</text>
             </svg>`
 };
 
@@ -224,6 +233,11 @@ const cardMeta = {
     skillsAriaLabel: "Difference of squares skills",
     actionsHtml: `<a class="button" href="../modules/calculating_with_formulas/calculating_with_formulas_module.html">Launch Calculating with Formulas</a>
             <a class="button secondary" href="../modules/calculating_with_formulas/calculating_with_formulas_source_extract.md">Source extract</a>`
+  },
+  prime_factorisation_2: {
+    skillsAriaLabel: "Prime factorisation skills",
+    actionsHtml: `<a class="button" href="../modules/prime_factorisation_2/prime_factorisation_2_module.html">Launch Prime Factorisation 2</a>
+            <a class="button secondary" href="../modules/prime_factorisation_2/prime_factorisation_2_source_extract.md">Source extract</a>`
   }
 };
 
@@ -268,7 +282,10 @@ const questNodeVisuals = {
               <small>Speed, distance, time</small>`,
   calculating_with_formulas: `<span class="node-number">12</span>
               <strong>Calculating with Formulas</strong>
-              <small>Difference of squares</small>`
+              <small>Difference of squares</small>`,
+  prime_factorisation_2: `<span class="node-number">13</span>
+              <strong>Prime Factorisation 2</strong>
+              <small>Zeros and equal groups</small>`
 };
 
 /*
