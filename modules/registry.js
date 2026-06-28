@@ -563,6 +563,50 @@ window.PMC_REGISTRY = {
         "hasAudit": true,
         "hasTests": true
       }
+    },
+    {
+      "id": "inequalities",
+      "slug": "inequalities",
+      "displayName": "Inequalities",
+      "shortLabel": "Inequalities",
+      "chapter": "Lesson 25",
+      "unit": "algebra",
+      "topic": "Inequalities",
+      "tags": [
+        "algebra",
+        "inequalities",
+        "linear",
+        "word-problems",
+        "number-line"
+      ],
+      "skills": [
+        "Recognise inequality symbols",
+        "Inequality properties",
+        "Smallest integer solution",
+        "Largest integer solution",
+        "Inequality word problems",
+        "Count integer solutions"
+      ],
+      "difficulty": 4,
+      "order": 140,
+      "status": "published",
+      "cardVariant": "inequalities",
+      "blurb": "Recognise the four inequality symbols, use their properties to solve linear inequalities for the smallest or largest integer, count integer solutions, and turn word problems into inequalities.",
+      "paths": {
+        "folder": "modules/inequalities",
+        "launch": "modules/inequalities/inequalities_module.html",
+        "moduleJs": "modules/inequalities/inequalities_module.js",
+        "auditJs": "modules/inequalities/inequalities_bank_quality_audit.js",
+        "testsJs": "modules/inequalities/inequalities_module_tests.js",
+        "introPack": "modules/inequalities/inequalities_intro_video_pack.md",
+        "sourceExtract": "modules/inequalities/inequalities_source_extract.md",
+        "audioDir": "modules/inequalities/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
     }
   ]
 };

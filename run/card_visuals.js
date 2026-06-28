@@ -169,6 +169,15 @@ const cardVisuals = {
               <rect x="186" y="46" width="74" height="74" rx="8" fill="#ffe6e0" stroke="#0d263f" stroke-width="3"></rect>
               <text x="223" y="92" text-anchor="middle" style="font-size:30px">5</text>
               <text x="150" y="150" text-anchor="middle">= 10  →  one zero</text>
+            </svg>`,
+  inequalities: `<svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Inequalities preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <rect x="40" y="46" width="74" height="74" rx="8" fill="#fff8dc" stroke="#0d263f" stroke-width="3"></rect>
+              <text x="77" y="96" text-anchor="middle" style="font-size:34px">&lt;</text>
+              <text x="150" y="90" text-anchor="middle" style="font-size:22px">vs</text>
+              <rect x="186" y="46" width="74" height="74" rx="8" fill="#ffe6e0" stroke="#0d263f" stroke-width="3"></rect>
+              <text x="223" y="96" text-anchor="middle" style="font-size:34px">&gt;</text>
+              <text x="150" y="150" text-anchor="middle">≤  ≥  solve for x</text>
             </svg>`
 };
 
@@ -238,6 +247,11 @@ const cardMeta = {
     skillsAriaLabel: "Prime factorisation skills",
     actionsHtml: `<a class="button" href="../modules/prime_factorisation_2/prime_factorisation_2_module.html">Launch Prime Factorisation 2</a>
             <a class="button secondary" href="../modules/prime_factorisation_2/prime_factorisation_2_source_extract.md">Source extract</a>`
+  },
+  inequalities: {
+    skillsAriaLabel: "Inequalities skills",
+    actionsHtml: `<a class="button" href="../modules/inequalities/inequalities_module.html">Launch Inequalities</a>
+            <a class="button secondary" href="../modules/inequalities/inequalities_source_extract.md">Source extract</a>`
   }
 };
 
@@ -285,7 +299,10 @@ const questNodeVisuals = {
               <small>Difference of squares</small>`,
   prime_factorisation_2: `<span class="node-number">13</span>
               <strong>Prime Factorisation 2</strong>
-              <small>Zeros and equal groups</small>`
+              <small>Zeros and equal groups</small>`,
+  inequalities: `<span class="node-number">14</span>
+              <strong>Inequalities</strong>
+              <small>Symbols and solving</small>`
 };
 
 /*
