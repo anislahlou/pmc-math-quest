@@ -368,8 +368,14 @@
       }
 
       .quest-node strong {
-        font-size: 1rem;
+        font-size: 0.92rem;
         line-height: 1.15;
+        /* Long mission names ("Calculating with Formulas", "Prime
+           Factorisation 2") must wrap inside the narrow map columns instead
+           of spilling over the node border. */
+        overflow-wrap: break-word;
+        hyphens: auto;
+        min-width: 0;
       }
 
       .quest-node small {
@@ -377,6 +383,8 @@
         color: var(--muted);
         font-weight: 900;
         line-height: 1.2;
+        overflow-wrap: break-word;
+        min-width: 0;
       }
 
       .level-bar {

@@ -178,6 +178,13 @@ const cardVisuals = {
               <rect x="186" y="46" width="74" height="74" rx="8" fill="#ffe6e0" stroke="#0d263f" stroke-width="3"></rect>
               <text x="223" y="96" text-anchor="middle" style="font-size:34px">&gt;</text>
               <text x="150" y="150" text-anchor="middle">≤  ≥  solve for x</text>
+            </svg>`,
+  "circle-sectors": `<svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Circles and sectors preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <rect x="85" y="30" width="130" height="130" fill="#ffe6e0" stroke="#0d263f" stroke-width="3"></rect>
+              <circle cx="150" cy="95" r="65" fill="#ffffff" stroke="#0b8993" stroke-width="3"></circle>
+              <circle cx="150" cy="95" r="5" fill="#0d263f"></circle>
+              <text x="150" y="180" text-anchor="middle">shaded = whole − blank</text>
             </svg>`
 };
 
@@ -252,6 +259,11 @@ const cardMeta = {
     skillsAriaLabel: "Inequalities skills",
     actionsHtml: `<a class="button" href="../modules/inequalities/inequalities_module.html">Launch Inequalities</a>
             <a class="button secondary" href="../modules/inequalities/inequalities_source_extract.md">Source extract</a>`
+  },
+  circles_sectors_2: {
+    skillsAriaLabel: "Circle and sector skills",
+    actionsHtml: `<a class="button" href="../modules/circles_sectors_2/circles_sectors_2_module.html">Launch Circle Sectors 2</a>
+            <a class="button secondary" href="../modules/circles_sectors_2/circles_sectors_2_source_extract.md">Source extract</a>`
   }
 };
 
@@ -302,7 +314,10 @@ const questNodeVisuals = {
               <small>Zeros and equal groups</small>`,
   inequalities: `<span class="node-number">14</span>
               <strong>Inequalities</strong>
-              <small>Symbols and solving</small>`
+              <small>Symbols and solving</small>`,
+  circles_sectors_2: `<span class="node-number">15</span>
+              <strong>Circle Sectors 2</strong>
+              <small>Whole minus blank</small>`
 };
 
 /*
