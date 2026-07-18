@@ -108,6 +108,12 @@
         color: var(--navy);
       }
 
+      .topbar-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
       .hero {
         position: relative;
         overflow: hidden;
@@ -920,7 +926,13 @@
           <span class="brand-mark" aria-hidden="true">M</span>
           <span>PMC Math Quest</span>
         </a>
-        <a class="builder-link" href="../dashboard/math_skill_command_center.html">Builder room</a>
+        <div class="topbar-links">
+          <!-- Absolute LFS media URL on purpose: GitHub Pages serves LFS files
+               as 133-byte pointer stubs, so a relative link breaks on the live
+               site. This URL streams the real PDF from GitHub's LFS media host. -->
+          <a class="builder-link" href="https://media.githubusercontent.com/media/anislahlou/pmc-math-quest/main/modules/train_problems/source/Y6-M-L19-28_lesson22_train_problems.pdf" target="_blank" rel="noopener">Source workbook (PDF)</a>
+          <a class="builder-link" href="../dashboard/math_skill_command_center.html">Builder room</a>
+        </div>
       </header>
 
       <section class="hero" aria-labelledby="hero-title">
