@@ -54,7 +54,11 @@ function main() {
   }
 
   const expected = buildExpectedJsContent(data);
-  const actual = fs.readFileSync(JS_PATH, "utf8");
+  // Normalize CRLF -> LF before comparing: a Windows checkout (or an editor
+  // set to CRLF) must not fail the drift check when the CONTENT is in sync.
+  // .gitattributes forces eol=lf for this file, and this normalization keeps
+  // the gate OS-neutral even without it.
+  const actual = fs.readFileSync(JS_PATH, "utf8").replace(/\r\n/g, "\n");
 
   if (expected !== actual) {
     fail(

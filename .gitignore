@@ -1,5 +1,7 @@
-# Claude Code local config
-.claude/
+# Claude Code local config — but keep launch.json (preview/dev-server config)
+# tracked so any machine can run the same workflow after a plain clone.
+.claude/*
+!.claude/launch.json
 
 # QA cache
 qa/.cache/

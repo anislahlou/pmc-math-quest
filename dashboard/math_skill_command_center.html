@@ -385,27 +385,94 @@
         <div>
           <h1>Every mission moves through the same trusted build chain.</h1>
           <p>
-            This dashboard keeps the app organized around the agents we created: extract the source,
-            teach the concept, protect diagram accuracy, vary the practice bank, and check the
-            experience before a student uses it.
+            One workbook lesson goes in; one verified, playable mission comes out. The
+            <strong>Module Factory Pipeline</strong> below is the assembly line — an orchestrating
+            agent reads the source PDF, scaffolds and authors the module, then independent
+            verifier agents and mechanical QA gates check the work before a human-approved
+            merge deploys it to GitHub Pages. New here? Read the pipeline cards top to bottom,
+            then open the full protocol.
           </p>
         </div>
         <aside class="status-panel" aria-label="Package status">
           <h2>Package Status</h2>
           <div class="status-list">
             <div class="status-row"><strong>Launch file</strong><span>run folder only</span></div>
-            <div class="status-row"><strong>Live missions</strong><span>7</span></div>
-            <div class="status-row"><strong>Agent files</strong><span>7 protocols</span></div>
-            <div class="status-row"><strong>Release gate</strong><span>QA scripts included</span></div>
+            <div class="status-row"><strong>Live missions</strong><span id="live-mission-count">—</span></div>
+            <div class="status-row"><strong>Agent files</strong><span>pipeline + 7 protocols</span></div>
+            <div class="status-row"><strong>Release gate</strong><span>QA + human-approved PR merge</span></div>
           </div>
         </aside>
+      </section>
+
+      <section class="section" aria-labelledby="factory-pipeline">
+        <div class="section-head">
+          <div>
+            <h2 id="factory-pipeline">Module Factory Pipeline</h2>
+            <p>
+              The end-to-end assembly line for a new lesson, exactly as run for Lessons 22&ndash;25.
+              Stages 1&ndash;3 build, stages 4&ndash;6 verify and ship &mdash; the author agent never grades
+              its own homework.
+            </p>
+          </div>
+          <a class="button" href="../agents/module_factory_pipeline.md">Full pipeline protocol</a>
+        </div>
+        <div class="agent-grid">
+          <article class="agent-card" data-agent="pipeline-source">
+            <span class="step">S1</span>
+            <h3>Read the Source Lesson</h3>
+            <p>The orchestrator renders the lesson's PDF pages (printed page + 10) and extracts objectives, worked examples, and every exercise. No printed answer key exists &mdash; nothing is transcribed.</p>
+            <div class="link-row">
+              <a class="text-link" href="../agents/module_factory_pipeline.md">Step 1</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="pipeline-scaffold">
+            <span class="step">S2</span>
+            <h3>Scaffold + Author</h3>
+            <p>new-module.mjs creates the folder and draft registry entry; the author agent writes 6 classics whose answers are computed in code, intro scenes with teaching diagrams, and leak-proof practice visuals.</p>
+            <div class="link-row">
+              <a class="text-link" href="../scripts/new-module.mjs">Scaffolder</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="pipeline-wire">
+            <span class="step">S3</span>
+            <h3>Wire + Publish</h3>
+            <p>Card visuals (three maps), numbered quest node, intro pack, source extract; flip the registry entry to published and regenerate registry.js &mdash; the registry is the single source of truth.</p>
+            <div class="link-row">
+              <a class="text-link" href="../modules/registry.json">Registry</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="pipeline-verify">
+            <span class="step">S4</span>
+            <h3>Independent Verification</h3>
+            <p>Two separate agents: a math re-derivation agent brute-forces every answer from the student-facing text (target: 0 discrepancies), and an adversarial reviewer hunts answer leaks and boundary bugs.</p>
+            <div class="link-row">
+              <a class="text-link" href="../agents/module_factory_pipeline.md">Step 9</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="pipeline-qa">
+            <span class="step">S5</span>
+            <h3>Mechanical QA Gates</h3>
+            <p>npm run qa: bank audits, module tests, skill coverage, intro-pack lint, diagram parity, integration. Plus a live browser smoke test of every answer style before shipping.</p>
+            <div class="link-row">
+              <a class="text-link" href="../qa/run_all_quality_checks.js">QA runner</a>
+            </div>
+          </article>
+          <article class="agent-card" data-agent="pipeline-ship">
+            <span class="step">S6</span>
+            <h3>Ship via PR</h3>
+            <p>Feature branch, pull request with verification evidence, then a human-approved merge to main &mdash; which is production: GitHub Pages auto-deploys and the live URLs are re-verified.</p>
+            <div class="link-row">
+              <a class="text-link" href="../GITHUB_PAGES_README.md">Deploy notes</a>
+            </div>
+          </article>
+        </div>
       </section>
 
       <section class="section" aria-labelledby="agent-chain">
         <div class="section-head">
           <div>
-            <h2 id="agent-chain">Agent Chain</h2>
-            <p>Use this sequence whenever new lesson notes or review papers are added.</p>
+            <h2 id="agent-chain">Design Protocol Library</h2>
+            <p>The per-discipline standards the factory consults while building (stages S2&ndash;S5): what good pedagogy, diagrams, question banks, and learner experience look like.</p>
           </div>
         </div>
         <div class="agent-grid">
@@ -509,6 +576,14 @@
               <a class="text-link" href="../run/pmc_simulation_app.html">Launch file</a>
             </div>
           </article>
+          <article class="gate-card">
+            <h3>Ship &amp; Deploy</h3>
+            <p>main is production. Every change lands as a feature branch and pull request with verification evidence; a human approves the merge, GitHub Pages auto-deploys, and the live URLs are re-checked.</p>
+            <div class="link-row">
+              <a class="text-link" href="../agents/module_factory_pipeline.md">Pipeline step 10</a>
+              <a class="text-link" href="../GITHUB_PAGES_README.md">Pages notes</a>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -582,6 +657,8 @@
           const mods = (registry.modules || [])
             .filter((m) => m && m.status === 'published')
             .sort((a, b) => (a.order || 0) - (b.order || 0));
+          const countEl = document.getElementById('live-mission-count');
+          if (countEl) countEl.textContent = String(mods.length);
           const html = mods
             .map((mod) => {
               try {
