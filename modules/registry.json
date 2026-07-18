@@ -440,6 +440,37 @@
         "hasAudit": true,
         "hasTests": true
       }
+    },
+    {
+      "id": "circles_sectors_2",
+      "slug": "circles_sectors_2",
+      "displayName": "Circles and Circle Sectors (2)",
+      "shortLabel": "Circle Sectors 2",
+      "chapter": "Lesson 26",
+      "unit": "geometry",
+      "topic": "Circle and Sector Areas",
+      "tags": ["circles", "sectors", "area", "geometry", "pi"],
+      "skills": ["Circle in a square", "Quarter circle shade", "Four circle gap", "Petal power", "Leaf lens", "Flag slice"],
+      "difficulty": 4,
+      "order": 150,
+      "status": "published",
+      "cardVariant": "circle-sectors",
+      "blurb": "Split and combine circle figures and subtract blank areas from the whole: squares minus inscribed circles, quarter-circle shades, four-circle gaps, petals, leaf lenses, and flag slices.",
+      "paths": {
+        "folder": "modules/circles_sectors_2",
+        "launch": "modules/circles_sectors_2/circles_sectors_2_module.html",
+        "moduleJs": "modules/circles_sectors_2/circles_sectors_2_module.js",
+        "auditJs": "modules/circles_sectors_2/circles_sectors_2_bank_quality_audit.js",
+        "testsJs": "modules/circles_sectors_2/circles_sectors_2_module_tests.js",
+        "introPack": "modules/circles_sectors_2/circles_sectors_2_intro_video_pack.md",
+        "sourceExtract": "modules/circles_sectors_2/circles_sectors_2_source_extract.md",
+        "audioDir": "modules/circles_sectors_2/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
     }
   ]
 }
