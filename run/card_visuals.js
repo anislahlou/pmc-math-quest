@@ -185,6 +185,17 @@ const cardVisuals = {
               <circle cx="150" cy="95" r="65" fill="#ffffff" stroke="#0b8993" stroke-width="3"></circle>
               <circle cx="150" cy="95" r="5" fill="#0d263f"></circle>
               <text x="150" y="180" text-anchor="middle">shaded = whole − blank</text>
+            </svg>`,
+  "recurring-decimals": `<svg class="volume-stage" viewBox="0 0 300 190" role="img" aria-label="Recurring decimals preview">
+              <rect width="300" height="190" rx="8" fill="#ffffff"></rect>
+              <rect x="42" y="60" width="60" height="60" rx="8" fill="#fff8dc" stroke="#0d263f" stroke-width="3"></rect>
+              <rect x="120" y="60" width="60" height="60" rx="8" fill="#ffe6e0" stroke="#0d263f" stroke-width="3"></rect>
+              <rect x="198" y="60" width="60" height="60" rx="8" fill="#fff8dc" stroke="#0d263f" stroke-width="3"></rect>
+              <text x="72" y="100" text-anchor="middle" style="font-size:26px">2</text>
+              <text x="150" y="100" text-anchor="middle" style="font-size:26px">7</text>
+              <text x="228" y="100" text-anchor="middle" style="font-size:26px">1</text>
+              <path d="M 236 50 Q 150 12 64 50" fill="none" stroke="#0b8993" stroke-width="3"></path>
+              <text x="150" y="160" text-anchor="middle">8.2̇71̇ — the block repeats</text>
             </svg>`
 };
 
@@ -264,6 +275,11 @@ const cardMeta = {
     skillsAriaLabel: "Circle and sector skills",
     actionsHtml: `<a class="button" href="../modules/circles_sectors_2/circles_sectors_2_module.html">Launch Circle Sectors 2</a>
             <a class="button secondary" href="../modules/circles_sectors_2/circles_sectors_2_source_extract.md">Source extract</a>`
+  },
+  recurring_decimals_1: {
+    skillsAriaLabel: "Recurring decimal skills",
+    actionsHtml: `<a class="button" href="../modules/recurring_decimals_1/recurring_decimals_1_module.html">Launch Recurring Decimals 1</a>
+            <a class="button secondary" href="../modules/recurring_decimals_1/recurring_decimals_1_source_extract.md">Source extract</a>`
   }
 };
 
@@ -317,7 +333,10 @@ const questNodeVisuals = {
               <small>Symbols and solving</small>`,
   circles_sectors_2: `<span class="node-number">15</span>
               <strong>Circle Sectors 2</strong>
-              <small>Whole minus blank</small>`
+              <small>Whole minus blank</small>`,
+  recurring_decimals_1: `<span class="node-number">16</span>
+              <strong>Recurring Decimals 1</strong>
+              <small>Dots and periods</small>`
 };
 
 /*

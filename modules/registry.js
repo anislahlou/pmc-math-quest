@@ -651,6 +651,50 @@ window.PMC_REGISTRY = {
         "hasAudit": true,
         "hasTests": true
       }
+    },
+    {
+      "id": "recurring_decimals_1",
+      "slug": "recurring_decimals_1",
+      "displayName": "Recurring Decimals (1)",
+      "shortLabel": "Recurring Decimals 1",
+      "chapter": "Lesson 27",
+      "unit": "number",
+      "topic": "Recurring Decimals",
+      "tags": [
+        "decimals",
+        "recurring",
+        "fractions",
+        "periodicity",
+        "number"
+      ],
+      "skills": [
+        "Dots notation",
+        "Compare recurring decimals",
+        "Middle of the order",
+        "Terminating or recurring",
+        "Nth digit hunt",
+        "Digit sum runs"
+      ],
+      "difficulty": 4,
+      "order": 160,
+      "status": "published",
+      "cardVariant": "recurring-decimals",
+      "blurb": "Read and write recurring-decimal dot notation, compare and order repeating decimals, spot which fractions terminate from the denominator's prime factors, and use periodicity to hunt the nth digit and long digit sums.",
+      "paths": {
+        "folder": "modules/recurring_decimals_1",
+        "launch": "modules/recurring_decimals_1/recurring_decimals_1_module.html",
+        "moduleJs": "modules/recurring_decimals_1/recurring_decimals_1_module.js",
+        "auditJs": "modules/recurring_decimals_1/recurring_decimals_1_bank_quality_audit.js",
+        "testsJs": "modules/recurring_decimals_1/recurring_decimals_1_module_tests.js",
+        "introPack": "modules/recurring_decimals_1/recurring_decimals_1_intro_video_pack.md",
+        "sourceExtract": "modules/recurring_decimals_1/recurring_decimals_1_source_extract.md",
+        "audioDir": "modules/recurring_decimals_1/audio",
+        "engineEntry": null
+      },
+      "qa": {
+        "hasAudit": true,
+        "hasTests": true
+      }
     }
   ]
 };
